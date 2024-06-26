@@ -1,0 +1,47 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createBooking - finishBooking API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createBooking - finishBooking API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(booking_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(createBooking, "createBooking", "Function | NodeJs", "Function for create booking\n(NodeJs Booking API)")
+
+
+
+Component(finishBooking, "finishBooking", "Function | NodeJs", "Function for Case if finish booking\n(NodeJs Booking API)")
+Component(readByIDWithAdditionalData, "Booking_Order.readByIDWithAdditionalData", "Function | NodeJs", "Function for read by ID with additional data\n(NodeJs Booking API)")
+Component(checkQuota_script, "Booking_Order.checkQuota_script", "Function | NodeJs", "Function for check booking quota\n(NodeJs Booking API)")
+Component(updateBookingCustomerStatus_scripts, "Booking_Order.updateBookingCustomerStatus_script", "Function | NodeJs", "Function for update booking customer status\n(NodeJs Booking API)")
+Component(updateBookingAvailability_scripts, "Booking_Availability.updateBookingAvailability_script", "Function | NodeJs", "Function for update booking availability data\n(NodeJs Booking API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "Payment Service")
+AddProperty("API", "/api/payments/cash/payment")
+Component(payVoucher, "payVoucher", "Function | NodeJs", "Function for pay with voucher\n(NodeJs Booking API)")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request create booking")
+Rel_D(auth_middleware, booking_controller, "2. Request create booking")
+Rel_D(booking_controller, createBooking, "3. Create booking and Check booking status")
+
+Rel_D(createBooking, finishBooking, "4. Check if Booking was Finished")
+Rel_D(finishBooking, readByIDWithAdditionalData, "5. Read by ID with additional data")
+
+Rel_D(readByIDWithAdditionalData, database, "6. Read by ID with additional data, Continue 17.")
+
+Rel_D(finishBooking, checkQuota_script, "7. Check Booking Quota")
+Rel_D(finishBooking, updateBookingCustomerStatus_scripts, "9. Update Booking Customer Status")
+
+Rel_D(checkQuota_script, database, "8. Check Booking Quota")
+Rel_D(updateBookingCustomerStatus_scripts, database, "10. Update Booking Customer Status")
+
+Rel_D(finishBooking, updateBookingAvailability_scripts, "11. Update booking availability data")
+Rel_D(updateBookingAvailability_scripts, database, "12. Update booking availability data")
+
+Rel_D(finishBooking, payVoucher, "13. Check if there is Voucher, If there is Voucher Use Voucher")
+Rel_D(payVoucher, database, "14. Check if there is Voucher, If there is Voucher Use Voucher")
+
+@enduml

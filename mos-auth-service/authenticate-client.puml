@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title authenticate Client API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "authenticate Client API\n[Component]"){
+Component(auth_client_middleware, "Auth Client Middleware", "Middleware | TypeScript", "Middleware for Client Authentication\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-auth-service)")
+
+Component(auth_controller, "Auth Controller", "Controller | TypeScript", "Controller for Authentication related Function\n(mos-auth-service)")
+Component(authenticate, "authenticate", "Function | TypeScript", "Main Function for authenticate\n(mos-auth-service)")
+}
+
+Rel(Web_Moservice, mainMiddleware, "1. Request authenticate Client")
+
+Rel(mainMiddleware, auth_client_middleware, "2. Request authenticate Client")
+Rel(auth_client_middleware, auth_controller, "3. Request authenticate Client")
+Rel(auth_controller, authenticate, "4. Authenticate Client")
+@enduml

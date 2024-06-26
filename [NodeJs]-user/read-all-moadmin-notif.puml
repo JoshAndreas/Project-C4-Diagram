@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readAll moadmin notif API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "readAll moadmin notif API\n[Component]"){
+Component(auths_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for verify\n(NodeJs User API)")
+Component(user_controller, "Moadmin Notif Controller", "Controller | NodeJs", "Controller for Moadmin Notif Related function\n(NodeJs User API)")
+Component(readAll, "MoadminNotif.readAll", "Function | NodeJs", "Function for Read All Moadmin Notif\n(NodeJs User API)")
+
+Component(countUnread, "MoadminNotif.countUnread", "Function | NodeJs", "Function for Count unread moadmin notif data\n(NodeJs User API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auths_middleware, "1. Request Read All moadmin notif data")
+Rel_D(auths_middleware, user_controller, "2. Request Read All moadmin notif data")
+Rel_D(user_controller, readAll, "3. Request Read All moadmin notif data")
+Rel_D(readAll, countUnread, "5. Request Count unread moadmin notif data")
+
+Rel_D(readAll, database, "4. Read All moadmin notif data")
+Rel_D(countUnread, database, "6. Count unread moadmin notif data")
+
+@enduml

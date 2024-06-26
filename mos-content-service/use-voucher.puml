@@ -1,0 +1,43 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title useVoucher API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "useVoucher API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(voucher_controller, "Voucher Controller", "Controller | TypeScript", "Controller for Voucher Related Function\n(mos-content-service)")
+Component(bengkelAppAuthMiddleware, "Bengkel App Auth Middleware", "Middleware | TypeScript", "Middleware for Bengkel App Authentication\n(mos-content-service)")
+Component(useVoucherValidationMiddleware, "Use Voucher Validation Middleware", "Middleware | TypeScript", "Middleware for Use Voucher Validation\n(mos-content-service)")
+Component(useVoucherMappingMiddleware, "Use Voucher Mapping Middleware", "Middleware | TypeScript", "Middleware for Use Voucher Mapping\n(mos-content-service)")
+
+Component(useVoucher, "useVoucher", "Function | TypeScript", "Main Function for use Voucher\n(mos-content-service)")
+Component(recordBookingVoucher, "recordBookingVoucher", "Function | TypeScript", "Main Function for use Record Booking Voucher\n(mos-content-service)")
+Component(VoucherRepository, "VoucherRepository.update", "Function | TypeScript", "Main Function for Update Voucher Data\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+AddProperty("Repository", "mos-booking-service")
+AddProperty("URL", "/api/transaction")
+Component(bookingVoucher, "recordBookingVoucher.bookingVoucher", "Function | TypeScript", "Main Function for checking Booking Voucher\n(mos-booking-service)")
+AddProperty("Repository", "mos-payment-service")
+AddProperty("URL", "/api/payments/$(paymentId)")
+Component(updatePayment, "updatePayment", "Function | TypeScript", "Main Function for Update Payment Data\n(mos-payment-service)")
+
+
+Rel(Web_Moservice, mainMiddleware, "1. Request Use Voucher")
+
+Rel(mainMiddleware, bengkelAppAuthMiddleware, "2. Request Use Voucher")
+Rel(bengkelAppAuthMiddleware, useVoucherValidationMiddleware, "3. Use Voucher Validation")
+Rel(useVoucherValidationMiddleware, useVoucherMappingMiddleware, "4. Use Voucher Mapping")
+
+Rel(useVoucherMappingMiddleware, voucher_controller, "5. Request Use Voucher")
+Rel(voucher_controller, useVoucher, "6. Request Use Voucher")
+Rel(useVoucher, recordBookingVoucher, "7. Check Booking Voucher")
+Rel(useVoucher, bookingVoucher, "8. Use Booking Voucher")
+Rel(useVoucher, VoucherRepository, "9. Request Update Voucher data")
+Rel(useVoucher, updatePayment, "11. Update Payment data")
+Rel(VoucherRepository, database, "10. Update Voucher data")
+Rel(updatePayment, database, "12. Update Payment data")
+@enduml

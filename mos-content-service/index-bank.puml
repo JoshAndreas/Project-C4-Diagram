@@ -1,0 +1,33 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index Bank API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index Bank API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+Component(auth_middlewares, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-content-service)")
+
+Component(authMiddleware, "Auth Middleware", "Auth Middleware | TypeScript", "Middleware for Authentication\n(mos-content-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-content-service)")
+
+Component(bank_controller, "Bank Controller", "Controller | TypeScript", "Controller for Bank Related Function\n(mos-content-service)")
+Component(index, "index", "Function | TypeScript", "Main Function for get bank list data\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, mainMiddleware, "1. Request get bank list data")
+
+Rel(mainMiddleware, authMiddleware, "2. Request get bank list data")
+Rel_L(authMiddleware, auth_middlewares, "3. If there is (xToken), Return Auth Operator Middleware.")
+
+Rel_R(authMiddleware, getPemKey, "3. Get Pem Key")
+Rel_D(authMiddleware, bank_controller, "4. Request get bank list data")
+Rel_D(auth_middlewares, bank_controller, "4. Request get bank list data")
+
+Rel_D(bank_controller, index, "5. Request get bank list data")
+Rel_D(index, database, "6. Retrieve bank list data")
+
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createPrebookFromPromo API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createPrebookFromPromo API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(pre_booking_controller, "Bengkel App Prebooking Controller", "Controller | NodeJs", "Controller for Bengkel APP Prebooking Related Function\n(NodeJs Booking API)")
+Component(createPrebookFromPromo, "createPrebookFromPromo", "Function | NodeJs", "Function for create prebook from promo\n(NodeJs Booking API)")
+Component(insertPreBookingData2_script, "Pre_Booking.insertPreBookingData2_script", "Function | NodeJs", "Function for insert prebooking data\n(NodeJs Booking API)")
+Component(selectLastPrebookID, "Pre_Booking.selectLastPrebookID", "Function | NodeJs", "Function for select last prebook ID\n(NodeJs Booking API)")
+Component(insertBookingDatafromPrebookingPromo_script, "Booking_Order.insertBookingDatafromPrebookingPromo_script", "Function | NodeJs", "Function for insert Booking Data from Prebooking Promo\n(NodeJs Booking API)")
+Component(selectLastBookingID, "Booking_Order.selectLastBookingID", "Function | NodeJs", "Function for select last booking ID\n(NodeJs Booking API)")
+
+Component(insertBookingPromoDatafromPrebookingPromo_script, "Booking_Order.insertBookingPromoDatafromPrebookingPromo_script", "Function | NodeJs", "Function for insert Booking Promo Data from Prebooking Promo\n(NodeJs Booking API)")
+
+Component(insertBookingServiceUmumDatafromPrebookingPromo_script, "Booking_Order.insertBookingServiceUmumDatafromPrebookingPromo_script", "Function | NodeJs", "Function for insert Booking Service Umum Data from Prebooking Promo\n(NodeJs Booking API)")
+Component(insertBookingServiceBerkalaDatafromPrebookingPromo_script, "Booking_Order.insertBookingServiceBerkalaDatafromPrebookingPromo_script", "Function | NodeJs", "Function for insert Booking Service Berkala Data from Prebooking Promo\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request Create preboook from promo")
+Rel_D(auth_middleware, pre_booking_controller, "2. Request Create preboook from promo")
+Rel_D(pre_booking_controller, createPrebookFromPromo, "3. Request Create preboook from promo")
+Rel_D(createPrebookFromPromo, insertPreBookingData2_script, "4. Request Insert prebooking data")
+
+Rel_D(createPrebookFromPromo, selectLastPrebookID, "6. Request select last prebook ID data")
+Rel_D(createPrebookFromPromo, insertBookingDatafromPrebookingPromo_script, "8. Request Insert booking data from prebooking promo")
+Rel_D(createPrebookFromPromo, selectLastBookingID, "10. Request select last booking ID data")
+Rel_D(createPrebookFromPromo, insertBookingPromoDatafromPrebookingPromo_script, "12. Request Insert Booking Promo Data from Prebooking Promo")
+Rel_D(createPrebookFromPromo, insertBookingServiceUmumDatafromPrebookingPromo_script, "14. If Service umum, insert Booking Service Umum Data from Prebooking Promo")
+Rel_D(createPrebookFromPromo, insertBookingServiceBerkalaDatafromPrebookingPromo_script, "16. If Service berkala, Create data")
+
+
+Rel_D(insertPreBookingData2_script, database, "5. Insert prebooking data")
+Rel_D(selectLastPrebookID, database, "7. Select last prebook ID data")
+Rel_D(insertBookingDatafromPrebookingPromo_script, database, "9. Insert booking data from prebooking promo")
+Rel_D(selectLastBookingID, database, "11. Insert booking data from prebooking promo")
+Rel_D(insertBookingPromoDatafromPrebookingPromo_script, database, "13. Insert booking promo data from prebooking promo")
+Rel_D(insertBookingServiceUmumDatafromPrebookingPromo_script, database, "15. Insert Booking Service Umum Data from Prebooking Promo")
+Rel_D(insertBookingServiceBerkalaDatafromPrebookingPromo_script, database, "17. Insert Booking Service Berkala Data from Prebooking Promo")
+
+@enduml
+
+

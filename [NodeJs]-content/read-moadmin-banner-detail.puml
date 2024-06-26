@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readBannerDetail Banner API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readBannerDetail Banner API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Banner Related Function\n(NodeJs Content API)")
+    Component(readBannerDetail, "readBannerDetail", "Function | NodeJs", "Function for Read Moadmin banner detail\n(NodeJs Content API)")
+    Component(readMoadminBannerDetail, "ContentBanner.readMoadminBannerDetail", "Function | NodeJs", "Function for Read Moadmin banner detail\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read Moadmin banner detail")
+Rel(auth_middleware, content_controller, "2. Request Read Moadmin banner detail")
+Rel(content_controller, readBannerDetail, "3. Request Read Moadmin banner detail")
+Rel(readBannerDetail, readMoadminBannerDetail, "4. Request Read Moadmin banner detail")
+
+Rel(readMoadminBannerDetail, database, "5. Read Moadmin banner detail")
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getCategoriesMoadmin Category API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "getCategoriesMoadmin Category API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Category Controller", "Controller | NodeJs", "Controller for Content Category Related Function\n(NodeJs Content API)")
+    Component(getCategoriesMoadmin, "getCategoriesMoadmin", "Function | NodeJs", "Function for Get Categories Moadmin\n(NodeJs Content API)")
+    Component(getCategoriesMoadmins, "ContentCategory.getCategoriesMoadmin", "Function | NodeJs", "Function for Get Categories Moadmin\n(NodeJs Content API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get Categories Moadmin")
+Rel(auth_middleware, content_controller, "2. Request Get Categories Moadmin")
+Rel(content_controller, getCategoriesMoadmin, "3. Request Get Categories Moadmin")
+Rel(getCategoriesMoadmin, getCategoriesMoadmins, "4. Request Get Categories Moadmin")
+
+Rel(getCategoriesMoadmins, database, "5. Get Categories Moadmin")
+
+@enduml

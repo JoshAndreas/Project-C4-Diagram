@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index transaction API 
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index transaction API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for authentication\n(mos-booking-service)")
+Component(sp_transaction_controller, "Sp Transaction Controller", "Controller | TypeScript", "Controller for SP Transaction Related function\n(mos-booking-service)")
+Component(index, "index", "Controller | TypeScript", "Function for retrieve transaction data\n(mos-booking-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-booking-service)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request retrieve Transaction data")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request retrieve Transaction data")
+Rel_D(auth_operator_middleware, sp_transaction_controller, "3. Request retrieve Transaction data")
+Rel_D(sp_transaction_controller, index, "4. Request retrieve Transaction data")
+Rel_D(index, database, "5. Retrieve Transaction data")
+
+
+
+@enduml

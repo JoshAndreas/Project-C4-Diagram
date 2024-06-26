@@ -1,0 +1,33 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readBengkelList API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readBengkelList API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    
+    Component(readBengkelList, "readBengkelList", "Function | NodeJs", "Function for Read Bengkel list data\n(NodeJs Content API)")
+    Component(readMoadminList, "ContentPromo.readMoadminList", "Function | NodeJs", "Function for Read Moadmin List data\n(NodeJs Content API)")
+    Component(countMoadminList, "ContentPromo.countMoadminList", "Function | NodeJs", "Function for Count Moadmin list data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Read Bengkel list data")
+
+Rel(auth_middleware, content_controller, "3. Request Read Bengkel list data")
+Rel(content_controller, readBengkelList, "4. Request Read Bengkel list data")
+Rel(readBengkelList, readMoadminList, "5. Read Moadmin List data")
+Rel(readBengkelList, countMoadminList, "7. Count Moadmin list data")
+
+Rel(readMoadminList, database, "6. Read Moadmin List data")
+Rel(countMoadminList, database, "8. Count Moadmin list data")
+
+@enduml

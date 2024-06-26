@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title insertMapBookingService API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "insertMapBookingService API\n[Component]"){
+Component(booking_order_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(insertMapBookingService, "Booking_Order.insertMapBookingService", "Function | NodeJs", "Function for Insert Map Booking Service\n(NodeJs Booking API)")
+Component(readMapBookingService, "Booking_Order.readMapBookingService", "Function | NodeJs", "Function for read Map Booking Service\n(NodeJs Booking API)")
+Component(updateService, "Pre_Booking.updateService", "Function | NodeJs", "Function for Update service\n(NodeJs Booking API)")
+Component(insertMapBookingServices, "insertMapBookingService", "Function | NodeJs", "Function for Insert Map Booking Service\n(NodeJs Booking API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, booking_order_controller, "1. Request Insert Map Booking Service data")
+Rel_D(booking_order_controller, insertMapBookingServices, "2. Request Insert Map Booking Service data")
+Rel_D(insertMapBookingServices, readMapBookingService, "3. Request Read Map Booking service data")
+Rel_D(insertMapBookingServices, insertMapBookingService, "5. Request insert map booking service data")
+Rel_D(insertMapBookingServices, updateService, "7. Request update service data")
+
+
+Rel_D(readMapBookingService, database, "4. Read Map Booking service data")
+Rel_D(insertMapBookingService, database, "6. Insert map booking service data")
+Rel_D(updateService, database, "8. Update service data")
+
+@enduml

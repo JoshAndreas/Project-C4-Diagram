@@ -1,0 +1,49 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createUpdatePreBooking API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createUpdatePreBooking API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(pre_booking_controller, "Prebooking Controller", "Controller | NodeJs", "Controller for Prebooking Related Function\n(NodeJs Booking API)")
+Component(createUpdatePreBooking, "createUpdatePreBooking", "Function | NodeJs", "Function for Create Update Prebooking\n(NodeJs Booking API)")
+
+Component(checkIsHourAvailable, "Booking_Order.checkIsHourAvailable", "Function | NodeJs", "Function for check if hour is available\n(NodeJs Booking API)")
+Component(readBySessionID, "Pre_Booking.readBySessionID", "Function | NodeJs", "Function for check if hour is available\n(NodeJs Booking API)")
+Component(updatePreBookingData_script, "Pre_Booking.updatePreBookingData_script", "Function | NodeJs", "Function for update prebooking data\n(NodeJs Booking API)")
+Component(insertPreBookingData_script, "Pre_Booking.insertPreBookingData_script", "Function | NodeJs", "Function for insert prebooking data\n(NodeJs Booking API)")
+Component(bookingDone, "Booking_Email.bookingDone", "Function | NodeJs", "Function for mark booking done\n(NodeJs Booking API)")
+Component(sendEmail, "message.sendEmail", "Function | NodeJs", "Function for send Email\n(NodeJs Booking API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "NodeJs Content API")
+AddProperty("URL", "/api/contents/moservice/promo/redeem?origin=booking")
+Component(redeemPrebook, "redeemPrebook", "Function | NodeJs", "Function for redeem prebooking data")
+
+Lay_R(Web_Moservice, auth_middleware)
+Lay_D(pre_booking_controller, createUpdatePreBooking)
+Lay_R(pre_booking_controller, createUpdatePreBooking)
+Rel_D(Web_Moservice, auth_middleware, "1. Request Create Update Prebooking")
+Rel_D(auth_middleware, pre_booking_controller, "2. Request Create Update Prebooking")
+Rel_D(pre_booking_controller, createUpdatePreBooking, "3. Request Create Update Prebooking")
+Rel_D(createUpdatePreBooking, redeemPrebook, "4. Request Retrieve Prebooking data")
+Rel_D(createUpdatePreBooking, checkIsHourAvailable, "6. Request Create Bengkel Availability")
+Rel_D(createUpdatePreBooking, readBySessionID, "8. Request read data by session id")
+Rel_L(readBySessionID, updatePreBookingData_script, "10. If there is prebooking before, Update Prebooking data.")
+Rel_D(readBySessionID, insertPreBookingData_script, "10. If there is no prebooking data before, insert prebooking data.")
+
+Rel_D(createUpdatePreBooking, bookingDone, "12. Request Update Booking Status")
+
+Rel_D(bookingDone, sendEmail, "14. Request Send Email")
+
+Rel_D(checkIsHourAvailable, database, "7. Check Bengkel Availability")
+Rel_D(readBySessionID, database, "9. Read data by session ID")
+Rel_D(updatePreBookingData_script, database, "11. Update Prebooking data.")
+Rel_D(insertPreBookingData_script, database, "11. Insert Prebooking data.")
+Rel_D(bookingDone, database, "13. Update Prebooking Status")
+Rel_D(redeemPrebook, database, "5. Retrieve Prebooking data")
+
+@enduml

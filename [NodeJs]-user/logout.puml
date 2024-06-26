@@ -1,0 +1,19 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title logout API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "logout API\n[Component]"){
+Component(user_controller, "Users Controller", "Controller | NodeJs", "Controller for User Related function\n(NodeJs User API)")
+Component(logout, "logout", "Function | NodeJs", "Function for logout\n(NodeJs User API)")
+
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, user_controller, "1. Request logout")
+Rel_D(user_controller, logout, "2. logout")
+Rel_D(logout, database, "3. Store logout data")
+
+@enduml

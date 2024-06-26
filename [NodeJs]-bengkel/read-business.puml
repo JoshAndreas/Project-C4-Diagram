@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getAll Business API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getAll Business API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Business, "Business Controller", "Controller | NodeJs", "Controller for Business Function related\n(NodeJs Bengkel API)")
+
+    Component(read, "read", "Function | NodeJs", "Function for Read Business data\n(NodeJs Bengkel API)")
+    Component(countAll, "Business.countAll", "Function | NodeJs", "Function for Count All business data\n(NodeJs Bengkel API)")
+    Component(getAll, "Business.getAll", "Function | NodeJs", "Function for Get All Business data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read Business data")
+Rel(auth_middleware, Business, "2. Request Read Business data")
+Rel(Business, read, "3. Request Read Business data")
+Rel(read, countAll, "4. Request Count All business data")
+Rel(read, getAll, "6. Request Get All Business data")
+
+Rel(countAll, database, "5. Count All business data")
+Rel(getAll, database, "7. Get All Business data")
+
+@enduml

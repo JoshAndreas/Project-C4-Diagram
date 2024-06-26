@@ -1,0 +1,67 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+title redeem voucher API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "redeem voucher API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(voucher_controller, "Voucher Controller", "Controller | TypeScript", "Controller for Voucher Related Function\n(mos-content-service)")
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-content-service)")
+Component(redeem_promo_middleware, "Redeem Promo Middleware", "Middleware | TypeScript", "Middleware for Redeem Promo\n(mos-content-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-content-service)")
+Component(auth_middlewares, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-content-service)")
+
+Component(redeemVoucher, "redeemVoucher", "Function | TypeScript", "Main Function for redeem Voucher\n(mos-content-service)")
+Component(VoucherRepositorycreate, "VoucherRepository.create", "Function | TypeScript", "Main Function for Create Voucher data\n(mos-content-service)")
+Component(generateQRCode, "generateQRCode", "Function | TypeScript", "Function for Generate QR Code\n(mos-content-service)")
+Component(uploadCloudinary, "uploadCloudinary", "Function | TypeScript", "Function for upload QR to cloudinary\n(mos-content-service)")
+
+
+Component(create, "QrCodeRepository.create", "Function | TypeScript", "Function for create QR\n(mos-content-service)")
+
+Component(VoucherRepositoryupdate, "VoucherRepository.update", "Function | TypeScript", "Main Function for update voucher data\n(mos-content-service)")
+Component(sendEmail, "sendEmail", "Function | TypeScript", "Main Function for send email\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-payment-service")
+AddProperty("URL", "/api/payments/invoice")
+Component(sendInvoice, "sendInvoice", "Function | TypeScript", "Main Function for send Invoice data")
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto,fl_attachment/v1/${cloudinaryConfig.cloudinary_path}")
+System_Ext(Cloudinary, "Cloudinary", "External system for upload image data")
+
+AddProperty("Topic", "email-event-topic")
+SystemQueue(Kafka, "Kafka")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Redeem Voucher")
+
+Rel_D(mainMiddleware, auth_middleware, "2. Request Redeem Voucher")
+Rel(auth_middleware, redeem_promo_middleware, "3. Request Redeem Voucher")
+Rel_R(auth_middleware, getPemKey, "3. Else, Get Pem Key")
+Rel_L(auth_middleware, auth_middlewares, "3. If there is (xToken), Return Auth Operator Middleware.")
+Rel(auth_middlewares, redeem_promo_middleware, "4. Request Get Voucher Data")
+
+Rel(redeem_promo_middleware, voucher_controller, "4. Request Redeem Voucher")
+
+Rel(voucher_controller, redeemVoucher, "5. Request Redeem Voucher")
+
+Rel(redeemVoucher, VoucherRepositorycreate, "6. Create Voucher Data")
+Rel(redeemVoucher, sendInvoice, "8. Request Send Invoice")
+Rel(redeemVoucher, generateQRCode, "9. Request Generate QR Code")
+Rel(redeemVoucher, uploadCloudinary, "10. Retrieve Voucher Data")
+Rel_L(uploadCloudinary, Cloudinary, "11. Upload QR to Cloudinary")
+Rel(redeemVoucher, create, "12. Upload QR to Cloudinary")
+
+Rel(redeemVoucher, VoucherRepositoryupdate, "14. Update Voucher data")
+Rel(redeemVoucher, sendEmail, "16. If Email exist & Validated, Request Send Email")
+Rel(VoucherRepositoryupdate, database, "15. Update Voucher Data")
+Rel(VoucherRepositorycreate, database, "7. Create Voucher data")
+Rel(create, database, "13. Update Voucher data")
+Rel(sendEmail, Kafka, "16. Send Email")
+
+
+@enduml

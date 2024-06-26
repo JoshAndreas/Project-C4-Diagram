@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index Pilihan Lain API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index Pilihan Lain API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(pilihan_lain_controller, "Pilihan Lain Controller", "Controller | TypeScript", "Controller for Pilihan Lain Related Function\n(mos-content-service)")
+Component(index, "index", "Function | TypeScript", "Main Function for get Pilihan Lain data\n(mos-content-service)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request get Pilihan Lain data")
+
+Rel_D(mainMiddleware, pilihan_lain_controller, "2. Request get Pilihan Lain data")
+Rel_D(pilihan_lain_controller, index, "3. Request get Pilihan Lain data")
+Rel_D(index, database, "4. Retrieve Pilihan Lain data")
+
+
+@enduml

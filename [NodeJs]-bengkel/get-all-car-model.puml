@@ -1,0 +1,17 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getAllCarModel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getAllCarModel API\n[Component]"){
+    Component(getAllCarModel, "carModel.getAllCarModel", "Function | NodeJs", "Function for Get All car model\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, getAllCarModel, "1. Request Get All car model data")
+
+Rel(getAllCarModel, database, "2. Get All car model data")
+
+@enduml

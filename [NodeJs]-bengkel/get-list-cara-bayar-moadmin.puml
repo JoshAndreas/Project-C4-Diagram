@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getListCaraBayar Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getListCaraBayar Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Bengkel Cara Bayar Controller", "Controller | NodeJs", "Controller for Bengkel Cara Bayar Function related\n(NodeJs Bengkel API)")
+
+    Component(getListCaraBayar, "getListCaraBayar", "Function | NodeJs", "Function for Get list cara bayar\n(NodeJs Bengkel API)")
+    Component(getAllCaraBayar, "CaraBayar.getAllCaraBayar", "Function | NodeJs", "Function for Get all cara bayar\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get list cara bayar")
+Rel(auth_middleware, bengkel, "2. Request Get list cara bayar")
+Rel(bengkel, getListCaraBayar, "3. Request Get list cara bayar")
+Rel(getListCaraBayar, getAllCaraBayar, "4. Get list cara bayar")
+Rel(getAllCaraBayar, database, "5. Get all cara bayar")
+
+@enduml

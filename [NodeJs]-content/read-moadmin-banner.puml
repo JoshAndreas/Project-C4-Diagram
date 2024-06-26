@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readMoadminList Banner API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readMoadminList Banner API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Banner Related Function\n(NodeJs Content API)")
+    Component(readMoadminList, "readMoadminList", "Function | NodeJs", "Function for Read Moadmin banner list\n(NodeJs Content API)")
+    Component(readMoadminLists, "ContentBanner.readMoadminList", "Function | NodeJs", "Function for Read Moadmin banner list\n(NodeJs Content API)")
+    Component(countMoadminList, "ContentBanner.countMoadminList", "Function | NodeJs", "Function for Count moadmin banner list\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read Moadmin banner list")
+Rel(auth_middleware, content_controller, "2. Request Read Moadmin banner list")
+Rel(content_controller, readMoadminList, "3. Request Read Moadmin banner list")
+Rel(readMoadminList, readMoadminLists, "4. Request Read Moadmin banner list")
+Rel(readMoadminList, countMoadminList, "6. Request Count moadmin banner list")
+
+Rel(readMoadminLists, database, "5. Read Moadmin banner list")
+Rel(countMoadminList, database, "7. Count moadmin banner list")
+@enduml

@@ -1,0 +1,78 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+title create booking API
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Container_Boundary(api, "create booking API\n[Component]"){
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Auth Check\n(mos-booking-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-booking-service)")
+
+Component(Booking_Controller, "Booking Controller.Create", "Controller | TypeScript", "Controller for Booking Process\n(mos-booking-service)")
+Component(generateQRCode, "Generate QR Code", "Function | TypeScript", "Function for create Booking Result\n(mos-booking-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-booking-service)")
+
+Component(uploadCloudinary, "uploadCloudinary", "Function | TypeScript", "Function for uploadQR\n(mos-booking-service)")
+Component(MapBookingServiceRepository, "MapBookingServiceRepository.create", "Function | TypeScript", "Function for check if there is service item\n(mos-booking-service)")
+Component(QRCodeRepository, "QRCodeRepository.create", "Repository | TypeScript", "Repository for QRCode\n(mos-booking-service)")
+Component(sendEmail, "sendEmail", "Function | TypeScript", "Function for Send Email\n(mos-booking-service)")
+
+Boundary(If_Condition2, "If there is promo.ids"){
+Component(redeemVoucherHelper, "redeemVoucherHelper", "Function | TypeScript", "Function for Redeem Voucher\n(mos-booking-service)")
+Component(createVoucher, "VoucherRepository.create", "Function | TypeScript", "Function for Create Voucher\n(mos-booking-service)")
+Component(VoucherRepository, "VoucherRepository.Update", "Function | TypeScript", "Function for update voucher data\n(mos-booking-service)")
+
+}
+}
+AddProperty("Repository", "mos-payment-service")
+AddProperty("URL", "/api/payments/invoice")
+Component(sendInvoiceData, "sendInvoice", "Function | TypeScript", "Function for send invoice data")
+
+AddProperty("Repository", "mos-payment-service")
+AddProperty("URL", "/api/payment-methods/$(paymentMethodUuid)")
+Component(paymentMethod, "getPaymentMethodById", "Function | TypeScript", "Function for search payment method")
+
+AddProperty("Repository", "mos-content-service")
+AddProperty("URL", "/api/promo/${`promo_id`}")
+Component(getPromoById, "getPromoById", "Function | TypeScript", "Function for Retrieve Promo List")
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryConfig.cloudinary_path}")
+System_Ext(Cloudinary, "Cloudinary", "External System for storing image")
+
+AddProperty("Topic", "email-event-topic")
+SystemQueue(Kafka, "Kafka")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Lay_D(auth_middleware, Booking_Controller)
+Lay_R(mainMiddleware, sendEmail)
+Lay_D(mainMiddleware, sendEmail)
+Lay_L(redeemVoucherHelper, paymentMethod)
+Lay_D(MapBookingServiceRepository, redeemVoucherHelper)
+
+Rel(Web_Moservice, mainMiddleware, "1. Request Create Booking")
+
+Rel(mainMiddleware, auth_middleware, "2. Request Create Booking")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem key")
+
+Rel(auth_middleware, Booking_Controller, "4. Request Create Booking")
+Rel(Booking_Controller, database, "5. Create Booking Data")
+Rel_D(Booking_Controller, generateQRCode, "6. Generate QR Code")
+Rel_R(Booking_Controller, uploadCloudinary, "7. Upload QR to Cloudinary")
+Rel_R(uploadCloudinary, Cloudinary, "8. Upload QR to Cloudinary")
+
+Rel(Booking_Controller, MapBookingServiceRepository, "9. Check if there is service Item")
+Rel(MapBookingServiceRepository, database, "10. Create Service data")
+Rel(Booking_Controller, QRCodeRepository, "11. Create QR Data")
+Rel(QRCodeRepository, database, "12. Create QR data")
+Rel(Booking_Controller, redeemVoucherHelper, "13. Check IF there is promo.id, Request Redeem Voucher. If there is None, Continue to 19.")
+Rel(redeemVoucherHelper, getPromoById, "14.Retrieve Promo")
+Rel(redeemVoucherHelper, createVoucher, "15. Create Voucher Data")
+Rel(createVoucher, database, "16. Create Voucher data")
+
+Rel(redeemVoucherHelper, paymentMethod, "17. Request Payment Method Info")
+Rel(redeemVoucherHelper, sendInvoiceData, "18. Request send Invoice data")
+Rel(redeemVoucherHelper, VoucherRepository, "19. Create Voucher data")
+Rel(VoucherRepository, database, "20. Create Voucher data")
+Rel(Booking_Controller, sendEmail, "21. Check if there is Email If there is send Email")
+Rel_L(sendEmail, Kafka, "22. Send Email")
+
+@enduml

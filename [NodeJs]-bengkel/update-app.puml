@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateApp API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "updateApp API\n[Component]"){
+    Component(auth_middleware, "validateBengkelId", "Middleware | NodeJs", "Authentication Middleware for Validate Bengkel ID\n(NodeJs Bengkel API)")
+    Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(detail, "Detail Controller", "Controller | NodeJs", "Controller for Detail Function related\n(NodeJs Bengkel API)")
+
+    Component(updateApp, "updateApp", "Function | NodeJs", "Function for Update App data\n(NodeJs Bengkel API)")
+    Component(getBrandIdList, "getBrandIdList", "Function | NodeJs", "Function for Get Brand ID list data\n(NodeJs Bengkel API)")
+    Component(getTipeServisList, "getTipeServisList", "Function | NodeJs", "Function for Get Tipe Service list data\n(NodeJs Bengkel API)")
+    Component(getDetailByID, "Bengkel.getDetailByID", "Function | NodeJs", "Function for Get Detail By ID data\n(NodeJs Bengkel API)")
+    Component(updates, "Bengkel.updates", "Function | NodeJs", "Function for Update Bengkel data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Validate Bengkel ID")
+Rel(auth_middleware, auth_middlewares, "2. Request Update App data")
+Rel(auth_middlewares, detail, "3. Request Update App data")
+Rel(detail, updateApp, "4. Request Update App data")
+
+Rel(updateApp, getBrandIdList, "5. Request Get Brand ID list data")
+Rel(updateApp, getTipeServisList, "7. Request Get Tipe Service list data")
+Rel(updateApp, getDetailByID, "9. Request Get Detail By ID data")
+Rel(updateApp, updates, "11. Request Update Bengkel data")
+
+Rel(getBrandIdList, database, "6. Get Brand ID list data")
+Rel(getTipeServisList, database, "8. Get Tipe Service list data")
+Rel(getDetailByID, database, "10. Get Detail By ID data")
+Rel(updates, database, "12. Update Bengkel data")
+
+@enduml

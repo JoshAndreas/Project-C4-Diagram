@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateQuotaByBengkelID API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "updateQuotaByBengkelID API\n[Component]"){
+    Component(auth_middleware, "validateBengkelId", "Middleware | NodeJs", "Authentication Middleware for Validate Bengkel ID\n(NodeJs Bengkel API)")
+    Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(detail, "Daily Quota Controller", "Controller | NodeJs", "Controller for Daily Quota Function related\n(NodeJs Bengkel API)")
+    
+    Component(getCountByBengkelID, "getCountByBengkelID", "Function | NodeJs", "Function for Get Daily quota count data by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(count, "DailyQuota.count", "Function | NodeJs", "Function for Count Daily Quota data\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Validate Bengkel ID")
+Rel(auth_middleware, auth_middlewares, "2. Request Get Daily quota count data by Bengkel ID")
+Rel(auth_middlewares, detail, "3. Request Get Daily quota count data by Bengkel ID")
+Rel(detail, getCountByBengkelID, "4. Request Get Daily quota count data by Bengkel ID")
+
+Rel(getCountByBengkelID, count, "5. Get Daily quota count data by Bengkel ID")
+Rel(count, database, "6. Count Daily Quota data")

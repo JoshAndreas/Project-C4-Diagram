@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getCurrentActivityBengkel API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getCurrentActivityBengkel API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify Function\n(NodeJs Booking API)")
+Component(booking_customer_controller, "Booking Customer Controller", "Controller | NodeJs", "Controller for Booking Customer Related Function\n(NodeJs Booking API)")
+Component(getCurrentActivityBengkel, "getCurrentActivityBengkel", "Function | NodeJs", "Function for get bengkel current activity\n(NodeJs Booking API)")
+Component(getCalendarBengkelByDateBengkel, "Booking_Availability.getCalendarBengkelByDateBengkel", "Function | NodeJs", "Function for get Calendar Bengkel By Date Bengkel\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request get bengkel current activity")
+Rel_D(auth_middleware, booking_customer_controller, "2. Request get bengkel current activity")
+Rel_D(booking_customer_controller, getCurrentActivityBengkel, "3. Request get bengkel current activity")
+Rel_D(getCurrentActivityBengkel, getCalendarBengkelByDateBengkel, "4. get bengkel current activity")
+Rel_D(getCalendarBengkelByDateBengkel, database, "5. get Calendar Bengkel By Date Bengkel")
+
+
+
+
+
+
+@enduml

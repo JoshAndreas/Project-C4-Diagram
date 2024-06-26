@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findGroupBengkelById API\n[mos-bengkel-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findGroupBengkelById API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-bengkel-service)")
+Component(group_bengkel_controller, "Group Bengkel Controller", "Controller | TypeScript", "Controller for Group Bengkel Related Function\n(mos-bengkel-service)")
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-bengkel-service)")
+
+Component(findGroupBengkelById, "findGroupBengkelById", "Function | TypeScript", "Main Function for find group bengkel by ID\n(mos-bengkel-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request find group bengkel by ID")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request find group bengkel by ID")
+Rel_D(auth_operator_middleware, group_bengkel_controller, "3. Request find group bengkel by ID")
+Rel_D(group_bengkel_controller, findGroupBengkelById, "4. Request find group bengkel by ID")
+Rel_D(findGroupBengkelById, database, "5. Retrieve group bengkel data by ID")
+
+@enduml

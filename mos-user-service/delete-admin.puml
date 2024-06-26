@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteAdmin API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "deleteAdmin API\n[Component]"){
+Component(operators_controller, "Operators Controller", "Controller | TypeScript", "Controller for Operator Related Function\n(mos-user-service)")
+Component(deleteAdmin, "deleteAdmin", "Function | TypeScript", "Function for delete admin data\n(mos-user-service)")
+Component(deleteAdmins, "MstOperatorRepository.update", "Function | TypeScript", "Function for update admin data\n(mos-user-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request delete admin data")
+
+Rel_D(mainMiddleware, operators_controller, "2. Request delete admin data")
+Rel_D(operators_controller, deleteAdmin, "3. Request delete admin data")
+Rel_D(deleteAdmin, deleteAdmins, "4. Delete admin data")
+Rel_D(deleteAdmins, database, "5. Delete admin data")
+
+@enduml

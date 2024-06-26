@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getServiceBerkalaForBookingByBengkelID Service Umum API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getServiceBerkalaForBookingByBengkelID Service Umum API\n[Component]"){
+Component(reference_controller, "Moservice Service Berkala Controller", "Controller | NodeJs", "Controller for Moservice Service Berkala Related function\n(NodeJs Katalog API)")
+Component(getServiceBerkalaForBookingByBengkelID, "getServiceBerkalaForBookingByBengkelID", "Function | NodeJs", "Function for get Service Berkala For Booking By Bengkel ID\n(NodeJs Katalog API)")
+Component(bookingReadByBengkelID, "ServiceBerkala.bookingReadByBengkelID", "Function | NodeJs", "Function for Read Booking By Bengkel ID\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, reference_controller, "1. Request get Service Berkala For Booking By Bengkel ID")
+Rel_D(reference_controller, getServiceBerkalaForBookingByBengkelID, "2. Request get Service Berkala For Booking By Bengkel ID")
+Rel_D(getServiceBerkalaForBookingByBengkelID, bookingReadByBengkelID, "3. Request get Service Berkala For Booking By Bengkel ID")
+Rel_D(bookingReadByBengkelID, database, "4. Get Service Berkala For Booking By Bengkel ID")
+
+@enduml

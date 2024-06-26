@@ -1,0 +1,39 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "create Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(auth_middlewares, "auth.decodeToken", "Middleware | NodeJs", "Authentication Middleware for Decode token\n(NodeJs Bengkel API)")
+
+    Component(bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(create, "create", "Function | NodeJs", "Function for Create Bengkel data\n(NodeJs Bengkel API)")
+    Component(selectLastID, "Bengkel.selectLastID", "Function | NodeJs", "Function for select last ID\n(NodeJs Bengkel API)")
+    Component(creates, "Bengkel.creates", "Function | NodeJs", "Function for Create Bengkel data\n(NodeJs Bengkel API)")
+    Component(createe, "bengkelUser.create", "Function | NodeJs", "Function for Create Bengkel User data\n(NodeJs Bengkel API)")
+
+}
+AddProperty("URL", "/api/merchant-configurations/create")
+AddProperty("Service", "Payment Service")
+Component(createMerchantConfig, "createMerchantConfig", "Function | NodeJs", "Function for Create Merchant Config")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Create Bengkel data")
+Rel(auth_middleware, bengkel, "2. Request Create Bengkel data")
+Rel(bengkel, auth_middlewares, "3. Decode Token")
+Rel(auth_middlewares, create, "4. Request Create Bengkel data")
+
+Rel(create, selectLastID, "5. Request select last ID")
+Rel(create, createMerchantConfig, "7. Request Create Merchant Config")
+Rel(create, creates, "8. Request Create Bengkel data")
+Rel(create, createe, "10. Request Create Bengkel user data")
+
+Rel(selectLastID, database, "6. Select last ID")
+Rel(creates, database, "9. Create Bengkel data")
+Rel(createe, database, "11. Create Bengkel user data")
+@enduml

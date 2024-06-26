@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+Title Moservice.id(Context Diagram)
+Person(A, "Moservice Customer", "[Member: Customer, Admin, Bengkel Partner]\n Customer of the moservice, with personal id moservice as Member.")
+System(B, "Moservice App", "[Software System]\nmoservice.id main services for All User")
+System_Ext(l, "External System", "External API for OTP, Notification, Payment Service & Disbursement")
+
+Rel_D(A, B, "Login, Register, Booking, Manage Vehicle")
+Rel_R(B, l, "Request OTP, Notification, Submit Payment Disbursement")
+Rel_U(l, A, "OTP, Notification, Payment")
+
+@enduml
+

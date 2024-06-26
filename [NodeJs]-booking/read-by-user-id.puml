@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getHourByDate API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getHourByDate API\n[Component]"){
+Component(booking_order_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(readByUserID, "readByUserID", "Function | NodeJs", "Function for read By User ID\n(NodeJs Booking API)")
+Component(listByUserId, "Booking_Order.listByUserId", "Function | NodeJs", "Function for list By User ID\n(NodeJs Booking API)")
+Component(countBookingByUserID, "countBookingByUserID", "Function | NodeJs", "Function for count booking by user ID\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+Rel_D(Web_Moservice, booking_order_controller, "1. Request Retrieve user dashboard")
+Rel_D(booking_order_controller, readByUserID, "2. Read by User ID")
+Rel_D(readByUserID, listByUserId, "3. Request List By User ID")
+Rel_D(readByUserID, countBookingByUserID, "5. Request Count Booking By User ID")
+
+
+Rel_D(listByUserId, database, "4. List By User ID")
+Rel_D(countBookingByUserID, database, "6. Count Booking By User ID")
+
+
+
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findUserVehicleById API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findUserVehicleById API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-user-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-user-service)")
+
+Component(user_vehicle_controller, "User Vehicle Controller", "Controller | TypeScript", "Controller for User Vehicle Related Function\n(mos-user-service)")
+Component(findUserVehicleById, "findUserVehicleById", "Function | TypeScript", "Function for find User vehicle by ID\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-mobil-service")
+AddProperty("URL", "/api/mobil/$(userId)/cars/$(carId)?$(queryString)")
+Component(getVehicleByCarId, "getVehicleByCarId", "Function | TypeScript", "Function for get vehicle by car ID")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Find User Vehicle by ID")
+
+Rel_D(mainMiddleware, auth_middleware, "2. Request Find User Vehicle by ID")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem Key")
+
+Rel_D(auth_middleware, user_vehicle_controller, "4. Request Find User Vehicle by ID")
+Rel_D(user_vehicle_controller, findUserVehicleById, "5. Find User Vehicle by ID")
+Rel_D(findUserVehicleById, getVehicleByCarId, "6. Get Vehicle by car ID")
+Rel_D(getVehicleByCarId, database, "7. Retrieve user vehicle data")
+
+@enduml

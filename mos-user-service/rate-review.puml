@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title rateReview API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "rateReview API\n[Component]"){
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-user-service)")
+Component(auth_middleware, "Auth Middleware", "Controller | TypeScript", "Middleware for Authentication\n(mos-user-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(user_booking_controller, "User Booking Controller", "Controller | TypeScript", "Controller for User Booking Related Function\n(mos-user-service)")
+Component(rateReview, "rateReview", "Function | TypeScript", "Function for retrieve rate review data\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel(Web_Moservice, mainMiddleware, "1. Request retrieve rate review data")
+Rel(mainMiddleware, auth_middleware, "2. Request Get Pemkey")
+Rel_R(auth_middleware, getPemKey, "3. Request Get Pemkey")
+
+Rel(auth_middleware, user_booking_controller, "4. Request retrieve rate review data")
+Rel(user_booking_controller, rateReview, "5. Request retrieve rate review data")
+Rel(rateReview, database, "6. Retrieve rate review data")
+
+@enduml

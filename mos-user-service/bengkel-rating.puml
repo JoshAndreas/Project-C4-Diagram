@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title bengkelRating API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "bengkelRating API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(user_booking_controller, "User Booking Controller", "Controller | TypeScript", "Controller for User Booking Related Function\n(mos-user-service)")
+Component(bengkelRating, "bengkelRating", "Function | TypeScript", "Function for get bengkel rating data\n(mos-user-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel(Web_Moservice, mainMiddleware, "1. Request get bengkel rating data")
+
+Rel(mainMiddleware, user_booking_controller, "2. Request get bengkel rating data")
+Rel(user_booking_controller, bengkelRating, "3. Request get bengkel rating data")
+Rel(bengkelRating, database, "4. Retrieve bengkel rating data")
+
+@enduml

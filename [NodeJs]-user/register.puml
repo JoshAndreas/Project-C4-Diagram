@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title register API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "register API\n[Component]"){
+Component(user_controller, "Users Controller", "Controller | NodeJs", "Controller for User Related function\n(NodeJs User API)")
+Component(register, "register", "Function | NodeJs", "Function for register\n(NodeJs User API)")
+Component(PasswordValidator, "PasswordValidator", "Function | NodeJs", "Function for Validate Password\n(NodeJs User API)")
+Component(generateOTP, "generateOTP", "Function | NodeJs", "Function for Generate OTP\n(NodeJs User API)")
+Component(validateEmailAndPhone, "validateEmailAndPhone", "Function | NodeJs", "Function for Validate Email and Phone\n(NodeJs User API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, user_controller, "1. Request Register New User")
+Rel_D(user_controller, register, "2. Request Register New User")
+Rel_D(register, PasswordValidator, "3. Validate Password")
+Rel_D(register, generateOTP, "4. Generate OTP")
+Rel_D(register, validateEmailAndPhone, "5. Check if Email Validated Or Not, if Validated Insert User data")
+Rel_D(validateEmailAndPhone, database, "6. Insert User data")
+
+@enduml

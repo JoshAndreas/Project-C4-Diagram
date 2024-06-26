@@ -1,0 +1,34 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index Payment API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index Payment API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middlware for Authentication\n(mos-payment-service)")
+Component(payment_method_controller, "Payment Controller", "Controller | TypeScript", "Controller for payment Related Function\n(mos-payment-service)")
+Component(index, "index", "Function | TypeScript", "Function for retrieve Payment data\n(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Main Function for Get Pemkey\n(mos-payment-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-bengkel-service")
+AddProperty("URL", "/api/workshop-groups/$(groupBengkelById)")
+Component(groupBengkelById, "groupBengkelById", "Function | TypeScript", "Function for Find Group Bengkel By ID\n(mos-bengkel-service)")
+Rel(Web_Moservice, mainMiddleware, "1. Request retrieve Payment data")
+Rel(mainMiddleware, loggerMiddleware, "2. Request retrieve Payment data")
+
+Rel(loggerMiddleware, auth_middleware, "3. Request retrieve Payment data")
+Rel_R(auth_middleware, getPemKey, "4. Get Pem Key")
+
+Rel(auth_middleware, payment_method_controller, "5. Request retrieve Payment data")
+Rel(payment_method_controller, index, "6. Request retrieve Payment data")
+Rel(index, database, "7. Retrieve payment data")
+Rel_D(index, groupBengkelById, "8. If Payment items have Related to group bengkel, retrieve group bengkel data by ID")
+Rel_L(groupBengkelById, database, "9. Retrieve group bengkel by ID payment data")
+
+
+@enduml

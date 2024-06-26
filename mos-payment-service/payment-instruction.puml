@@ -1,0 +1,29 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title paymentInstruction API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "paymentInstruction API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(payment_method_controller, "Payment Method Controller", "Controller | TypeScript", "Controller for payment method Related Function\n(mos-payment-service)")
+Component(paymentInstruction, "paymentInstruction", "Function | TypeScript", "Function for retrieve payment instruction data\n(mos-payment-service)")
+Component(cloudinaryBaseUrl, "cloudinaryBaseUrl", "Function | TypeScript", "Function for retrieve payment instruction image data\n(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryConfig.cloudinary_path}")
+System_Ext(cloudinary, "Cloudinary", "External System for store Image data")
+Rel(Web_Moservice, mainMiddleware, "1. Request Upload payment instruction")
+Rel(mainMiddleware, loggerMiddleware, "2. Request Upload payment instruction")
+
+Rel(loggerMiddleware, payment_method_controller, "3. Request Upload payment instruction")
+Rel(payment_method_controller, paymentInstruction, "4. Request retrieve payment instruction")
+Rel_R(paymentInstruction, database, "5. Retrieve payment instruction data")
+Rel(paymentInstruction, cloudinaryBaseUrl, "6. Request payment instruction image data")
+Rel_L(cloudinaryBaseUrl, cloudinary, "7. Upload payment instruction image data")
+
+
+@enduml

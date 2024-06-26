@@ -1,0 +1,33 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getAllPromoList Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "getAllPromoList Content Promo API\n[Component]"){
+    Component(auth_middleware, "Auth Middleware", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    
+    Component(getAllPromoList, "getAllPromoList", "Function | NodeJs", "Function for Get All Promo List data\n(NodeJs Content API)")
+    Component(readMoadminList, "ContentPromoNew.readMoadminList", "Function | NodeJs", "Function for Read Moadmin list data\n(NodeJs Content API)")
+    Component(countMoadminList, "ContentPromoNew.countMoadminList", "Function | NodeJs", "Function for Count Moadmin list data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Get All Promo List data")
+
+Rel(auth_middleware, content_controller, "3. Request Get All Promo List data")
+Rel(content_controller, getAllPromoList, "4. Request Get All Promo List data")
+Rel(getAllPromoList, readMoadminList, "5. Request Read Moadmin list data")
+Rel(getAllPromoList, countMoadminList, "7. Request Count Moadmin list data")
+
+Rel(readMoadminList, database, "6. Read Moadmin list data")
+Rel(countMoadminList, database, "8. Count Moadmin list data")
+
+@enduml

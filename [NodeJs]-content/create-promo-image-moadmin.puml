@@ -1,0 +1,40 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createPromoImage Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "createPromoImage Content Promo API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    
+    Component(createPromoImage, "createPromoImage", "Function | NodeJs", "Function for Create Promo Image data\n(NodeJs Content API)")
+    Component(readMoadminDetail, "ContentPromo.readMoadminDetail", "Function | NodeJs", "Function for Read Moadmin detail data\n(NodeJs Content API)")
+    Component(upload, "cloudinary.uploader.upload", "Function | NodeJs", "Function for Upload Image data to Cloudinary\n(NodeJs Content API)")
+    Component(update, "ContentPromo.update", "Function | NodeJs", "Function for Update Promo data\n(NodeJs Content API)")
+
+
+}
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/${version}/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for Store Image Data")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Create Promo Image data")
+
+Rel(auth_middleware, content_controller, "3. Request Create Promo Image data")
+Rel(content_controller, createPromoImage, "4. Request Create Promo Image data")
+Rel(createPromoImage, readMoadminDetail, "5. Request Read Moadmin detail data")
+Rel(createPromoImage, upload, "7. Request Upload Image to Cloudinary")
+Rel(createPromoImage, update, "9. Request Update promo data")
+
+Rel_L(upload, Cloudinary, "8. Upload Image to Cloudinary")
+
+Rel_D(readMoadminDetail, database, "6. Read Moadmin detail data")
+Rel_D(update, database, "10. Update promo data")
+
+@enduml

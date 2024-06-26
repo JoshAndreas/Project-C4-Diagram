@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getMultiConditionList prebooking API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getMultiConditionList prebooking API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(Pre_Booking_controller, "Pre Booking Controller", "Controller | NodeJs", "Controller for Pre Booking Related Function\n(NodeJs Booking API)")
+Component(getMultiConditionList, "getMultiConditionList", "Function | NodeJs", "Function for get multi condition list\n(NodeJs Booking API)")
+Component(getAllMultiCondition, "Pre_Booking.getAllMultiCondition", "Function | NodeJs", "Function for get all multi condition list\n(NodeJs Booking API)")
+Component(countAllFilter, "Pre_Booking.countAllFilter", "Function | NodeJs", "Function for count All Filter\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request get multi condition list")
+Rel_D(auth_middleware, Pre_Booking_controller, "2. Request get multi condition list")
+Rel_D(Pre_Booking_controller, getMultiConditionList, "3. Request get multi condition list")
+Rel_D(getMultiConditionList, getAllMultiCondition, "4. Request get all multi condition list")
+Rel_D(getMultiConditionList, countAllFilter, "6. Request count all filter condition list")
+
+Rel_D(getAllMultiCondition, database, "5. Get all multi condition list")
+Rel_D(countAllFilter, database, "7. Count all filter condition list")
+
+@enduml

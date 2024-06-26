@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title generateQRCode API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "generateQRCode API\n[Component]"){
+Component(auths_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for authentication\n(NodeJs User API)")
+
+Component(user_controller, "User Workshop Controller", "Controller | NodeJs", "Controller for User Workshop Related function\n(NodeJs User API)")
+Component(generateQRCode, "generateQRCode", "Function | NodeJs", "Function for generate QR Code\n(NodeJs User API)")
+Component(toDataURL, "QRCode.toDataURL", "Function | NodeJs", "Function for generate qc code to Data URL\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auths_middleware, "1. Request Generate QR Code")
+Rel_D(auths_middleware, user_controller, "2. Request Generate QR Code")
+
+
+Rel_D(user_controller, generateQRCode, "3. Generate QR Code")
+Rel_D(generateQRCode, toDataURL, "5. Generate QR Code to Data URL")
+Rel_D(generateQRCode, database, "4. Generate QR Code data")
+
+@enduml

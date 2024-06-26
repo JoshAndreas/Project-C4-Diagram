@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create brand API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "create brand API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-mobil-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-mobil-service)")
+
+Component(sp_moadmin_auth_middleware, "SP Moadmin Auth Middleware", "Middleware | TypeScript", "Middleware for Moadmin Authentication\n(mos-mobil-service)")
+Component(sp_mobil_brand_controller, "SP Mobil Brand Controller", "Controller | TypeScript", "Controller for Mobil Brand Related Function\n(mos-mobil-service)")
+
+Component(create, "create", "Function | TypeScript", "Main Function for create car brands data\n(mos-mobil-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, loggerMiddleware, "1. Request Create Car Brands Data")
+Rel_D(loggerMiddleware, mainMiddleware, "2. Request Create Car Brands Data")
+
+Rel_D(mainMiddleware, sp_moadmin_auth_middleware, "3. Request Create Car Brands Data")
+Rel_D(sp_moadmin_auth_middleware, sp_mobil_brand_controller, "4. Request Create Car Brands Data")
+Rel_D(sp_mobil_brand_controller, create, "5. Request Create Car Brands Data")
+Rel_D(create, database, "6. Create Car Brands Data")
+
+@enduml

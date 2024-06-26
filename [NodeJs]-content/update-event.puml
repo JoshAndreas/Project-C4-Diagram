@@ -1,0 +1,29 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Event API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "update Event API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Event Controller", "Controller | NodeJs", "Controller for Event Related Function\n(NodeJs Content API)")
+    Component(update, "update", "Function | NodeJs", "Function for Update Event data\n(NodeJs Content API)")
+    Component(updates, "ContentEvent.updates", "Function | NodeJs", "Function for Update Event data\n(NodeJs Content API)")
+    Component(updater, "ContentEvent.update", "Function | NodeJs", "Function for update Event data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Update Event data")
+Rel(auth_middleware, content_controller, "2. Request Update Event data")
+Rel(content_controller, update, "3. Request Update Event data")
+Rel(update, updates, "4. If (data.mapping_data) Exist, Request Update Event data")
+Rel(update, updater, "4. Request Update Event data")
+
+Rel(updates, database, "5. Update Event data")
+Rel(updater, database, "5. Update Event data")
+
+@enduml

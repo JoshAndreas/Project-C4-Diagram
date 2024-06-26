@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getPromoBengkelCities Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getPromoBengkelCities Bengkel API\n[Component]"){
+    Component(bengkel, "Bengkel Detail Controller", "Controller | NodeJs", "Controller for Bengkel Detail Function related\n(NodeJs Bengkel API)")
+
+    Component(getPromoBengkelCities, "getPromoBengkelCities", "Function | NodeJs", "Function for Get Promo bengkel cities data\n(NodeJs Bengkel API)")
+    Component(getPromoBengkelCitiess, "Bengkel.getPromoBengkelCities", "Function | NodeJs", "Function for Get Promo bengkel cities data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, bengkel, "1. Request Get Promo bengkel cities data")
+Rel(bengkel, getPromoBengkelCities, "2. Request Get Promo bengkel cities data")
+Rel(getPromoBengkelCities, getPromoBengkelCitiess, "3. Get Promo bengkel cities data")
+Rel(getPromoBengkelCitiess, database, "4. Get Promo bengkel cities data")
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getYearCar API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getYearCar API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-mobil-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-mobil-service)")
+
+Component(mobil_controller, "Mobil Controller", "Controller | TypeScript", "Controller for Mobil Related Function\n(mos-mobil-service)")
+Component(getYearCar, "getYearCar", "Function | TypeScript", "Main Function for Get Year Car\n(mos-mobil-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, loggerMiddleware, "1. Request get year car")
+Rel_D(loggerMiddleware, mainMiddleware, "2. Request get year car")
+
+Rel_D(mainMiddleware, mobil_controller, "3. Request get year car")
+Rel_D(mobil_controller, getYearCar, "4. Request get year car")
+Rel_D(getYearCar, database, "5. Search & Retrieve Car Year data")
+
+
+@enduml

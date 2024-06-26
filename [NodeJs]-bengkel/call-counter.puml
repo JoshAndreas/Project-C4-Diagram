@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Call Counter API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "Call Counter API\n[Component]"){
+    Component(callCounter, "Call Counter Controller", "Controller | NodeJs", "Controller for Call Counter Function related\n(NodeJs Bengkel API)")
+    Component(read, "read", "Function | NodeJs", "Function for Read Call Counter data\n(NodeJs Bengkel API)")
+    Component(getCounterCall, "Bengkel.getCounterCall", "Function | NodeJs", "Function for Get Counter Call data\n(NodeJs Bengkel API)")
+    Component(insert, "insert", "Function | NodeJs", "Function for Insert Call Counter data\n(NodeJs Bengkel API)")
+    Component(insertCounterCall, "Bengkel.insertCounterCall", "Function | NodeJs", "Function for Insert Call Counter data\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, callCounter, "1. Request Call Counter data")
+Rel(callCounter, read, "2. If case = 'read', Request Read Call Counter data")
+Rel(callCounter, insert, "2. If case = 'insert', Request Insert Call Counter data")
+Rel(read, getCounterCall, "3. Request Get Counter Call data")
+Rel(insert, insertCounterCall, "3. Request Insert Call Counter data")
+Rel(getCounterCall, database, "4. Get Counter Call data")
+Rel(insertCounterCall, database, "4. Insert Call Counter data")
+
+@enduml

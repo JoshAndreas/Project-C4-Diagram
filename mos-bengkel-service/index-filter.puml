@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index filter API\n[mos-bengkel-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index filter API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-bengkel-service)")
+Component(partner_controller, "Filter Controller", "Controller | TypeScript", "Controller for Filter Related Function\n(mos-bengkel-service)")
+
+Component(index, "index", "Function | TypeScript", "Main Function for Indexing filter Data, Filter data became param\n(mos-bengkel-service)")
+
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request show filter data")
+
+Rel_D(mainMiddleware, partner_controller, "2. Request show filter data")
+Rel_D(partner_controller, index, "3. Request show filter data")
+Rel_D(index, database, "4. Retrieve Filtered Data")
+
+@enduml

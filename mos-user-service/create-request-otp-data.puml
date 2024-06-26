@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createRequestOtpData API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createRequestOtpData API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-user-service)")
+Component(operators_controller, "Operators Controller", "Controller | TypeScript", "Controller for Operator Related Function\n(mos-user-service)")
+Component(createRequestOtpData, "createRequestOtpData", "Function | TypeScript", "Function for create otp request data\n(mos-user-service)")
+Component(find, "MstOtpRepository.findOne", "Function | TypeScript", "Function for Inquiry user data based on email or phone number\n(mos-user-service)")
+Component(create, "TrOptRequestRepository.create", "Function | TypeScript", "Function for create otp request data\n(mos-user-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Lay_R(mainMiddleware, operators_controller)
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request create otp request data")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request create otp request data")
+Rel_D(auth_operator_middleware, operators_controller, "3. Request create otp request data")
+Rel_D(operators_controller, createRequestOtpData, "4. Request Create otp request data")
+Rel_D(createRequestOtpData, find, "5. Request Retrieve user data")
+Rel_D(createRequestOtpData, create, "7. Create otp request data")
+Rel_D(find, database, "6. Retrieve user data")
+Rel_D(create, database, "8. Create otp request data")
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updatePromo API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updatePromo API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Authentication Operator\n(mos-content-service)")
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(updatePromo, "updatePromo", "Function | TypeScript", "Main Function for Update Promo\n(mos-content-service)")
+Component(updatePromos, "PromoRepository.update", "Function | TypeScript", "Function for Update Promo\n(mos-content-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Update Promo")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request Update Promo")
+Rel_D(auth_operator_middleware, promo_controller, "3. Request Update Promo Data")
+Rel_D(promo_controller, updatePromo, "4. Request Update Promo data by ID")
+Rel_D(updatePromo, updatePromos, "5. Update Promo data")
+Rel_D(updatePromos, database, "6. Update Promo data")
+
+
+@enduml

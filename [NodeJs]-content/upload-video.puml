@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Video API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "update Video API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Video Controller", "Controller | NodeJs", "Controller for Video Related Function\n(NodeJs Content API)")
+    Component(update, "update", "Function | NodeJs", "Function for Update Video data\n(NodeJs Content API)")
+    Component(updates, "contentVideo.update", "Function | NodeJs", "Function for Update Video data\n(NodeJs Content API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Update Video data")
+Rel(auth_middleware, content_controller, "2. Request Update Video data")
+Rel(content_controller, update, "3. Request Update Video data")
+Rel(update, updates, "4. Request Update Video data")
+
+Rel(updates, database, "5. Update Video data")
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title checkIsUserRegistered Moadmin API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "checkIsUserRegistered Moadmin API\n[Component]"){
+Component(user_controller, "User Workshop Controller", "Controller | NodeJs", "Controller for User Workshop Related function\n(NodeJs User API)")
+Component(checkIsUserRegistered, "checkIsUserRegistered", "Function | NodeJs", "Function for check is user registered\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, user_controller, "1. Request check is user registered")
+Rel_D(user_controller, checkIsUserRegistered, "2. Request check is user registered")
+Rel_D(checkIsUserRegistered, database, "3. Check is user registered")
+
+@enduml

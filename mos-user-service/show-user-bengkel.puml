@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title show user bengkel API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "show user bengkel API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+
+Component(user_bengkel_controller, "User Bengkel Controller", "Controller | TypeScript", "Controller for User bengkel Related Function\n(mos-user-service)")
+Component(show, "show", "Function | TypeScript", "Function for show user bengkel data by bengkel id\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel(Web_Moservice, mainMiddleware, "1. Request show user bengkel data by bengkel id")
+
+Rel(mainMiddleware, user_bengkel_controller, "2. Request show user bengkel data by bengkel id")
+Rel(user_bengkel_controller, show, "3. Request show user bengkel data by bengkel id")
+Rel(show, database, "4. Retrieve user bengkel data by bengkel id")
+
+@enduml

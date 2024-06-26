@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteByServiceUmumID Service Umum API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "deleteByServiceUmumID Service Umum API\n[Component]"){
+Component(auth_middleware, "user.login", "Function | NodeJs", "Function for login\n(NodeJs Katalog API)")
+
+Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Umum Controller", "Controller | NodeJs", "Controller for Service Umum Related function\n(NodeJs Katalog API)")
+Component(deleteByServiceUmumID, "deleteByServiceUmumID", "Function | NodeJs", "Function for Delete service umum data by Service Umum ID\n(NodeJs Katalog API)")
+Component(Delete, "ServiceUmum.delete", "Function | NodeJs", "Function for Delete service umum data\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request Delete service umum data by Service Umum ID")
+Rel_D(auth_middleware, auth_middlewares, "2. Request Delete service umum data by Service Umum ID")
+Rel_D(auth_middlewares, reference_controller, "3. Request Delete service umum data by Service Umum ID")
+Rel_D(reference_controller, deleteByServiceUmumID, "4. Delete service umum data by Service Umum ID")
+Rel_D(deleteByServiceUmumID, Delete, "5. Request Delete service umum data")
+Rel_D(Delete, database, "6. Delete service umum data")
+
+@enduml

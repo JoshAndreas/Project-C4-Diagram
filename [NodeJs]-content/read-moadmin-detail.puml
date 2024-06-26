@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readMoadminDetail API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readMoadminDetail API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    
+    Component(readMoadminDetail, "readMoadminDetail", "Function | NodeJs", "Function for Read Moadmin detail data\n(NodeJs Content API)")
+    Component(readMoadminDetails, "ContentPromo.readMoadminDetail", "Function | NodeJs", "Function for Read Moadmin detail data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Update Transaction Promo data")
+
+Rel(auth_middleware, content_controller, "3. Request Update Transaction Promo data")
+Rel(content_controller, readMoadminDetail, "4. Request Update Transaction Promo data")
+Rel(readMoadminDetail, readMoadminDetails, "5. If Confirm, Confirm Transaction and Update data")
+
+Rel(readMoadminDetails, database, "6. Confirm Transaction and Update data")
+
+@enduml

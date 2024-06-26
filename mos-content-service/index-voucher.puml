@@ -1,0 +1,32 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Index Voucher API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "Index Voucher API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(voucher_controller, "Voucher Controller", "Controller | TypeScript", "Controller for Voucher Related Function\n(mos-content-service)")
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-content-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-content-service)")
+Component(auth_middlewares, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-content-service)")
+
+Component(index, "index", "Function | TypeScript", "Main Function for get voucher data\n(mos-content-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Get Voucher Data")
+
+Rel_D(mainMiddleware, auth_middleware, "2. Request Get Voucher Data")
+Rel_R(auth_middleware, getPemKey, "3. Else, Get Pem Key")
+Rel_L(auth_middleware, auth_middlewares, "3. If there is (xToken), Return Auth Operator Middleware.")
+Rel(auth_middlewares, voucher_controller, "4. Request Get Voucher Data")
+
+Rel(auth_middleware, voucher_controller, "4. Request Get Voucher Data")
+Rel(voucher_controller, index, "5. Request Get Voucher Data")
+
+Rel(index, database, "6. Retrieve Voucher Data")
+
+
+@enduml

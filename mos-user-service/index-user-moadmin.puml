@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index user moadmin API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index user moadmin API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(user_mos_moadmin_controller, "User Mos Moadmin Controller", "Controller | TypeScript", "Controller for User Moadmin Related Function\n(mos-user-service)")
+Component(index, "index", "Function | TypeScript", "Function for retrieve moadmin user data\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, mainMiddleware, "1. Request retrieve moadmin user data")
+
+Rel(mainMiddleware, user_mos_moadmin_controller, "2. Request retrieve moadmin user data")
+Rel(user_mos_moadmin_controller, index, "3. Request retrieve moadmin user data")
+Rel(index, database, "4. Retrieve moadmin user data")
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title bookingGetCarModelList  API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "bookingGetCarModelList  API\n[Component]"){
+Component(reference_controller, "Reference Controller", "Controller | NodeJs", "Controller for Reference Related function\n(NodeJs Katalog API)")
+Component(bookingGetCarModelList, "bookingGetCarModelList", "Function | NodeJs", "Function for get booking car model list\n(NodeJs Katalog API)")
+Component(getCarModel, "Mobil.getCarModel", "Function | NodeJs", "Function for get car model\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, reference_controller, "1. Request get booking car model list")
+Rel_D(reference_controller, bookingGetCarModelList, "2. Request get booking car model list")
+Rel_D(bookingGetCarModelList, getCarModel, "3. Request get booking car model list")
+Rel_D(getCarModel, database, "4. Get booking car model list")
+
+@enduml

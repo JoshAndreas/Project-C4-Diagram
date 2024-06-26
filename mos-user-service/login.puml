@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title login API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "login API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(operators_controller, "Operators Controller", "Controller | TypeScript", "Controller for Operator Related Function\n(mos-user-service)")
+Component(login, "login", "Function | TypeScript", "Function for register admin data\n(mos-user-service)")
+Component(generateTokenOperatorUser, "generateTokenOperatorUser", "Function | TypeScript", "Function for generate token operator user\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request login")
+
+Rel_D(mainMiddleware, operators_controller, "2. Request login")
+Rel_D(operators_controller, login, "3. Request Login")
+Rel_R(login, database, "4. Check login info")
+Rel_D(login, generateTokenOperatorUser, "5. Generate Token")
+
+@enduml

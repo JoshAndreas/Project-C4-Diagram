@@ -1,0 +1,15 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title groupParamsByKey API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "groupParamsByKey API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(groupParamsByKey, "groupParamsByKey", "Function | NodeJs", "Function for decode qr code\n(NodeJs Booking API)")
+}
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request decode qr code")
+Rel_D(auth_middleware, groupParamsByKey, "2. Decode qr code")
+
+@enduml

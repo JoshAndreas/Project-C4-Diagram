@@ -1,0 +1,39 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updatePrebook API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updatePrebook API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(pre_booking_controller, "Prebooking Controller", "Controller | NodeJs", "Controller for Prebooking Related Function\n(NodeJs Booking API)")
+Component(updatePrebook, "updatePrebook", "Function | NodeJs", "Function for update Prebook data\n(NodeJs Booking API)")
+Component(checkIfPrebookExist, "Booking_Order.checkIfPrebookExist", "Function | NodeJs", "Function for check if prebook exist\n(NodeJs Booking API)")
+Boundary(if, "if (!prebookIsExist && prebook_status == 2)"){
+Component(readByPrebookID, "Pre_Booking.readByPrebookID", "Function | NodeJs", "Function for read Prebook data by prebook ID\n(NodeJs Booking API)")
+Component(createBookingFromPreBooking, "booking_order.createBookingFromPreBooking", "Function | NodeJs", "Function for create booking from prebooking\n(NodeJs Booking API)")
+}
+
+Component(updateByPrebookID_script, "Pre_Booking.updateByPrebookID_script", "Function | NodeJs", "Function for update prebooking data by Prebooking ID\n(NodeJs Booking API)")
+
+Component(updateBookingCustomerStatusFromPrebooking_script, "Booking_Order.updateBookingCustomerStatusFromPrebooking_script", "Function | NodeJs", "Function for update status from prebooking to Booking\n(NodeJs Booking API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request Update Prebooking")
+Rel_D(auth_middleware, pre_booking_controller, "2. Request Update Prebooking")
+Rel_D(pre_booking_controller, updatePrebook, "3. Request Update Prebooking")
+Rel_D(updatePrebook, checkIfPrebookExist, "4. Request Check if prebook exist")
+Rel_D(checkIfPrebookExist, readByPrebookID, "6. if (!prebookIsExist && prebook_status == 2), read prebook data by prebooking ID")
+Rel_D(checkIfPrebookExist, createBookingFromPreBooking, "8. Request create booking from prebooking")
+
+Rel_D(checkIfPrebookExist, updateByPrebookID_script, "6. Else, Update prebooking data by ID")
+Rel_D(checkIfPrebookExist, updateBookingCustomerStatusFromPrebooking_script, "10. Request update Booking Customer Status From Prebooking")
+
+Rel_D(checkIfPrebookExist, database, "5. Check if prebook exist")
+Rel_D(readByPrebookID, database, "7. Read prebook data by prebooking ID")
+Rel_D(createBookingFromPreBooking, database, "9. Create booking from prebooking")
+Rel_D(updateByPrebookID_script, database, "7. Update prebooking data by ID, Continue to 10.")
+Rel_D(updateBookingCustomerStatusFromPrebooking_script, database, "11. Update Booking Customer Status From Prebooking")
+
+@enduml

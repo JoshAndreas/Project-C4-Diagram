@@ -1,0 +1,68 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title NodeJs Service Platform User API 
+
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+Component(API, "NodeJs Service User Mobil API", "Repository | NodeJs", "Repository for NodeJs User Related Function")
+
+Boundary(api, "NodeJs User API\n[Component]"){
+Component(OTP, "OTP", "Function | TypeScript", "Function for Inquiry OTP, Approve OTP Request, Verify OTP, Check OTP data\n(NodeJs User API)")
+Component(Password, "Password", "Function | TypeScript", "Function for Change Password, Check Current Password, Forgot Password, Reset Password\n(NodeJs User API)")
+Component(checkIsUserRegistered, "checkIsUserRegistered", "Function | NodeJs", "Function for Check is user registered\n(NodeJs User API)")
+Component(NotifMoadmin, "Moadmin Notif", "Function | NodeJs", "Function for Inquiry, Create, Delete, Update, Inquiry By ID Moadmin Notif data\n(NodeJs User API)")
+Component(deleteToken, "deleteToken", "Function | NodeJs", "Function for Delete Token\n(NodeJs User API)")
+Component(generateQRCode, "generateQRCode", "Function | NodeJs", "Function for Generate QR Code\n(NodeJs User API)")
+Component(getUserbyID, "getUserbyID", "Function | NodeJs", "Function for Get user by ID\n(NodeJs User API)")
+Component(isBengkelIdDuplicate, "isBengkelIdDuplicate", "Function | NodeJs", "Function for Check is bengkel ID duplicate\n(NodeJs User API)")
+Component(login, "Login", "Function | NodeJs", "Function for Login user, Login Workshop\n(NodeJs User API)")
+Component(logout, "logout", "Function | NodeJs", "Function for Logout\n(NodeJs User API)")
+
+Component(readByID, "Read User", "Function | NodeJs", "Function for Inquiry User, Inquiry User data By ID, Inquiry User Workshop\n(NodeJs User API)")
+Component(readMultiConditionUserMoservice, "readMultiConditionUserMoservice", "Function | NodeJs", "Function for Read Multi Condition User Moservice\n(NodeJs User API)")
+Component(register, "Register", "Function | NodeJs", "Function for Register User, Moadmin, Moservice, Register Workshop data\n(NodeJs User API)")
+Component(saveUser, "saveUser", "Function | NodeJs", "Function for Save user data\n(NodeJs User API)")
+Component(updateFirebaseToken, "updateFirebaseToken", "Function | NodeJs", "Function for Update Firebase Token\n(NodeJs User API)")
+Component(update, "Update Workshop", "Function | NodeJs", "Function for Update user workshop data\n(NodeJs User API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, API, "Request use Function Related to User")
+
+Rel_D(API, OTP, "Request Inquiry OTP, Approve OTP Request, Verify OTP, Check OTP data")
+Rel_D(API, Password, "Request Change Password, Check Current Password, Forgot Password, Reset Password")
+Rel_D(API, checkIsUserRegistered, "Request Check is user registered")
+Rel_D(API, NotifMoadmin, "Request Inquiry, Create, Delete, Update, Inquiry By ID Moadmin Notif data")
+Rel_D(API, deleteToken, "Request Delete Token")
+Rel_D(API, generateQRCode, "Request Generate QR Code")
+Rel_D(API, getUserbyID, "Request Get user by ID")
+Rel_D(API, isBengkelIdDuplicate, "Request Check is bengkel ID duplicate")
+Rel_D(API, login, "Request Login user, Login Workshop")
+Rel_D(API, logout, "Request Logout")
+
+Rel_D(API, readByID, "Request Inquiry User, Inquiry User data By ID, Inquiry User Workshop")
+Rel_D(API, readMultiConditionUserMoservice, "Request Read Multi Condition User Moservice")
+Rel_D(API, register, "Request Register User, Moadmin, Moservice, Register Workshop data")
+Rel_D(API, saveUser, "Request Save user data")
+Rel_D(API, updateFirebaseToken, "Request Update Firebase Token")
+Rel_D(API, update, "Request Update user workshop data")
+
+Rel_D(OTP, database, "Request Inquiry OTP, Approve OTP Request, Verify OTP, Check OTP data")
+Rel_D(Password, database, "Request Change Password, Check Current Password, Forgot Password, Reset Password")
+Rel_D(checkIsUserRegistered, database, "Request Check is user registered")
+Rel_D(NotifMoadmin, database, "Request Inquiry, Create, Delete, Update, Inquiry By ID Moadmin Notif data")
+Rel_D(deleteToken, database, "Request Delete Token")
+Rel_D(generateQRCode, database, "Request Generate QR Code")
+Rel_D(getUserbyID, database, "Request Get user by ID")
+Rel_D(isBengkelIdDuplicate, database, "Request Check is bengkel ID duplicate")
+Rel_D(login, database, "Request Login user, Login Workshop")
+Rel_D(logout, database, "Request Logout")
+
+Rel_D(readByID, database, "Request Inquiry User, Inquiry User data By ID, Inquiry User Workshop")
+Rel_D(readMultiConditionUserMoservice, database, "Request Read Multi Condition User Moservice")
+Rel_D(register, database, "Request Register User, Moadmin, Moservice, Register Workshop data")
+Rel_D(saveUser, database, "Request Save user data")
+Rel_D(updateFirebaseToken, database, "Request Update Firebase Token")
+Rel_D(update, database, "Request Update user workshop data")

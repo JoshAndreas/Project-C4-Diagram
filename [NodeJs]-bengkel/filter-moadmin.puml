@@ -1,0 +1,60 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title filter API\n[NodeJs Bengkel API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "filter API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+Component(bengkel_controller, "Bengkel Filter Controller", "Controller | NodeJs", "Controller for Bengkel Filter Related Function\n(NodeJs Bengkel API)")
+Boundary(apis, "filter Function"){
+
+Component(filter, "filter", "Function | NodeJs", "Function for Filter bengkel data\n(NodeJs Bengkel API)")
+
+Component(countFilter, "Bengkel.countFilter", "Function | NodeJs", "Function for Count Filter data\n(NodeJs Bengkel API)")
+Component(filters, "Bengkel.filter", "Function | NodeJs", "Function for Filter Bengkel data\n(NodeJs Bengkel API)")
+Component(topThree, "Bengkel.topThree", "Function | NodeJs", "Function for Inquiry Top Three Bengkel data\n(Promo, City, Location)\n(NodeJs Bengkel API)")
+}
+Boundary(apid, "getFilterParams Function"){
+
+Component(getFilterParams, "getFilterParams", "Function | NodeJs", "Function for Get Filter Params data\n(NodeJs Bengkel API)")
+
+Component(getBengkelTypes, "getBengkelTypes", "Function | NodeJs", "Function for Get Bengkel Types data\n(NodeJs Bengkel API)")
+Component(getBengkelCities, "getBengkelCities", "Function | NodeJs", "Function for Get Bengkel Cities data\n(NodeJs Bengkel API)")
+Component(getBengkelBrands, "getBengkelBrands", "Function | NodeJs", "Function for Get Bengkel Brands data\n(NodeJs Bengkel API)")
+Component(getBengkelFacilities, "getBengkelFacilities", "Function | NodeJs", "Function for Get Bengkel Facilities data\n(NodeJs Bengkel API)")
+Component(getBengkelProvinces, "getBengkelProvinces", "Function | NodeJs", "Function for Get Bengkel Provinces data\n(NodeJs Bengkel API)")
+
+
+}
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request Filter bengkel data")
+
+Rel_D(auth_middleware, bengkel_controller, "2. Request Filter bengkel data")
+Rel_D(bengkel_controller, filter, "3. If Case = 'filter', Request Filter Bengkel data")
+Rel_D(bengkel_controller, getFilterParams, "3. If Case = 'filter-param', Request Filter Bengkel Param data")
+
+Rel(filter, countFilter, "4. Request Count Filter data")
+Rel(filter, filters, "6. Filter Bengkel data")
+Rel(filter, topThree, "8. Request Inquiry Top Three Bengkel data")
+
+Rel_D(countFilter, database, "5. Count Filter data")
+Rel_D(filters, database, "7. Filter Bengkel data")
+Rel_D(topThree, database, "9. Inquiry Top Three Bengkel data")
+
+
+Rel_D(getFilterParams, getBengkelTypes, "4. Request Get Bengkel Types data")
+Rel_D(getFilterParams, getBengkelCities, "6. Request Get Bengkel Cities data")
+Rel_D(getFilterParams, getBengkelBrands, "8. Request Get Bengkel Brands data")
+Rel_D(getFilterParams, getBengkelFacilities, "10. Request Get Bengkel Facilities data")
+Rel_D(getFilterParams, getBengkelProvinces, "12. Request Get Bengkel Provinces data")
+
+Rel_D(getBengkelTypes, database, "5. Get Bengkel Types data")
+Rel_D(getBengkelCities, database, "7. Get Bengkel Cities data")
+Rel_D(getBengkelBrands, database, "9. Get Bengkel Brands data")
+Rel_D(getBengkelFacilities, database, "11. Get Bengkel Facilities data")
+Rel_D(getBengkelProvinces, database, "13. Get Bengkel Provinces data")
+
+@enduml

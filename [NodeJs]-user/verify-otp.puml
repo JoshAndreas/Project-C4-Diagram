@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title verify API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "verify API\n[Component]"){
+Component(otp_controller, "OTP Controller", "Controller | NodeJs", "Controller for OTP Related function\n(NodeJs User API)")
+Component(verify, "verify", "Function | NodeJs", "Function for Verify OTP data\n(NodeJs User API)")
+Component(selectVerify, "OTP.selectVerify", "Function | NodeJs", "Function for Verify OTP data\n(NodeJs User API)")
+Component(updateVerify, "OTP.updateVerify", "Function | NodeJs", "Function for Verify OTP data\n(NodeJs User API)")
+Component(insertSession, "OTP.insertSession", "Function | NodeJs", "Function for Verify OTP data\n(NodeJs User API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, otp_controller, "1. Request verify OTP")
+Rel_D(otp_controller, verify, "2. Request verify OTP")
+Rel_D(verify, selectVerify, "3. Request Select Verify data")
+Rel_D(verify, updateVerify, "5. Request Update Verify data")
+Rel_D(verify, insertSession, "7. Request Insert session data")
+
+Rel_D(selectVerify, database, "4. Select Verify data")
+Rel_D(updateVerify, database, "6. Update Verify data")
+Rel_D(insertSession, database, "8. Insert Session data")
+
+@enduml

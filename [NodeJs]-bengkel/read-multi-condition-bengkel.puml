@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readMultiConditionBengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "readMultiConditionBengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(readMultiConditionBengkel, "readMultiConditionBengkel", "Function | NodeJs", "Function for Read Multi Condition Bengkel data\n(NodeJs Bengkel API)")
+    Component(getAllMultiCondition, "Bengkel.getAllMultiCondition", "Function | NodeJs", "Function for Get All multicondition data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read Multi Condition Bengkel data")
+Rel(auth_middleware, Bengkel, "2. Request Read Multi Condition Bengkel data")
+Rel(Bengkel, readMultiConditionBengkel, "3. Request Read Multi Condition Bengkel data")
+Rel(readMultiConditionBengkel, getAllMultiCondition, "4. Request Get All Bengkel multi condition data")
+
+Rel(getAllMultiCondition, database, "5. Get All Bengkel multi condition data")
+
+@enduml

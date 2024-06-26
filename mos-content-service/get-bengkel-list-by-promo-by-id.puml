@@ -1,0 +1,41 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getBengkelListByPromoById API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getBengkelListByPromoById API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(promoIdMiddleware, "Promo ID Middleware", "Middleware | TypeScript", "Middleware for Promo ID List\n(mos-content-service)")
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(getBengkelListByPromoById, "getBengkelListByPromoById", "Function | TypeScript", "Main Function for get bengkel list by promo id\n(mos-content-service)")
+
+Component(getBengkelList, "getBengkelList", "Function | TypeScript", "Function for get bengkel list\n(mos-content-service)")
+Component(countBengkelList, "countBengkelList", "Function | TypeScript", "Function for count bengkel list\n(mos-content-service)")
+Component(getBengkelListByGroupBengkel, "getBengkelListByGroupBengkel", "Function | TypeScript", "Function for get bengkel list by group bengkel\n(mos-content-service)")
+Component(countBengkelListByGroupBengkel, "countBengkelListByGroupBengkel", "Function | TypeScript", "Function for count bengkel list by group bengkel\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request get bengkel list by promo id")
+
+Rel_D(mainMiddleware, promoIdMiddleware, "2. Request get bengkel list by promo id")
+Rel_D(promoIdMiddleware, promo_controller, "3. Request get bengkel list by promo id")
+Rel_D(promo_controller, getBengkelListByPromoById, "4. Request get bengkel list by promo id")
+Rel_D(getBengkelListByPromoById, database, "5. Retrieve bengkel list data")
+
+Rel_D(getBengkelListByPromoById, getBengkelList, "6. Request Retrieve bengkel list data")
+Rel_D(getBengkelList, database, "7. Retrieve bengkel list data")
+
+Rel_D(getBengkelListByPromoById, countBengkelList, "8. Request Count bengkel list data")
+Rel_D(countBengkelList, database, "9. Count bengkel list data")
+
+Rel_D(getBengkelListByPromoById, getBengkelListByGroupBengkel, "10. Request Retrieve bengkel list data by group bengkel")
+Rel_D(getBengkelListByGroupBengkel, database, "11. Retrieve bengkel list data by group bengkel")
+
+Rel_D(getBengkelListByPromoById, countBengkelListByGroupBengkel, "12. Request Count bengkel list by group bengkel")
+Rel_D(countBengkelListByGroupBengkel, database, "13. Count bengkel list by group bengkel")
+
+@enduml

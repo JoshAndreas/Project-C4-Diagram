@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deletedUserVehicle API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "deletedUserVehicle API\n[Component]"){
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-user-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-user-service)")
+
+Component(user_vehicle_controller, "User Vehicle Controller", "Controller | TypeScript", "Controller for User Vehicle Related Function\n(mos-user-service)")
+Component(deletedUserVehicle, "deletedUserVehicle", "Function | TypeScript", "Function for delete User vehicle by ID\n(mos-user-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-mobil-service")
+AddProperty("URL", "/api/mobil/${userId}/cars/$(carId)")
+Component(deletedUserCar, "deletedUserCar", "Function | TypeScript", "Function for delete vehicle data")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request delete customer vehicle")
+
+Rel_D(mainMiddleware, auth_middleware, "2. Request delete customer vehicle")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem key")
+
+Rel_D(auth_middleware, user_vehicle_controller, "4. Request delete customer vehicle")
+Rel_D(user_vehicle_controller, deletedUserVehicle, "5. Delete customer vehicle")
+Rel_D(deletedUserVehicle, deletedUserCar, "6. Delete customer vehicle")
+Rel_D(deletedUserCar, database, "7. Delete customer vehicle")
+
+@enduml

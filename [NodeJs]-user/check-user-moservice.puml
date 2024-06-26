@@ -1,0 +1,34 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title checkUser Moservice API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "checkUser Moservice API\n[Component]"){
+Component(user_controller, "Users Controller", "Controller | NodeJs", "Controller for User Related function\n(NodeJs User API)")
+
+Component(getMaskedContact, "getMaskedContact", "Function | NodeJs", "Function for get Masked Contact\n(NodeJs User API)")
+Component(getMaskedEmail, "getMaskedEmail", "Function | NodeJs", "Function for get masked email\n(NodeJs User API)")
+Component(getMaskedPhone, "getMaskedPhone", "Function | NodeJs", "Function for get masked phone\n(NodeJs User API)")
+
+Component(checkIsUserRegistered, "checkIsUserRegistered", "Function | NodeJs", "Function for check is user registered\n(NodeJs User API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, user_controller, "1. Request check user")
+Rel_D(user_controller, getMaskedContact, "2. if (platformName === 'moservice.id'), get masked contact")
+Rel_D(user_controller, checkIsUserRegistered, "2. Else, Check is user registered or not")
+
+Rel_D(getMaskedContact, getMaskedEmail, "3. Get Masked Email")
+Rel_D(getMaskedContact, getMaskedPhone, "3. Get Masked Phone")
+
+
+Rel_D(getMaskedEmail, database, "4. Get Masked Email")
+Rel_D(getMaskedPhone, database, "4. Get Masked Phone")
+
+Rel_D(checkIsUserRegistered, database, "3. Check is user registered or not")
+
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readByID Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "readByID Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(readByID, "readByID", "Function | NodeJs", "Function for Read bengkel data by ID\n(NodeJs Bengkel API)")
+    Component(readByIDs, "Bengkel.readByID", "Function | NodeJs", "Function for Read bengkel data by ID\n(NodeJs Bengkel API)")
+    
+    Component(getBengkelUserWorkshop, "Bengkel.getBengkelUserWorkshop", "Function | NodeJs", "Function for Get Bengkel User Workshop data\n(NodeJs Bengkel API)")
+
+}
+AddProperty("URL", "/api/merchant-configurations?bengkelId=${bengkel_id}")
+AddProperty("Service", "Payment Service")
+Component(getPaymentMerchantConfigByBengkelId, "getPaymentMerchantConfigByBengkelId", "Function | NodeJs", "Function for Get Payment Merchant Config by Bengkel ID\n(NodeJs Bengkel API)")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read bengkel data by ID")
+Rel(auth_middleware, bengkel, "2. Request Read bengkel data by ID")
+Rel(bengkel, readByID, "3. Request Read bengkel data by ID")
+
+Rel(readByID, readByIDs, "4. Request Read bengkel data by ID")
+Rel(readByID, getPaymentMerchantConfigByBengkelId, "6. Get Payment Merchant Config by Bengkel ID")
+Rel(readByID, getBengkelUserWorkshop, "7. Request Get Bengkel User Workshop data")
+
+Rel(readByIDs, database, "5. Read bengkel data by ID")
+Rel(getBengkelUserWorkshop, database, "8. Get Bengkel User Workshop data")
+
+@enduml

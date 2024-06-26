@@ -1,0 +1,66 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createBooking - acceptBookingAPI\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createBooking - acceptBooking API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(booking_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(createBooking, "createBooking", "Function | NodeJs", "Function for create booking\n(NodeJs Booking API)")
+
+Component(acceptBooking, "acceptBooking", "Function | NodeJs", "Function for Case if accept Booking\n(NodeJs Booking API)")
+Component(readByIDWithAdditionalData, "Booking_Order.readByIDWithAdditionalData", "Function | NodeJs", "Function for read by ID with additional data\n(NodeJs Booking API)")
+Component(getBookAvailabilityByDateHourAndBengkel, "Booking_Availability.getBookAvailabilityByDateHourAndBengkel", "Function | NodeJs", "Function for get booking availability by date hour and bengkel\n(NodeJs Booking API)")
+Component(insertBookingAvailability_script, "Booking_Availability.insertBookingAvailability_script", "Function | NodeJs", "Function for insert booking availability data\n(NodeJs Booking API)")
+Component(updateBookingAvailability_script, "Booking_Availability.updateBookingAvailability_script", "Function | NodeJs", "Function for update booking availability data\n(NodeJs Booking API)")
+Component(acceptBookingCustomerStatus_script, "Booking_Order.acceptBookingCustomerStatus_script", "Function | NodeJs", "Function for accept Booking Customer Status data\n(NodeJs Booking API)")
+Component(insertInbox, "Booking_Inbox.insertInbox", "Function | NodeJs", "Function for insert inbox data\n(NodeJs Booking API)")
+Component(bookingEmailAccepted, "Booking_Email.bookingEmailAccepted", "Function | NodeJs", "Function for create email if booking was accepted\n(NodeJs Booking API)")
+Component(sendEmailLocal, "sendEmailLocal", "Function | NodeJs", "Function for send email local\n(NodeJs Booking API)")
+Component(uploadCloudinary, "uploadCloudinary", "Function | NodeJs", "Function for upload Cloudinary\n(NodeJs Booking API)")
+Component(sendMail, "sendMail", "Function | NodeJs", "Function for send Mail\n(NodeJs Booking API)")
+Component(sendSmsLocal, "sendSmsLocal", "Function | NodeJs", "Function for send sms local\n(NodeJs Booking API)")
+Component(sendSMS, "sendSMS", "Function | NodeJs", "Function for send sms\n(NodeJs Booking API)")
+}
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for Store Image Data")
+
+AddProperty("API", "/sms/2/text/single")
+System_Ext(infoBIP, "InfoBip", "External System for Send SMS")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Lay_D(acceptBookingCustomerStatus_script, database)
+Lay_R(infoBIP, database)
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request create booking")
+Rel_D(auth_middleware, booking_controller, "2. Request create booking")
+Rel_D(booking_controller, createBooking, "3. Create booking and Check booking status")
+
+Rel_D(createBooking, acceptBooking, "4. Check if Booking was accepted")
+Rel_D(acceptBooking, readByIDWithAdditionalData, "5. Read by ID with additional data")
+Rel_D(readByIDWithAdditionalData, database, "6 Read by ID with additional data")
+Rel_D(acceptBooking, getBookAvailabilityByDateHourAndBengkel, "7. Get booking availability by date hour and bengkel")
+Rel_D(getBookAvailabilityByDateHourAndBengkel, database, "8. Get booking availability by date hour and bengkel. If Availability < 1 Continue 9, else continue 10.")
+Rel_D(acceptBooking, insertBookingAvailability_script, "9. If Availability < 1, Insert Booking Availability data and Continue 11.")
+Rel_D(acceptBooking, updateBookingAvailability_script, "10. Else, Update Booking Availability data")
+Rel_D(insertBookingAvailability_script, database, "11. Insert Booking Availability data, Continue 13.")
+Rel_D(updateBookingAvailability_script, database, "12. Update Booking Availability data, Continue 14.")
+Rel_D(acceptBooking, acceptBookingCustomerStatus_script, "13. Accept Booking Customer Status data, Continue")
+
+
+Rel_D(acceptBooking, insertInbox, "14. Request Insert Inbox data")
+Rel_D(insertInbox, database, "15. Insert Inbox data")
+Rel_D(acceptBooking, bookingEmailAccepted, "16. Request Create Email for Accepted booking information")
+Rel_D(bookingEmailAccepted, database, "17. Retrieve Email for Accepted booking information")
+Rel_D(bookingEmailAccepted, sendEmailLocal, "18. If there is email Email, Request send Email local Continue to 21.")
+Rel_D(bookingEmailAccepted, sendSmsLocal, "19. If there is no email, Request send Sms local Continue to 22.")
+Rel_D(sendSmsLocal, sendSMS, "21. Request send Sms local, Continue 24.")
+Rel_D(sendSMS, infoBIP, "23. Send SMS")
+
+Rel_D(acceptBooking, uploadCloudinary, "20. Request Upload Image data to cloudinary, Continue 23.")
+Rel_L(uploadCloudinary, Cloudinary, "22. Upload Image data to cloudinary, Continue 25.")
+Rel_D(sendEmailLocal, sendMail, "24. Request send email")
+@enduml

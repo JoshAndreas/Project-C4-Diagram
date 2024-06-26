@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title espayPaymentMethodAvailableOnBengkel API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "espayPaymentMethodAvailableOnBengkel API\n[Component]"){
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(payment_method_controller, "Payment Method Controller", "Controller | TypeScript", "Controller for payment method Related Function\n(mos-payment-service)")
+Component(espayPaymentMethodAvailableOnBengkel, "espayPaymentMethodAvailableOnBengkel", "Function | TypeScript", "Function for check if espay payment method available on bengkel\n(mos-payment-service)")
+}
+
+AddProperty("Service","Espay Merchant")
+AddProperty("URL","/rest/merchant/merchantinfo")
+Component_Ext(findMerchantInfo, "findMerchantInfo", "Function | TypeScript", "Function for Find Espay Merchant Info")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request check if espay payment method available or not by using bengkel ID")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request check if espay payment method available or not by using bengkel ID")
+
+Rel_D(loggerMiddleware, payment_method_controller, "3. Request check if espay payment method available or not by using bengkel ID")
+Rel_D(payment_method_controller, espayPaymentMethodAvailableOnBengkel, "4. Request check if espay payment method available or not by using bengkel ID")
+Rel_R(espayPaymentMethodAvailableOnBengkel, findMerchantInfo, "5. Request Bengkel info data by using bengkel ID")
+Rel_D(findMerchantInfo, database, "6. Check if espay payment method available or not")
+
+
+@enduml

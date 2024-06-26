@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title read user workshop API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "read user workshop API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for validate bengkel ID\n(NodeJs User API)")
+Component(user_controller, "User Workshop Controller", "Controller | NodeJs", "Controller for User Workshop Related function\n(NodeJs User API)")
+Component(read, "usersWorkshopCRUD.read", "Function | NodeJs", "Function for read User Workshop data\n(NodeJs User API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request read User Workshop data")
+Rel_D(auth_middleware, user_controller, "2. Request read User Workshop data")
+Rel_D(user_controller, read, "3. Request read User Workshop data")
+Rel_D(read, database, "4. Read User Workshop data")
+
+@enduml

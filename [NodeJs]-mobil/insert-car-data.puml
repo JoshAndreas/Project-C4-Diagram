@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title insertCarData API\n[NodeJs Mobil API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "insertCarData API\n[Component]"){
+Component(auth_middleware, "auth.validate", "Middleware | NodeJs", "Authentication Middleware for validate Function\n(NodeJs Mobil API)")
+Component(mobil_controller, "Mobil Controller", "Controller | NodeJs", "Controller for Mobil Related Function\n(NodeJs Mobil API)")
+Component(insertCarData, "insertCarData", "Function | NodeJs", "Function for insert car data\n(NodeJs Mobil API)")
+Component(CreateCarData, "Mobil.create", "Function | NodeJs", "Function for create car data\n(NodeJs Mobil API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request insert car data")
+Rel_D(auth_middleware, mobil_controller, "2. Request insert car data")
+Rel_D(mobil_controller, insertCarData, "3. Request insert car data")
+Rel_D(insertCarData, CreateCarData, "4. Create car data")
+Rel_D(CreateCarData, database, "5. Create car data")
+
+@enduml

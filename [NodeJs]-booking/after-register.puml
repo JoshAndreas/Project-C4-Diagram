@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title afterRegister API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "afterRegister API\n[Component]"){
+Component(booking_email_controller, "Booking Email Controller", "Controller | NodeJs", "Controller for Booking Email Related Function\n(NodeJs Booking API)")
+Component(afterRegister, "afterRegister", "Function | NodeJs", "Function for to send email after register process\n(NodeJs Booking API)")
+Component(sendEmail, "message.sendEmail", "Function | NodeJs", "Function for send email\n(NodeJs Booking API)")
+Component(createTransport, "nodemailer.createTransport", "Function | NodeJs", "Function for create transport data\n(NodeJs Booking API)")
+Component(sendmail, "transporter.sendMail", "Function | NodeJs", "Function for send email\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, booking_email_controller, "1. Request send after registration email")
+Rel_D(booking_email_controller, afterRegister, "2. Request send after registration email")
+Rel_D(afterRegister, sendEmail, "3. Request send after registration email")
+Rel_D(afterRegister, createTransport, "4. Send after registration email")
+Rel_D(afterRegister, sendmail, "6. Send after registration email")
+Rel_D(createTransport, database, "5. Check user credential")
+
+
+
+@enduml

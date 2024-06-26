@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getEventsMoadmins API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "getEventsMoadmins API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Event Controller", "Controller | NodeJs", "Controller for Event Related Function\n(NodeJs Content API)")
+    Component(getEventsMoadmin, "getEventsMoadmin", "Function | NodeJs", "Function for Get Event Moadmin data\n(NodeJs Content API)")
+    Component(getEventsMoadmins, "ContentEvent.getEventsMoadmin", "Function | NodeJs", "Function for Get Event Moadmin data\n(NodeJs Content API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get Event Moadmin data")
+Rel(auth_middleware, content_controller, "2. Request Get Event Moadmin data")
+Rel(content_controller, getEventsMoadmin, "3. Request Get Event Moadmin data")
+Rel(getEventsMoadmin, getEventsMoadmins, "4. Request Get Event Moadmin data")
+
+Rel(getEventsMoadmins, database, "5. Get Event Moadmin data")
+
+@enduml

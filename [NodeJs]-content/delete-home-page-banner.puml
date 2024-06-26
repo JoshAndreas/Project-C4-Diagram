@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteHomepageBannerImage API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "deleteHomepageBannerImage API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Content Banner Related Function\n(NodeJs Content API)")
+    Component(deleteHomepageBannerImage, "deleteHomepageBannerImage", "Function | NodeJs", "Function for Delete Banner Image data\n(NodeJs Content API)")
+    Component(readMoadminBannerDetail, "ContentBanner.readMoadminBannerDetail", "Function | NodeJs", "Function for Read detail Moadmin Banner data\n(NodeJs Content API)")
+    Component(update, "ContentBanner.update", "Function | NodeJs", "Function for Update Banner Image data\n(NodeJs Content API)")
+
+}
+
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Delete Banner Image data")
+Rel(auth_middleware, content_controller, "2. Request Delete Banner Image data")
+Rel(content_controller, deleteHomepageBannerImage, "3. Request Delete Banner Image data")
+Rel(deleteHomepageBannerImage, readMoadminBannerDetail, "4. Request Read detail Banner data")
+Rel(deleteHomepageBannerImage, update, "6. Request Update Pilihan Lain Image data")
+
+
+Rel(readMoadminBannerDetail, database, "5. Read detail Banner Image data")
+Rel(update, database, "7. Update Banner Image data")
+
+@enduml

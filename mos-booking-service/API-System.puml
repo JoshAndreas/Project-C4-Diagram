@@ -1,0 +1,43 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title API System\n[mos-booking-service]
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+Component(API, "mos-booking-service", "Repository | TypeScript", "Repository for booking Related Function")
+Boundary(api, "mos-booking-service API\n[Component]"){
+Component(getAvailability, "getAvailability", "Function | TypeScript", "Function For Checking Bengkel Availability Hours")
+Component(findBookingByUuid, "findBookingByUuid", "Function | TypeScript", "Function For Search Booking Data/Details By UUID")
+
+Component(createBooking, "Create Booking", "Function | TypeScript", "Function For Create Booking")
+Component(findBookingTransactionByUuid, "findBookingTransactionByUuid", "Function | TypeScript", "Function For find booking transaction By UUID")
+Component(createPrebooking, "Create Prebooking", "Function | TypeScript", "Function For Create Prebooking")
+Component(MonthlyTransaction, "Index Monthly Transaction", "Function | TypeScript", "Function For retrieve Monthly transaction data")
+Component(createTransaction, "Create Transaction", "Function | TypeScript", "Function For create transaction data")
+Component(Transaction, "Index Transaction", "Function | TypeScript", "Function For retrieve transaction data")
+Component(Booking, "Index Booking", "Function | TypeScript", "Function For retrieve booking data")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, API, "Request using function related to booking")
+
+Rel_D(API, getAvailability, "Request Checking Bengkel Availability Hours")
+Rel_D(API, findBookingByUuid, "Request Search Booking Data/Details By UUID")
+Rel_D(API, createBooking, "Request Create Booking")
+Rel_D(API, findBookingTransactionByUuid, "Request find booking transaction By UUID")
+Rel_D(API, createPrebooking, "Request Create Prebooking")
+Rel_D(API, MonthlyTransaction, "Request retrieve Monthly transaction data")
+Rel_D(API, createTransaction, "Request create transaction data")
+Rel_D(API, Transaction, "Request retrieve transaction data")
+Rel_D(API, Booking, "Request retrieve booking data")
+
+Rel_D(getAvailability, database, "Checking Bengkel Availability Hours")
+Rel_D(findBookingByUuid, database, "Search Booking Data/Details By UUID")
+Rel_D(createBooking, database, "Create Booking")
+Rel_D(findBookingTransactionByUuid, database, "Find booking transaction By UUID")
+Rel_D(createPrebooking, database, "Create Prebooking")
+Rel_D(MonthlyTransaction, database, "Retrieve Monthly transaction data")
+Rel_D(createTransaction, database, "Create transaction data")
+Rel_D(Transaction, database, "Retrieve transaction data")
+Rel_D(Booking, database, "Retrieve booking data")

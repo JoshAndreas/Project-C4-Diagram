@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteMapping API\n[NodeJs Mobil API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "deleteMapping API\n[Component]"){
+Component(auth_middleware, "auth.validate", "Middleware | NodeJs", "Authentication Middleware for validate Function\n(NodeJs Mobil API)")
+Component(mobil_controller, "Mobil Controller", "Controller | NodeJs", "Controller for Mobil Related Function\n(NodeJs Mobil API)")
+Component(deleteMapping, "deleteMapping", "Function | NodeJs", "Function for delete mapping\n(NodeJs Mobil API)")
+Component(deleteMappings, "Mobil.deleteMapping", "Function | NodeJs", "Function for delete mapping\n(NodeJs Mobil API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request delete mapping by car ID")
+Rel_D(auth_middleware, mobil_controller, "2. Request delete mapping by car ID")
+Rel_D(mobil_controller, deleteMapping, "3. Request delete mapping by car ID")
+Rel_D(deleteMapping, deleteMappings, "4. delete mapping data by car ID")
+Rel_D(deleteMappings, database, "5. delete mapping data by car ID")
+
+@enduml

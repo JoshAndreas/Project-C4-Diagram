@@ -1,0 +1,79 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title API System\n[mos-content-service]
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+
+Component(API, "mos-content-service", "Repository | TypeScript","Repository for Content Related Function")
+Boundary(api, "API System\n[mos-content-service]"){
+
+Component(Promo, "Promo", "Function | TypeScript", "Function for Create, Update, Delete, & Inquiry Promo\n(mos-content-service)")
+Component(getPromo, "getPromo", "Function | TypeScript", "Function for get Promo by Jenis, Target & Type\n(mos-content-service)")
+Component(Homeservices, "Home Service", "Function | TypeScript", "Function for get, record Home service data\n(mos-content-service)")
+Component(findPromo, "Find Promo", "Function | TypeScript", "Function for Find Promo By ID / Servis ID\n(mos-content-service)")
+Component(Voucher, "Voucher", "Function | TypeScript", "Function for inquiry, use, redeem Voucher(mos-content-service)")
+
+Component(checkIfEligible, "checkIfEligible", "Function | TypeScript", "Function for Check If Category is Eligible by using ID(mos-content-service)")
+Component(createShortenURL, "createShortenURL", "Function | TypeScript", "Function for Create Shorten URL(mos-content-service)")
+Component(findQrById, "findQrById", "Function | TypeScript", "Function for Find QR data by ID(mos-content-service)")
+Component(findVoucherById, "findVoucherById", "Function | TypeScript", "Function for find voucher by ID(mos-content-service)")
+Component(getBengkelListByPromoById, "getBengkelListByPromoById", "Function | TypeScript", "Function for get bengkel list by promo id(mos-content-service)")
+Component(Bank, "Index Bank", "Function | TypeScript", "Function for get bank list data(mos-content-service)")
+Component(Banner, "Index Banner", "Function | TypeScript", "Function for get banner list data(mos-content-service)")
+Component(Event, "Index Event", "Function | TypeScript", "Function for get Event list data(mos-content-service)")
+Component(PilihanLain, "Pilihan Lain", "Function | TypeScript", "Function for inquiry, save Pilihan lain(mos-content-service)")
+Component(Video, "Index Video", "Function | TypeScript", "Function for get Video data(mos-content-service)")
+Component(PlanetBan, "planetBan", "Function | TypeScript", "Function for integrate with planet ban voucher(mos-content-service)")
+Component(updateVoucherStatus, "updateVoucherStatus", "Function | TypeScript", "Function for update Voucher Status(mos-content-service)")
+Component(uploadImage, "uploadImage", "Function | TypeScript", "Function for upload Image data(mos-content-service)")
+Component(useClientVoucher, "useClientVoucher", "Function | TypeScript", "Function for use Client Voucher(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, API, "Request use Function related to Content")
+
+Rel_D(API, Promo, "Request Create, Update, Delete, & Inquiry Promo")
+Rel_D(API, getPromo, "Request get Promo by Jenis, Target & Type")
+Rel_D(API, Homeservices, "Request get, record Home service data")
+Rel_D(API, findPromo, "Request Find Promo By ID / Servis ID")
+Rel_D(API, Voucher, "Request inquiry, use, redeem Voucher")
+Rel_D(API, checkIfEligible, "Request Check If Category is Eligible by using ID")
+Rel_D(API, createShortenURL, "Request Create Shorten URL")
+Rel_D(API, findQrById, "Request Find QR data by ID")
+Rel_D(API, findVoucherById, "Request find voucher by ID")
+Rel_D(API, getBengkelListByPromoById, "Request get bengkel list by promo id")
+Rel_D(API, Bank, "Request get bank list data")
+Rel_D(API, Banner, "Request get banner list data")
+Rel_D(API, Event, "Request get Event list data")
+Rel_D(API, PilihanLain, "Request inquiry, save Pilihan lain")
+Rel_D(API, Video, "Request get Video data")
+Rel_D(API, PlanetBan, "Request integrate with planet ban voucher")
+Rel_D(API, updateVoucherStatus, "Request update Voucher Status")
+Rel_D(API, uploadImage, "Request upload Image data")
+Rel_D(API, useClientVoucher, "Request use Client Voucher")
+
+Rel_D(Promo, database, "Create, Update, Delete, & Inquiry Promo")
+Rel_D(getPromo, database, "get Promo by Jenis, Target & Type")
+Rel_D(Homeservices, database, "get, record Home service data")
+Rel_D(findPromo, database, "Find Promo By ID / Servis ID")
+Rel_D(Voucher, database, "inquiry, use, redeem Voucher")
+Rel_D(checkIfEligible, database, "Check If Category is Eligible by using ID")
+Rel_D(createShortenURL, database, "Create Shorten URL")
+Rel_D(findQrById, database, "Find QR data by ID")
+Rel_D(findVoucherById, database, "find voucher by ID")
+Rel_D(getBengkelListByPromoById, database, "get bengkel list by promo id")
+Rel_D(Bank, database, "get bank list data")
+Rel_D(Banner, database, "get banner list data")
+Rel_D(Event, database, "get Event list data")
+Rel_D(PilihanLain, database, "inquiry, save Pilihan lain")
+Rel_D(Video, database, "get Video data")
+Rel_D(PlanetBan, database, "integrate with planet ban voucher")
+Rel_D(updateVoucherStatus, database, "update Voucher Status")
+Rel_D(uploadImage, database, "upload Image data")
+Rel_D(useClientVoucher, database, "use Client Voucher")
+
+
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "update Content Promo API\n[Component]"){
+    Component(auth_decoder, "auth.decoded", "Middleware | NodeJs", "Authentication Middleware for Decode Token Function\n(NodeJs Content API)")
+
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    
+    Component(update, "update", "Function | NodeJs", "Function for Update promo data\n(NodeJs Content API)")
+    Component(updates, "ContentPromo.updates", "Function | NodeJs", "Function for Update promo data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_decoder, "2. Decode Token")
+Rel(auth_decoder, auth_middleware, "3. Request Update promo data")
+
+Rel(auth_middleware, content_controller, "4. Request Update promo data")
+Rel(content_controller, update, "5. Request Update promo data")
+Rel(update, updates, "6. Request Update promo data")
+
+Rel(updates, database, "7. Update promo data")
+
+@enduml

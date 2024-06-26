@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updatedRateReview API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updatedRateReview API\n[Component]"){
+Component(auth_middleware, "Auth Middleware", "Controller | TypeScript", "Middleware for Authentication\n(mos-user-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-user-service)")
+
+Component(user_booking_controller, "User Booking Controller", "Controller | TypeScript", "Controller for User Related Function\n(mos-user-service)")
+Component(updatedRateReview, "updatedRateReview", "Function | TypeScript", "Function for update booking review\n(mos-user-service)")
+Component(updatedRateReviews, "TrBookingCustRepository.update", "Function | TypeScript", "Function for update booking review\n(mos-user-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request update booking review")
+
+Rel_D(mainMiddleware, auth_middleware, "2. Request update booking review")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem Key")
+
+Rel_D(auth_middleware, user_booking_controller, "4. Request update booking review")
+Rel_D(user_booking_controller, updatedRateReview, "5. Request update booking review")
+Rel_D(updatedRateReview, updatedRateReviews, "6. Update booking review data")
+Rel_D(updatedRateReviews, database, "7. Update booking review data")
+
+@enduml

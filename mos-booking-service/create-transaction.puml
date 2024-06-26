@@ -1,0 +1,32 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+title create transaction API 
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "create transaction API\n[Component]"){
+Component(bengkel_app_auth_midleware, "Bengkel App Auth Middleware", "Middleware | TypeScript", "Middleware for verify Payload\n(mos-booking-service)")
+Component(ep_transaction_validation_middleware, "ep transaction validation middleware", "Middleware | TypeScript", "Middleware for use Transaction Validation\n(mos-booking-service)")
+Component(transaction_controller, "Transaction Controller.create", "Controller | TypeScript", "Controller for Create Transaction\n(mos-booking-service)")
+Component(createBooking, "BookingRepository.create", "Function | TypeScript", "Function from Create Booking\n(mos-booking-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-booking-service)")
+
+Component(createPrebookingResult, "PrebookingRepository.create", "Function | TypeScript", "Function from create Prebooking\n(mos-booking-service)")
+Boundary(if, If there is Promo){
+Component(createPromo, "MapBookingPromoRepository.create", "Function | TypeScript", "Function for Promo\n(mos-booking-service)")
+}
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Lay_D(bengkel_app_auth_midleware, transaction_controller)
+Rel(Web_Moservice, mainMiddleware, "1. Request Create Transaction")
+
+Rel(mainMiddleware, bengkel_app_auth_midleware, "2. Request Create Transaction")
+Rel(bengkel_app_auth_midleware, ep_transaction_validation_middleware, "3. Payload Verified")
+Rel(ep_transaction_validation_middleware, transaction_controller, "4. Transaction Validated")
+Rel(transaction_controller, createBooking, "5. If Booking, Request Create Booking and Continue to 7.")
+Rel(transaction_controller, createPrebookingResult, "6. If Prebooking, Request Create Prebooking and continue to 8.")
+Rel(createBooking, database, "7. Create Booking, Continue to 9.")
+Rel(createPrebookingResult, database, "8. Create Prebooking, Continue to 9.")
+Rel(createPromo, database, "10. If there is promo, Create Promo data")
+Rel(transaction_controller, createPromo, "9. Check If there is promo, use promo")
+
+@enduml

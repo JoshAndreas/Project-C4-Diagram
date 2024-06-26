@@ -1,0 +1,58 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+title API System\n[mos-payment-service]
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+Component(API, "mos-payment-service", "Repository | TypeScript", "Repository for Payment related function")
+
+Boundary(api, "API System\n[mos-payment-service]"){
+Component(MerchantConfig, "Merchant Config", "Function | TypeScript", "Function for Show, Create, Edit Merchant Config\n(mos-payment-service)")
+Component(findPaymentMethod, "findPaymentMethod", "Function | TypeScript", "Function for find Payment Method, Find Payment Method by ID\n(mos-payment-service)")
+Component(payment, "Payment", "Function | TypeScript", "Function for Payment, Inquiry Payment data, Show Payment data, Update Payment data\n(mos-payment-service)")
+Component(disbursement, "disbursement", "Function | TypeScript", "Function for disbursement, inquiry disbursement data, disbursement retry\n(mos-payment-service)")
+
+Component(espayPaymentMethodAvailableOnBengkel, "espayPaymentMethodAvailableOnBengkel", "Function | TypeScript", "Function for check if espay payment method available on bengkel\n(mos-payment-service)")
+Component(disbursementdetail, "Index Disbursement Detail", "Function | TypeScript", "Function for retrieve disbursement detail data\n(mos-payment-service)")
+Component(espaybeneficiary, "Index Espay Beneficiary Account", "Function | TypeScript", "Function for retrieve espay beneficiary account data\n(mos-payment-service)")
+Component(inquiry, "inquiry", "Function | TypeScript", "Function for Inquiry Payment data by UUID\n(mos-payment-service)")
+Component(inquiryBalanceEscrow, "inquiryBalanceEscrow", "Function | TypeScript", "Function for inquiry balance escrow data\n(mos-payment-service)")
+Component(invoice, "invoice", "Function | TypeScript", "Function for generate invoice data\n(mos-payment-service)")
+Component(paymentInstruction, "paymentInstruction", "Function | TypeScript", "Function for retrieve payment instruction data\n(mos-payment-service)")
+Component(transactionSummary, "transactionSummary", "Function | TypeScript", "Function for show transaction Summary data\n(mos-payment-service)")
+
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, API, "Request to use function that related to payment")
+
+Rel(API, MerchantConfig, "Request Show, Create, Edit Merchant Config")
+Rel(API, findPaymentMethod, "Request find Payment Method, Find Payment Method by ID")
+Rel(API, payment, "Request Payment, Inquiry Payment data, Show Payment data, Update Payment data")
+Rel(API, disbursement, "Request disbursement, inquiry disbursement data, disbursement retry")
+
+Rel(API, espayPaymentMethodAvailableOnBengkel, "Request check if espay payment method available on bengkel")
+Rel(API, disbursementdetail, "Request retrieve disbursement detail data")
+Rel(API, espaybeneficiary, "Request Retrieve espay beneficiary account data")
+Rel(API, inquiry, "Request Inquiry Payment data by UUID")
+Rel(API, inquiryBalanceEscrow, "Request inquiry balance escrow data")
+Rel(API, invoice, "Request generate invoice data")
+Rel(API, paymentInstruction, "Request retrieve payment instruction data")
+Rel(API, transactionSummary, "Request show transaction Summary data")
+
+Rel(MerchantConfig, database, "Show, Create, Edit Merchant Config")
+Rel(findPaymentMethod, database, "find Payment Method, Find Payment Method by ID")
+Rel(payment, database, "Payment, Inquiry Payment data, Show Payment data, Update Payment data")
+Rel(disbursement, database, "disbursement, inquiry disbursement data, disbursement retry")
+
+Rel(espayPaymentMethodAvailableOnBengkel, database, "check if espay payment method available on bengkel")
+Rel(disbursementdetail, database, "retrieve disbursement detail data")
+Rel(espaybeneficiary, database, "Retrieve espay beneficiary account data")
+Rel(inquiry, database, "Inquiry Payment data by UUID")
+Rel(inquiryBalanceEscrow, database, "inquiry balance escrow data")
+Rel(invoice, database, "generate invoice data")
+Rel(paymentInstruction, database, "retrieve payment instruction data")
+Rel(transactionSummary, database, "show transaction Summary data")
+
+
+@enduml

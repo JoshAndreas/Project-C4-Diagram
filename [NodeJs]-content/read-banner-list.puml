@@ -1,0 +1,35 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readBannerList Banner API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readBannerList Banner API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Content Banner Related Function\n(NodeJs Content API)")
+    
+    Component(readBannerList, "readBannerList", "Function | NodeJs", "Function for Read Banner List\n(NodeJs Content API)")
+    Component(authdecoded, "auth.decoded", "Middleware | NodeJs", "Authentication Middleware for Decode token\n(NodeJs Content API)")
+    Component(getBengkelbyId, "ContentBanner.getBengkelbyId", "Function | NodeJs", "Function for Get Bengkel By ID\n(NodeJs Content API)")
+    Component(bannerAppList, "ContentBanner.bannerAppList", "Function | NodeJs", "Function for Get Banner App List\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Read Banner List")
+
+Rel(auth_middleware, content_controller, "3. Request Read Banner List")
+Rel(content_controller, readBannerList, "4. Request Read Banner List")
+Rel(readBannerList, authdecoded, "5. Decode token")
+Rel(readBannerList, getBengkelbyId, "6. Request Get Bengkel By ID")
+Rel(readBannerList, bannerAppList, "8. Request Get Banner App List")
+
+Rel(getBengkelbyId, database, "7. Get Bengkel By ID")
+Rel(bannerAppList, database, "9. Get Banner App List")
+
+@enduml

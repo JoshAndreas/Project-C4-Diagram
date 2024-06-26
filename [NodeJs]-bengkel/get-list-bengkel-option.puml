@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getListBengkelOptions API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getListBengkelOptions API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Bengkel, "Bengkel Options Controller", "Controller | NodeJs", "Controller for Bengkel Option Function related\n(NodeJs Bengkel API)")
+
+    Component(getListBengkelOptions, "getListBengkelOptions", "Function | NodeJs", "Function for Get List bengkel option\n(NodeJs Bengkel API)")
+    Component(getOptions, "Bengkel.getOptions", "Function | NodeJs", "Function for Get Option data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get List bengkel option")
+Rel(auth_middleware, Bengkel, "2. Request Get List bengkel option")
+Rel(Bengkel, getListBengkelOptions, "3. Request Get List bengkel option")
+Rel(getListBengkelOptions, getOptions, "4. Get List bengkel option")
+
+Rel(getOptions, database, "5. Get Option data")
+
+@enduml

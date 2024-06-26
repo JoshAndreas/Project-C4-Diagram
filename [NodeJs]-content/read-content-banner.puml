@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title read Content Banner API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "read Content Banner API\n[Component]"){
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Content Banner Related Function\n(NodeJs Content API)")
+    Component(read, "read", "Function | NodeJs", "Function for read content Banner data\n(NodeJs Content API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Read Content Banner data")
+Rel(auth_middleware, content_controller, "3. Request Read Content Banner data")
+Rel(content_controller, read, "4. Request Read Content Banner data")
+Rel(read, database, "5. Read Content Banner data")
+
+@enduml

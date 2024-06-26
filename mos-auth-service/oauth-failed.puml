@@ -1,0 +1,18 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title authorize Failed API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "authorize Failed API\n[Component]"){
+Component(oauth2_controller, "Oauth2 Controller", "Controller | TypeScript", "Controller for Oauth\n(mos-auth-service)")
+Component(redirectOauthFail, "redirectOauthFail", "Function | TypeScript", "Function for Redirect if Oauth Failed\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-auth-service)")
+
+}
+Rel_D(Web_Moservice, mainMiddleware, "1. Oauth Failed")
+
+Rel_D(mainMiddleware, oauth2_controller, "2. Oauth Failed")
+Rel_D(oauth2_controller, redirectOauthFail, "3. Oauth Failed, Redirect to Login")
+
+@enduml

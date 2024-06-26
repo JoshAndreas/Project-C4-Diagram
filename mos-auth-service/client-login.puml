@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title authenticate Client API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "authenticate Client API\n[Component]"){
+Component(clientLoginRequest, "clientLoginRequest", "Request | TypeScript", "Request for Client Login\n(mos-auth-service)")
+Component(clientData, "ClientRepository.findOne", "Function | TypeScript", "Function for Retrieve Client data\n(mos-auth-service)")
+Component(checkValidPassword, "checkValidPassword", "Function | TypeScript", "Function for Check Valid Password\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-auth-service)")
+
+
+Component(client_controller, "Client Controller", "Controller | TypeScript", "Controller for Client related Function\n(mos-auth-service)")
+Component(login, "login", "Function | TypeScript", "Main Function for login\n(mos-auth-service)")
+Component(generateClientToken, "generateClientToken", "Function | TypeScript", "Function for Generate Client Token\n(mos-auth-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Client login")
+
+Rel_D(mainMiddleware, clientLoginRequest, "2. Request Client login")
+Rel_D(clientLoginRequest, clientData, "3. Request Retrieve Client Data")
+Rel_L(clientData, database, "4. Retrieve Client Data")
+Rel_D(clientLoginRequest, checkValidPassword, "5. Check if Password valid")
+Rel_D(clientLoginRequest, client_controller, "6. Request Client login")
+Rel_D(client_controller, login, "7. Request Client login")
+Rel_D(login, generateClientToken, "8. Generate Client Token")
+
+@enduml

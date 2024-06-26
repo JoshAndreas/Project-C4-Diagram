@@ -1,0 +1,29 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Category Moadmin API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "update Category Moadmin API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Category Controller", "Controller | NodeJs", "Controller for Content Category Related Function\n(NodeJs Content API)")
+    Component(update, "update", "Function | NodeJs", "Function for Update Categories Moadmin\n(NodeJs Content API)")
+    Component(updates, "ContentCategory.updates", "Function | NodeJs", "Function for update Categories Moadmin\n(NodeJs Content API)")
+    Component(updater, "ContentCategory.update", "Function | NodeJs", "Function for update Categories Moadmin\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request update Categories Moadmin")
+Rel(auth_middleware, content_controller, "2. Request update Categories Moadmin")
+Rel(content_controller, update, "3. Request update Categories Moadmin")
+Rel(update, updates, "4. If (data.mapping_data) Exist, Request update Categories Moadmin")
+Rel(update, updater, "4. Else, Request update Categories Moadmin")
+
+Rel(updates, database, "5. Update Categories Moadmin")
+Rel(updater, database, "5. Update Categories Moadmin")
+
+@enduml

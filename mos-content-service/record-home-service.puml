@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title recordHomeService API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "recordHomeService API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(home_service_controller, "Home Service Controller", "Controller | TypeScript", "Controller for Home Service Related Function\n(mos-content-service)")
+Component(recordHomeService, "recordHomeService", "Function | TypeScript", "Main Function for record home service data by Datetime\n(mos-content-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request record home service data")
+
+Rel_D(mainMiddleware, home_service_controller, "2. Request record home service data")
+Rel_D(home_service_controller, recordHomeService, "3. Request record home service data")
+Rel_D(recordHomeService, database, "4. Record home service data")
+
+
+@enduml

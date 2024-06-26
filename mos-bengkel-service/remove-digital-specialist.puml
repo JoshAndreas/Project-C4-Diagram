@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title remove Digital Specialist API\n[mos-bengkel-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "remove Digital Specialist API\n[Component]"){
+Component(digital_specialist_controller, "Digital Specialist Controller", "Controller | TypeScript", "Controller for Digital Specialist Related Function\n(mos-bengkel-service)")
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-bengkel-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-bengkel-service)")
+Component(remove, "remove", "Function | TypeScript", "Main Function for remove digital specialist data\n(mos-bengkel-service)")
+Component(removeDigitalSpecialist, "DigitalSpecialistRepository.remove", "Function | TypeScript", "Function for remove digital specialist data\n(mos-bengkel-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request remove digital specialist data by ID")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request remove digital specialist data by ID")
+Rel_D(auth_operator_middleware, digital_specialist_controller, "3. Request remove digital specialist data by ID")
+Rel_D(digital_specialist_controller, remove, "4. Request remove digital specialist data by ID")
+Rel_D(remove, removeDigitalSpecialist, "5. Remove Digital Specialist Data by ID")
+Rel_D(removeDigitalSpecialist, database, "6. Remove Digital Specialist Data by ID")
+
+@enduml

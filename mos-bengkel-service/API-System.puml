@@ -1,0 +1,114 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title API System\n[mos-bengkel-service]
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+
+Component(API, "mos-bengkel-service", "Repository | TypeScript", "Repository for Bengkel Related Function")
+Boundary(api, "mos-bengkel-service API\n[Component]"){
+Component(bengkel, "Bengkel", "Function | TypeScript", "Function For Retrieve, Create, Update Bengkel List Data")
+Component(landingPage, "Landing Page", "Function | TypeScript", "Function For Show Landing page")
+Component(findBengkelByPromoId, "findBengkelByPromoId", "Function | TypeScript", "Function For Find Bengkel using Promo ID")
+Component(findBengkelById, "findBengkelById", "Function | TypeScript", "Function For Find Bengkel using Bengkel ID")
+Component(registrationBengkel, "Registration Bengkel", "Function | TypeScript", "Function For Registration Bengkel data to Database")
+Component(Partner, "Index Partner", "Function | TypeScript", "Function For Show All Partner List Data")
+Component(Filter, "Index Filter", "Function | TypeScript", "Function For Show All Filter data")
+Component(showDG, "Digital Specialist", "Function | TypeScript", "Function For Show, Create, Remove Digital Specialist Data")
+Component(Workshop, "Index Workshop", "Function | TypeScript", "Function For Show All Workshop data")
+Component(FindworkshopbyID, "Find workshop by ID", "Function | TypeScript", "Function For Find Workshop By ID")
+Component(workshopReg, "Workshop Registration", "Function | TypeScript", "Function For Registration Workshop Data")
+Component(findworkshopReg, "Find workshop registration by ID", "Function | TypeScript", "Function For Find Workshop registration data by ID")
+Component(updateWorkshop, "Update Workshop Registration", "Function | TypeScript", "Function For Update Workshop Registration Data")
+Component(GroupBengkel, "Group Bengkel", "Function | TypeScript", "Function For Show, Create, Update Group Bengkel data list")
+
+Component(findGroupBengkel, "Find Group Bengkel By ID", "Function | TypeScript", "Function For Find Group Bengkel By ID")
+
+Component(UpdateEspay, "Update Espay Credential", "Function | TypeScript", "Function For Update Espay Credential Data")
+
+Component(Mission, "Mission", "Function | TypeScript", "Function For Show, Create, Remove Mission data list")
+
+Component(Uploadimage, "Upload Image", "Function | TypeScript", "Function For Upload Image data")
+
+Component(MissionTiers, "Index Mission Tiers", "Function | TypeScript", "Function For show all mission tiers data")
+
+Component(MissionRegistration, "Index Mission Registration", "Function | TypeScript", "Function for show all mission registration data")
+
+Component(Province, "Index Province", "Function | TypeScript", "Function for Show all province data")
+
+Component(PaymentMethod, "Index Payment Method", "Function | TypeScript", "Function For show all payment method data")
+
+Component(city, "Index City", "Function | TypeScript", "Function For show all city data")
+
+Component(Notification, "Index Notification", "Function | TypeScript", "For show all notification data")
+Component(Services, "Services", "Function | TypeScript", "For Show all services data")
+Component(Facilities, "Facilities", "Function | TypeScript", "For Show all Facilities data")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, API, "Request using function related to bengkel")
+
+Rel_D(API, bengkel, "Request Retrieve, Create, Update Bengkel List Data")
+Rel_D(API, landingPage, "Request Show Landing page")
+Rel_D(API, findBengkelByPromoId, "Request  Find Bengkel using Promo ID")
+
+Rel_D(API, registrationBengkel, "Request Registration Bengkel data to Database")
+Rel_D(API, Partner, "Request Show All Partner List Data")
+Rel_D(API, Filter, "Request Show All Filter data")
+Rel_D(API, showDG, "Request Show, Create, Remove Digital Specialist Data")
+
+Rel_R(API, Workshop, "Request Show All Workshop data")
+Rel_R(API, FindworkshopbyID, "Request Find Workshop By ID")
+Rel_R(API, workshopReg, "Request Registration Workshop Data")
+Rel_R(API, findworkshopReg, "Request Find Workshop registration data by ID")
+Rel_R(API, updateWorkshop, "Request Update Workshop Registration Data")
+Rel_R(API, GroupBengkel, "Request Show, Create, Update Group Bengkel data list")
+Rel_R(API, findGroupBengkel, "Request Find Group Bengkel By ID")
+
+
+Rel_L(API, UpdateEspay, "Request Update Espay Credential Data")
+Rel_L(API, Mission, "Request Show, create, remove Mission data list")
+
+Rel_L(API, Uploadimage, "Request Upload Image data")
+Rel_L(API, MissionTiers, "Request show all mission tiers data")
+Rel_L(API, MissionRegistration, "Request show all mission registration data")
+Rel_L(API, Province, "Request Show all province data")
+Rel_L(API, PaymentMethod, "Request show all payment method data")
+Rel_L(API, city, "Request show all city data")
+
+Rel_D(API, Notification, "Request show all notification data")
+Rel_D(API, Services, "Request Show all services data")
+Rel_D(API, Facilities, "Request Show all Facilities data")
+Rel_D(API, findBengkelById, "Request Find Bengkel using Bengkel ID")
+
+Rel_D(bengkel, database, "Retrieve, Create, Update Bengkel List Data")
+Rel_D(landingPage, database, "Show Landing page")
+Rel_D(findBengkelByPromoId, database, "Find Bengkel using Promo ID")
+Rel_D(registrationBengkel, database, "Registration Bengkel data to Database")
+Rel_D(Partner, database, "Show All Partner List Data")
+Rel_D(Filter, database, "Show All Filter data")
+Rel_D(showDG, database, "Show Digital Specialist Data")
+
+Rel_R(Workshop, database, "Show All Workshop data")
+Rel_R(FindworkshopbyID, database, "Find Workshop By ID")
+Rel_R(workshopReg, database, "Registration Workshop Data")
+Rel_R(findworkshopReg, database, "Find Workshop registration data by ID")
+Rel_R(updateWorkshop, database, "Update Workshop Registration Data")
+Rel_R(GroupBengkel, database, "Show All Group Bengkel data list")
+Rel_R(findGroupBengkel, database, "Find Group Bengkel By ID")
+
+Rel_L(UpdateEspay, database, "Update Espay Credential Data")
+Rel_L(Mission, database, "Show, Create, Remove Mission data list")
+Rel_L(Uploadimage, database, "Upload Image data")
+Rel_L(MissionTiers, database, "Show all mission tiers data")
+Rel_L(MissionRegistration, database, "Show all mission registration data")
+Rel_L(Province, database, "Show all province data")
+Rel_L(PaymentMethod, database, "Show all payment method data")
+Rel_L(city, database, "Show all city data")
+
+Rel_D(Notification, database, "Show all notification data")
+Rel_D(Services, database, "Show all services data")
+Rel_D(Facilities, database, "Show all Facilities data")
+Rel_D(findBengkelById, database, "Find Bengkel using Bengkel ID")
+
+@enduml

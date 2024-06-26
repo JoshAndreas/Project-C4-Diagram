@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index sp notif API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index sp notif API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(sp_moadmin_auth_middleware, "SP Moadmin Auth Middleware", "Middleware | TypeScript", "Middleware for Moadmin Authentication\n(mos-user-service)")
+Component(sp_notif_controller, "SP Notif Controller", "Controller | TypeScript", "Controller for SP Notification Related Function\n(mos-user-service)")
+Component(index, "index", "Function | TypeScript", "Function for retrieve notification data\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request retrieve notification data")
+
+Rel_D(mainMiddleware, sp_moadmin_auth_middleware, "2. Request retrieve notification data")
+Rel_D(sp_moadmin_auth_middleware, sp_notif_controller, "3. Request retrieve notification data")
+Rel_D(sp_notif_controller, index, "4. Retrieve notification data")
+Rel_D(index, database, "5. Retrieve notification data")
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create Pilihan lain API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "create Pilihan lain API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Pilihan Lain Controller", "Controller | NodeJs", "Controller for Content Pilihan Lain Related Function\n(NodeJs Content API)")
+    Component(update, "create", "Function | NodeJs", "Function for Update Pilihan Lain data\n(NodeJs Content API)")
+    Component(updates, "ContentPilihanLain.create", "Function | NodeJs", "Function for update Pilihan Lain data\n(NodeJs Content API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Create Pilihan Lain data")
+Rel(auth_middleware, content_controller, "2. Request Create Pilihan Lain data")
+Rel(content_controller, update, "3. Request Create Pilihan Lain data")
+Rel(update, updates, "4. Request Create Pilihan Lain data")
+
+Rel(updates, database, "5. Create Pilihan Lain data")
+
+@enduml

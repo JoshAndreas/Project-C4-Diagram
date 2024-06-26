@@ -1,0 +1,54 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title API System\n[mos-auth-service]
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+
+Component(API, "mos-auth-service", "Repository | TypeScript", "Repository for Authentication Function Related")
+Boundary(api, "API System\n[mos-auth-service]"){
+Component(authenticateAdm, "Authenticate Admin", "Function | TypeScript", "Main Function for authenticate Admin\n(mos-auth-service)")
+Component(authenticateCli, "Authenticate Client", "Function | TypeScript", "Main Function for authenticate Client\n(mos-auth-service)")
+Component(authenticateCust, "Authenticate Customer", "Function | TypeScript", "Main Function for authenticate Customer\n(mos-auth-service)")
+Component(authenticateFB, "Authenticate Facebook", "Function | TypeScript", "Main Function for authenticate Facebook\n(mos-auth-service)")
+Component(authenticateGoogle, "Authenticate Google", "Function | TypeScript", "Main Function for authenticate Google\n(mos-auth-service)")
+Component(login, "login", "Function | TypeScript", "Function for login\n(mos-auth-service)")
+Component(generateOTP, "generateOTP", "Function | TypeScript", "Function for generate OTP\n(mos-auth-service)")
+Component(geocoding, "geocoding", "Function | TypeScript", "Function for Geocoding\n(mos-auth-service)")
+Component(getTokens, "getToken Oauth", "Function | TypeScript", "Function for Get Token Oauth\n(mos-auth-service)")
+Component(getToken, "getToken Token", "Function | TypeScript", "Function for Get Token\n(mos-auth-service)")
+Component(redirectOauthFail, "redirectOauthFail", "Function | TypeScript", "Function for Redirect if Oauth Failed\n(mos-auth-service)")
+Component(validate, "validate", "Function | TypeScript", "Function for validate OTP\n(mos-auth-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, API, "Request use function related to Authentication")
+
+Rel_D(API, authenticateAdm, "Request authenticate Admin")
+Rel_D(API, authenticateCli, "Request authenticate Client")
+Rel_D(API, authenticateCust, "Request authenticate Customer")
+Rel_D(API, authenticateFB, "Request authenticate Facebook")
+Rel_D(API, authenticateGoogle, "Request authenticate Google")
+Rel_D(API, login, "Request login")
+Rel_D(API, generateOTP, "Request generate OTP")
+Rel_D(API, geocoding, "Request Geocoding")
+Rel_D(API, getTokens, "Request Get Token Oauth")
+Rel_D(API, getToken, "Request Get Token")
+Rel_D(API, redirectOauthFail, "Request Redirect if Oauth Failed")
+Rel_D(API, validate, "Request validate OTP")
+
+Rel_D(authenticateAdm, database, "authenticate Admin")
+Rel_D(authenticateCli, database, "authenticate Client")
+Rel_D(authenticateCust, database, "authenticate Customer")
+Rel_D(authenticateFB, database, "authenticate Facebook")
+Rel_D(authenticateGoogle, database, "authenticate Google")
+Rel_D(login, database, "login")
+Rel_D(generateOTP, database, "generate OTP")
+Rel_D(geocoding, database, "Geocoding")
+Rel_D(getTokens, database, "Get Token Oauth")
+Rel_D(getToken, database, "Get Token")
+Rel_D(redirectOauthFail, database, "Redirect if Oauth Failed")
+Rel_D(validate, database, "validate OTP")
+
+@enduml

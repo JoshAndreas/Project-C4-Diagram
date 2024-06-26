@@ -1,0 +1,49 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title redirectOauthSuccess facebook API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "redirectOauthSuccess facebook API\n[Component]"){
+Component(passport, "facebookStrategy", "Controller | TypeScript", "Function for Sync to Google Strategy\n(mos-auth-service)")
+Component(findCredential, "CredentialRepository.findOne", "Function | TypeScript", "Main Function for Get Token\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-auth-service)")
+
+Component(createUserResult, "UserRepository.create", "Function | TypeScript", "Function for Create User Result\n(mos-auth-service)")
+
+Component(createCredentialResult, "CredentialRepository.create", "Function | TypeScript", "Function for create credential result\n(mos-auth-service)")
+
+Component(getPayload, "getPayload", "Function | TypeScript", "Function for get payload\n(mos-auth-service)")
+Component(generateToken, "generateToken", "Function | TypeScript", "Function for Generate Token\n(mos-auth-service)")
+Component(oauth2_controller, "Oauth2 Controller", "Controller | TypeScript", "Controller for Oauth\n(mos-auth-service)")
+Component(redirectOauthSuccess, "redirectOauthSuccess", "Function | TypeScript", "Function for Redirect if Oauth Success\n(mos-auth-service)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("URL", "/login/oauth2/code/Facebook")
+System_Ext(Facebook, "Facebook", "External System for Facebook Authorize")
+
+
+Rel_D(mainMiddleware, passport, "2. Request authorize Facebook")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request authorize Facebook")
+Rel_D(passport, findCredential, "4. Request Credential Data")
+
+Rel_L(passport, Facebook, "3. Authorize Facebook")
+
+
+
+Rel_D(findCredential, database, "5. Retrieve Credential data")
+Rel_D(passport, createUserResult, "6. Request create user result data")
+
+Rel_D(createUserResult, database, "7. Create User result data")
+Rel_D(passport, createCredentialResult, "8. Request Create Credential Result")
+Rel_D(createCredentialResult, database, "9. Create Credential Result")
+
+Rel_D(passport, getPayload, "10. Get Access Token Payload")
+Rel_D(passport, generateToken, "11. Generate token")
+Rel_D(mainMiddleware, oauth2_controller, "12. Oauth Success")
+Rel_D(oauth2_controller, redirectOauthSuccess, "13. Oauth Success")
+
+@enduml

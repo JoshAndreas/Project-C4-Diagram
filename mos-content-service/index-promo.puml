@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index Promo API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index Promo API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(ep_promo_list_middleware, "Ep Promo list Middleware", "Middleware | TypeScript", "Middleware for Promo List\n(mos-content-service)")
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(index, "index", "Function | TypeScript", "Main Function for Show all promo data detail\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Show Promo Data details")
+
+Rel_D(mainMiddleware, ep_promo_list_middleware, "2. Request Show Promo Data details")
+Rel_D(ep_promo_list_middleware, promo_controller, "3. Request Show All Promo Data details")
+
+Rel_D(promo_controller, index, "4. Request Show All Promo Data details")
+Rel_D(index, database, "5. Search & Retrieve All Promo Data details")
+
+@enduml

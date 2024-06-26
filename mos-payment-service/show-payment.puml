@@ -1,0 +1,29 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title show payment API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "show payment API\n[Component]"){
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Main Function for Get Pemkey\n(mos-payment-service)")
+
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middlware for Authentication\n(mos-payment-service)")
+Component(payment_method_controller, "Payment Controller", "Controller | TypeScript", "Controller for payment Related Function\n(mos-payment-service)")
+Component(show, "show", "Function | TypeScript", "Function for show Payment data by payment UUID\n(mos-payment-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request show Payment data by payment UUID")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request show Payment data by payment UUID")
+
+Rel_D(loggerMiddleware, auth_middleware, "3. Request show Payment data by payment UUID")
+Rel_R(auth_middleware, getPemKey, "4. Get Pem Key")
+
+Rel_D(auth_middleware, payment_method_controller, "5. Request show Payment data by payment UUID")
+Rel_D(payment_method_controller, show, "6. Request show Payment data by payment UUID")
+Rel_D(show, database, "7. Retrieve Payment data by payment UUID")
+
+
+@enduml

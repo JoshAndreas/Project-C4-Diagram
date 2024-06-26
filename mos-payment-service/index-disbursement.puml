@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index disbursement API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index disbursement API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-payment-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(disbursement_controller, "Disbursement Controller", "Controller | TypeScript", "Controller for Disbursement Related Function\n(mos-payment-service)")
+Component(index, "index", "Function | TypeScript", "Function for retrieve all disbursement data\n(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-auth-service")
+AddProperty("URL", "/api/admin/authenticate")
+Component(authenticateAdmin, "authenticateAdmin", "Function | TypeScript", "Function for Authentication Admin\n(mos-auth-service)")
+
+
+AddProperty("Repository", "mos-bengkel-service")
+AddProperty("URL", "/api/workshop-groups/$(groupBengkelById)")
+Component(groupBengkelById, "groupBengkelById", "Function | TypeScript", "Function for Find Group Bengkel By ID\n(mos-bengkel-service)")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request retrieve disbursement data")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request retrieve disbursement data")
+
+Rel_D(loggerMiddleware, auth_operator_middleware, "3. Request retrieve disbursement data")
+Rel_L(auth_operator_middleware, authenticateAdmin, "4. Request retrieve disbursement data")
+Rel_D(auth_operator_middleware, disbursement_controller, "5. Request retrieve disbursement data")
+Rel_D(disbursement_controller, index, "6. Request retrieve disbursement data")
+Rel_R(index, groupBengkelById, "7. Request Find group bengkel data by id")
+Rel_D(groupBengkelById, database, "8. Retrieve disbursement data")
+
+
+@enduml

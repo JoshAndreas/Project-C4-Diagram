@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title exportDataBengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "exportDataBengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(exportDataBengkel, "exportDataBengkel", "Function | NodeJs", "Function for Export data bengkel\n(NodeJs Bengkel API)")
+    Component(getWorksheet, "workbook.getWorksheet", "Function | NodeJs", "Function for Get worksheet\n(NodeJs Bengkel API)")
+    Component(getListWhereEmptyGooglePlaceID, "Bengkel.getListWhereEmptyGooglePlaceID", "Function | NodeJs", "Function for Get List where place empty Google place ID\n(NodeJs Bengkel API)")
+    Component(addRow, "worksheet.addRow", "Function | NodeJs", "Function for Add row\n(NodeJs Bengkel API)")
+    Component(write, "workbook.xlsx.write", "Function | NodeJs", "Function for Write xlsx file\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Insert map video")
+Rel(auth_middleware, Bengkel, "2. Request Insert map video")
+Rel(Bengkel, exportDataBengkel, "3. Request Insert map video")
+
+Rel(exportDataBengkel, getWorksheet, "4. Request Get worksheet")
+Rel(exportDataBengkel, getListWhereEmptyGooglePlaceID, "6. Request Get List where place empty Google place ID")
+Rel(exportDataBengkel, addRow, "8. Add row")
+Rel(exportDataBengkel, write, "9. Write xlsx file")
+
+Rel(getWorksheet, database, "5. Get worksheet")
+Rel(getListWhereEmptyGooglePlaceID, database, "7. Get List where place empty Google place ID")
+
+
+
+@enduml

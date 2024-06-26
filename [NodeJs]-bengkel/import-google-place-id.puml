@@ -1,0 +1,41 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title importGooglePlaceId API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "importGooglePlaceId API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(importGooglePlaceId, "importGooglePlaceId", "Function | NodeJs", "Function for Import Google Place ID\n(NodeJs Bengkel API)")
+    Component(getWorksheet, "workbook.getWorksheet", "Function | NodeJs", "Function for Get worksheet\n(NodeJs Bengkel API)")
+    Component(getById, "Bengkel.getById", "Function | NodeJs", "Function for Get bengkel by ID\n(NodeJs Bengkel API)")
+
+
+    Component(updateGooglePlaceId, "Bengkel.updateGooglePlaceId", "Function | NodeJs", "Function for Update google place ID\n(NodeJs Bengkel API)")
+
+}
+AddProperty("URL", "/maps/api/place/details/json?${queryParamString}")
+AddProperty("Service", "Google Place Service")
+Component_Ext(getRatingandReviewCount, "getRatingandReviewCount", "Function | NodeJs", "Function for Get Rating and Review Count")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Import Google Place ID")
+Rel(auth_middleware, Bengkel, "2. Request Import Google Place ID")
+Rel(Bengkel, importGooglePlaceId, "3. Request Import Google Place ID")
+
+Rel(importGooglePlaceId, getWorksheet, "4. Request Get worksheet")
+Rel(importGooglePlaceId, getById, "6. Request Get bengkel by ID")
+Rel_R(importGooglePlaceId, getRatingandReviewCount, "8. Get Rating and Review Count")
+Rel(importGooglePlaceId, updateGooglePlaceId, "9. Request Update google place ID")
+
+Rel(getWorksheet, database, "5. Get worksheet")
+Rel(getById, database, "7. Get bengkel by ID")
+Rel(updateGooglePlaceId, database, "10. Update google place ID")
+
+
+
+@enduml

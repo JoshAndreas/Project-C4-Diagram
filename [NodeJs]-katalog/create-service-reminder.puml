@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create Service Reminder Config API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "create Service Reminder Config API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Reminder Config Controller", "Controller | NodeJs", "Controller for Service Reminder Config Related function\n(NodeJs Katalog API)")
+Component(create, "create", "Function | NodeJs", "Function for create Service Reminder Config\n(NodeJs Katalog API)")
+Component(creates, "ServiceReminderConfigController.create", "Function | NodeJs", "Function for create Service Reminder Config data\n(NodeJs Katalog API)")
+Component(findById, "ServiceReminderConfig.findById", "Function | NodeJs", "Function for find by ID\n(NodeJs Katalog API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request create Service Reminder Config")
+Rel_D(auth_middleware, reference_controller, "2. Request create Service Reminder Config")
+
+Rel_D(reference_controller, create, "3. Request create Service Reminder Config")
+Rel_D(create, creates, "4. Request create Service Reminder Config")
+Rel_D(create, findById, "6. Find By ID")
+
+Rel_D(creates, database, "5. create Service Reminder Config")
+Rel_D(findById, database, "7. Find By ID")
+
+@enduml

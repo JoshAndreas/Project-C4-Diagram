@@ -1,0 +1,18 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title checkifEligible API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "checkifEligible API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+Component(category_controller, "Category Controller", "Controller | TypeScript", "Controller for Category Related Function\n(mos-content-service)")
+Component(checkifEligible, "checkifEligible", "Function | TypeScript", "Main Function for Check If Category is Eligible\n(mos-content-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Check If Category is Eligible by using ID")
+Rel_D(mainMiddleware, category_controller, "2. Request Check If Category is Eligible by using ID")
+Rel_D(category_controller, checkifEligible, "3. Request Check If Category is Eligible by using ID")
+Rel_D(checkifEligible, database, "4. Check if category is Eligible & Retrieve Result")
+
+@enduml

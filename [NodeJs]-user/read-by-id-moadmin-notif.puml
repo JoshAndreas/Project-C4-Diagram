@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readByID moadmin notif API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "readByID moadmin notif API\n[Component]"){
+Component(auths_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for verify\n(NodeJs User API)")
+Component(user_controller, "Moadmin Notif Controller", "Controller | NodeJs", "Controller for Moadmin Notif Related function\n(NodeJs User API)")
+Component(readByID, "MoadminNotif.readByID", "Function | NodeJs", "Function for Read by ID moadmin notif data\n(NodeJs User API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auths_middleware, "1. Request Read by ID moadmin notif data")
+Rel_D(auths_middleware, user_controller, "2. Request Read moadmin notif data by ID")
+Rel_D(user_controller, readByID, "3. Request Read moadmin notif data by ID")
+
+Rel_D(readByID, database, "4. Read moadmin notif data by ID")
+
+@enduml

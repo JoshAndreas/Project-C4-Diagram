@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getListMobilbyUserID Bengkel APP API\n[NodeJs Mobil API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getListMobilbyUserID API\n[Component]"){
+
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verify Function\n(NodeJs Mobil API)")
+Component(mobil_controller, "Mobil Controller", "Controller | NodeJs", "Controller for Mobil Related Function\n(NodeJs Mobil API)")
+Component(getListMobilbyUserID, "getListMobilbyUserID", "Function | NodeJs", "Function for get list mobil by user ID Function\n(NodeJs Mobil API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, auth_middleware, "1. Request get list mobil by user ID")
+
+Rel_D(auth_middleware, mobil_controller, "2. Request get list mobil by user ID")
+Rel_D(mobil_controller, getListMobilbyUserID, "3. Request get list mobil by user ID")
+Rel_D(getListMobilbyUserID, database, "4. Retrieve list mobil by user ID")
+
+@enduml

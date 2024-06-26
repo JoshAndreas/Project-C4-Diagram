@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getAllParam Moadmin API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getAllParam Moadmin API\n[Component]"){
+Component(auth_middleware, "user.login", "Function | NodeJs", "Function for login\n(NodeJs Katalog API)")
+
+Component(auths_middlewares, "auth.verify", "Middleware | NodeJs", "Middleware for verify\n(NodeJs Katalog API)")
+Component(reference_controller, "Reference Controller", "Controller | NodeJs", "Controller for Reference Related function\n(NodeJs Katalog API)")
+Component(getParam, "getParam", "Function | NodeJs", "Function for get param\n(NodeJs Katalog API)")
+Component(getAllParam, "Mobil.getAllParam", "Function | NodeJs", "Function for get all mobil param\n(NodeJs Katalog API)")
+Component(getAllParams, "Ref_service_umum_category.getAllParam", "Function | NodeJs", "Function for get all service umum param\n(NodeJs Katalog API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Login")
+
+Rel_D(auth_middleware, auths_middlewares, "2. Request get All Param Moadmin")
+Rel_D(auths_middlewares, reference_controller, "3. Request get All Param Moadmin")
+
+Rel_D(reference_controller, getParam, "4. Request get All Param Moadmin")
+Rel_D(getParam, getAllParam, "5. Request Get All Mobil Param Moadmin")
+Rel_D(getParam, getAllParams, "7. Request Get All Service Umum Param Moadmin")
+
+Rel_D(getAllParam, database, "6. Get All Mobil Param Moadmin")
+Rel_D(getAllParams, database, "8. Get All Service Umum Param Moadmin")
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title planetBan API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "planetBan API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(server_middleware, "Server Middleware", "Middleware | TypeScript", "Middleware for Server\n(mos-content-service)")
+Component(integration_controller, "Integration Controller", "Controller | TypeScript", "Controller for Integration Related function\n(mos-content-service)")
+Component(planetBan, "planetBan", "Function | TypeScript", "Main Function for integrate with planet ban voucher\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Integrate Voucher data")
+
+Rel_D(mainMiddleware, server_middleware, "2. Request Integrate Voucher data")
+Rel_D(server_middleware, integration_controller, "3. Request Integrate Voucher data")
+
+Rel_D(integration_controller, planetBan, "4. Request Integrate Voucher data")
+Rel_D(planetBan, database, "5. Create Voucher data")
+
+@enduml

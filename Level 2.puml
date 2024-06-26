@@ -1,0 +1,27 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+title Moservice Service System\n(Container Diagram)
+Person(A, "Moservice Customer", "All user of the moservice.id")
+System_Boundary(System, "Moservice APP"){
+System(B, "Web Moservice", "[Website]\nmoservice.id main services for Customer")
+System(C, "Moserviceadmin", "[Website]\nmoservice.id main services for Admin")
+System(D, "Bengkel App", "[Application]\nmoservice.id main services for Bengkel & Bengkel Group")
+
+Rel(A, B, "Booking, Login, Register, Vehicle Management")
+Rel(A, C, "Content Management, Schedule Confirmation")
+Rel(A, D, "Booking Confirmation, Setting Bengkel/Bengkel Group Data & Information")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+System(e, "API System", "[Services | NodeJs & TypeScript]\nAll API used by moservice.id")
+}
+System_Ext(l, "External System", "External API for OTP, Notification, Payment Service & Disbursement")
+
+Rel(B, e, "Proceed Register, Login, Vehicle Management Request")
+Rel(C, e, "Proceed Content Management, Schedule Confirmation Request")
+Rel(D, e, "Proceed Booking Confirmation, Setting Bengkel/Bengkel Group Data & Information Request")
+Rel_D(e, database, "CRUD Request")
+Rel_D(B, l, "Request OTP, Notification, Submit Payment Disbursement")
+Rel_R(l, A, "OTP, Notification, Payment")
+@enduml

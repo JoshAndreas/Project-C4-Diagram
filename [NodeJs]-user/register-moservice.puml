@@ -1,0 +1,46 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title register API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "register API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(user_controller, "Users Moservice Controller", "Controller | NodeJs", "Controller for Moservice User Related function\n(NodeJs User API)")
+Component(create, "create", "Function | NodeJs", "Function for create moservice user data\n(NodeJs User API)")
+Component(creates, "UsersMoservice.create", "Function | NodeJs", "Function for create moservice user data\n(NodeJs User API)")
+
+Component(checkIfRefIDDuplicate, "checkIfRefIDDuplicate", "Function | NodeJs", "Function for check If RefID Duplicate\n(NodeJs User API)")
+Component(carDataSelect, "carDataSelect", "Function | NodeJs", "Function for select car data\n(NodeJs User API)")
+Component(toDataURL, "QRCode.toDataURL", "Function | NodeJs", "Function for create qr code\n(NodeJs User API)")
+Component(sendSMS, "message.sendSMS", "Function | NodeJs", "Function for send SMS\n(NodeJs User API)")
+Component(sendEmail, "message.sendEmail", "Function | NodeJs", "Function for send Email\n(NodeJs User API)")
+Component(sendMail, "transporter.sendMail", "Function | NodeJs", "Function for send Email\n(NodeJs User API)")
+}
+
+AddProperty("URL", "/sms/2/text/single")
+System_Ext(infoBIP, "InfoBIP", "External System for Send SMS")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Lay_D(sendMail, infoBIP)
+Lay_R(infoBIP, database)
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request register user data")
+Rel_D(auth_middleware, user_controller, "2. Request register user data")
+Rel_D(user_controller, create, "3. Request register user data")
+Rel_D(create, creates, "4. Request Create user data")
+Rel_D(creates, checkIfRefIDDuplicate, "6. Request Check if Ref ID duplicate")
+Rel_D(checkIfRefIDDuplicate, database, "7. Check if Ref ID duplicate")
+
+Rel_D(creates, carDataSelect, "8. Request Create car data")
+Rel_D(carDataSelect, database, "9. Create car data")
+Rel_D(creates, database, "5. Create User data")
+Rel_D(creates, toDataURL, "10. Create QR Code")
+Rel_D(creates, sendSMS, "11. If No Email, Request Send SMS")
+Rel_D(creates, sendEmail, "11. If there is email, Request Send Email")
+
+Rel_D(sendSMS, infoBIP, "12. Send SMS")
+Rel_D(sendEmail, sendMail, "12. Send Email")
+
+@enduml

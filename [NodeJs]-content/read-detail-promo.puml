@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readDetail Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readDetail Content Promo API\n[Component]"){
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    Component(readDetail, "readDetail", "Function | NodeJs", "Function for read detail promo data\n(NodeJs Content API)")
+    Component(readDetails, "ContentPromo.readDetail", "Function | NodeJs", "Function for read detail promo data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, content_controller, "2. Request Read Content Promo detail data")
+Rel(content_controller, readDetail, "3. Request Read Content Promo detail data")
+Rel(readDetail, readDetails, "4. Request Read Content Promo detail data")
+
+Rel(readDetails, database, "5. Read Content Promo detail data")
+
+@enduml

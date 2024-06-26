@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title generateOTP API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "generateOTP API\n[Component]"){
+Component(booking_otp_controller, "Booking OTP Controller", "Controller | NodeJs", "Controller for Booking OTP Related Function\n(NodeJs Booking API)")
+Component(generateOTP, "generateOTP", "Function | NodeJs", "Function for generate OTP\n(NodeJs Booking API)")
+Component(sendSMS, "message.sendSMS", "Function | NodeJs", "Function for send SMS\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("URL", "/sms/2/text/single")
+System_Ext(InfoBip, "InfoBip", "External System for SMS & Notification")
+
+Rel_D(Web_Moservice, booking_otp_controller, "1. Request generate OTP")
+Rel_D(booking_otp_controller, generateOTP, "2. Generate OTP")
+Rel_D(generateOTP, sendSMS, "4. Request Send SMS")
+Rel_R(generateOTP, database, "3. Store OTP data")
+Rel_D(sendSMS, InfoBip, "5. Send SMS")
+
+
+@enduml

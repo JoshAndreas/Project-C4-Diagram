@@ -1,0 +1,85 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title disbursementRetry API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "disbursementRetry API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-payment-service)")
+Component(disbursementValidationMiddleware, "Disbursement Validation Middleware", "Middleware | TypeScript", "Middleware for Disbursement Validation\n(mos-payment-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(disbursement_detail_controller, "Disbursement Detail Controller", "Controller | TypeScript", "Controller for Disbursement detail Related Function\n(mos-payment-service)")
+Component(disbursementRetry, "disbursementRetry", "Function | TypeScript", "Function for disbursement retry\n(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+
+Component(inquiryAccount, "inquiryAccountExternalHelper", "Function | TypeScript", "Function for Inquiry Account External data\n(mos-payment-service)")
+
+Component(generateDisbursementSignatureHelper, "generateDisbursementSignatureHelper", "Function | TypeScript", "Function for generate disbursement signature data\n(mos-payment-service)")
+Component(generateDisbursementSignatureHelpers, "generateDisbursementSignatureHelper", "Function | TypeScript", "Function for generate disbursement signature data\n(mos-payment-service)")
+
+
+Component(transferAmountHelper, "transferAmountHelper", "Function | TypeScript", "Function for decide transfer amount\n(mos-payment-service)")
+
+
+Component(createDisbursementDetail, "DisbursementDetailRepository.create", "Function | TypeScript", "Function for create disbursement detail data\n(mos-payment-service)")
+Component(updateDisbursementDetail, "DisbursementDetailRepository.update", "Function | TypeScript", "Function for update disbursement detail data\n(mos-payment-service)")
+
+Component(kafkaSendNotifDisburseHelper, "kafkaSendNotifDisburseHelper", "Function | TypeScript", "Function for send notification for disbursement\n(mos-payment-service)")
+Component(sendEmail, "sendEmail", "Function | TypeScript", "Function for send Email\n(mos-payment-service)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Topic", "SendEmailDisburse Adira = moservice-disbursement-report")
+SystemQueue(Kafka, "Kafka")
+
+AddProperty("Topic", "SendEmailDisburse Client = client-disbursement-report")
+SystemQueue(Kafkas, "Kafka")
+
+AddProperty("System", "Espay")
+AddProperty("URL", "/api/v1.0/account-inquiry-external")
+Component_Ext(accountExternalInquiry, "accountExternalInquiry", "Function | TypeScript", "Function for Inquiry Account External data")
+
+AddProperty("System", "Espay")
+AddProperty("URL", "/api/v1.0/transfer-interbank")
+Component_Ext(transferInterbank, "transferInterbank", "Function | TypeScript", "Function for transfer inter bank")
+
+
+AddProperty("Repository", "mos-auth-service")
+AddProperty("URL", "/api/admin/authenticate")
+Component(authenticateAdmin, "authenticateAdmin", "Function | TypeScript", "Function for Authentication Admin")
+Rel(Web_Moservice, mainMiddleware, "1. Request disbursement retry")
+Lay_D(generateDisbursementSignatureHelper, accountExternalInquiry)
+Lay_D(generateDisbursementSignatureHelpers, transferInterbank)
+Rel(mainMiddleware, loggerMiddleware, "2. Request disbursement retry")
+
+Rel(loggerMiddleware, auth_operator_middleware, "3. Request disbursement retry")
+Rel_L(auth_operator_middleware, authenticateAdmin, "4. Request disbursement retry")
+Rel(auth_operator_middleware, disbursementValidationMiddleware, "5. Request disbursement retry")
+Rel(disbursementValidationMiddleware, disbursement_detail_controller, "6. Request disbursement retry")
+Rel(disbursement_detail_controller, disbursementRetry, "7. Request disbursement retry")
+Rel(disbursementRetry, inquiryAccount, "8. Request inquiry account data")
+
+
+Rel(inquiryAccount, generateDisbursementSignatureHelper, "9. Request generate disbursement signature")
+Rel(inquiryAccount, accountExternalInquiry, "10. Retrieve external account data")
+Rel(disbursementRetry, transferAmountHelper, "11. Request transfer")
+
+Rel(transferAmountHelper, generateDisbursementSignatureHelpers, "12. Request generate disbursement signature")
+
+Rel(transferAmountHelper, transferInterbank, "13. Request transfer inter bank")
+Rel(disbursementRetry, createDisbursementDetail, "14. Request create disbursement retry data")
+Rel(disbursementRetry, updateDisbursementDetail, "16. Request update disbursement retry data")
+Rel(disbursementRetry, kafkaSendNotifDisburseHelper, "18. Request send notification")
+Rel(kafkaSendNotifDisburseHelper, sendEmail, "19. Send Email")
+
+Rel(sendEmail, Kafka, "20. If disbursement = adira, send email to adira")
+Rel(sendEmail, Kafkas, "21. If disbursement = bengkel, send email to bengkel")
+
+
+Rel(createDisbursementDetail, database, "15. Create Disbursement Retry Data")
+Rel(updateDisbursementDetail, database, "17. Update Disbursement Retry Data")
+
+
+@enduml

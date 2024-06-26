@@ -1,0 +1,50 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create promo API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "create promo API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Authentication Operator\n(mos-content-service)")
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(create, "create", "Function | TypeScript", "Main Function for create promo data detail\n(mos-content-service)")
+Component(PromoRepository, "PromoRepository.create", "Function | TypeScript", "Main Function for create promo data detail\n(mos-content-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(MapPromoAreaRepository, "MapPromoAreaRepository.create", "Function | TypeScript", "Function for Create map promo area data\n(mos-content-service)")
+Component(MapPromoBengkelRepository, "MapPromoBengkelRepository.create", "Function | TypeScript", "Function for create Map Promo Bengkel data\n(mos-content-service)")
+Component(MapPromoServiceRepository, "MapPromoServiceRepository.create", "Function | TypeScript", "Function for create Map Promo Service data\n(mos-content-service)")
+Component(MapPromoTargetRepository, "MapPromoTargetRepository.create", "Function | TypeScript", "Function for create Map Promo Target data\n(mos-content-service)")
+Component(MapPromoGroupBengkelRepository, "MapPromoGroupBengkelRepository.create", "Function | TypeScript", "Function for create Map Promo Group Bengkel data\n(mos-content-service)")
+Component(MapHowToUsePromoRepository, "MapHowToUsePromoRepository.create", "Function | TypeScript", "Function for create Map How To Use Promo data\n(mos-content-service)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request create Promo Data details")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request create Promo Data details")
+Rel_D(auth_operator_middleware, promo_controller, "3. Request create All Promo Data details")
+
+Rel_D(promo_controller, create, "4. Request create All Promo Data details")
+Rel_D(create, PromoRepository, "5. Create Promo Data details")
+Rel(PromoRepository, database, "6. Create Promo Data details")
+
+Rel_D(create, MapPromoAreaRepository, "7. Create map promo area data")
+Rel_D(MapPromoAreaRepository, database, "8. Create map promo area data")
+
+Rel_D(create, MapPromoBengkelRepository, "9. create Map Promo Bengkel data")
+Rel_D(MapPromoBengkelRepository, database, "10. create Map Promo Bengkel data")
+
+Rel_D(create, MapPromoServiceRepository, "11. create Map Promo Service data")
+Rel_D(MapPromoServiceRepository, database, "12. create Map Promo Service data")
+
+Rel_D(create, MapPromoTargetRepository, "13. create Map Promo Target data")
+Rel_D(MapPromoTargetRepository, database, "14. create Map Promo Target data")
+
+Rel_D(create, MapPromoGroupBengkelRepository, "15. create Map Promo Group Bengkel data")
+Rel_D(MapPromoGroupBengkelRepository, database, "16. create Map Promo Group Bengkel data")
+
+Rel_D(create, MapHowToUsePromoRepository, "17. If How to use promo exist, Create Map How To Use Promo data")
+Rel_D(MapHowToUsePromoRepository, database, "18. Create Map How To Use Promo data")
+@enduml

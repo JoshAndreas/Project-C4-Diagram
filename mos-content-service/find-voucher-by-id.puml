@@ -1,0 +1,38 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Find Voucher By ID API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "Find Voucher By ID API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(voucher_controller, "Voucher Controller", "Controller | TypeScript", "Controller for Voucher Related Function\n(mos-content-service)")
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-content-service)")
+Component(auth_middlewares, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-content-service)")
+
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-content-service)")
+
+Component(findVouchreById, "findVoucherById", "Function | TypeScript", "Main Function for find voucher by ID\n(mos-content-service)")
+Component(VoucherRepositoryUpdate, "VoucherRepository.update", "Function | TypeScript", "Main Function for Update Payment Data\n(mos-content-service)")
+
+}
+AddProperty("Repository", "mos-payment-service")
+AddProperty("URL", "/api/payments/$(paymentUUID)")
+Component(getPaymentById, "getPaymentById", "Function | TypeScript", "Main Function for get Payment By ID\n(mos-booking-service)")
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Find Voucher By ID")
+
+Rel_D(mainMiddleware, auth_middleware, "2. Request Find Voucher By ID")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem Key")
+Rel_L(auth_middleware, auth_middlewares, "3. If there is (xToken), Return Auth Operator Middleware.")
+Rel_D(auth_middlewares, voucher_controller, "4. Request Find Voucher By ID")
+
+Rel_D(auth_middleware, voucher_controller, "4. Request Find Voucher By ID")
+Rel_D(voucher_controller, findVouchreById, "5. Request Find Voucher By ID")
+Rel_D(findVouchreById, database, "6. Find Voucher data By ID")
+Rel_R(findVouchreById, getPaymentById, "7. If there is Payment ID")
+Rel_D(findVouchreById, VoucherRepositoryUpdate, "8. Update Voucher Data")
+Rel_D(VoucherRepositoryUpdate, database, "9. Update & Retrieve Voucher Data")
+@enduml

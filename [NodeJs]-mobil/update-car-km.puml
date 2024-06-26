@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateCarKM Bengkel App API\n[NodeJs Mobil API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Partner")
+Boundary(api, "updateCarKM API\n[Component]"){
+Component(mobil_controller, "Mobil Controller", "Controller | NodeJs", "Controller for Mobil Related Function\n(NodeJs Mobil API)")
+Component(updateCarKM, "updateCarKM", "Function | NodeJs", "Function for update car KM\n(NodeJs Mobil API)")
+Component(updateKM, "Mobil.updateKM", "Function | NodeJs", "Function for update car KM\n(NodeJs Mobil API)")
+Component(login, "login", "Function | NodeJs", "Function for Login\n(NodeJs Mobil API)")
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verify Function\n(NodeJs Mobil API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, auth_middleware, "1. Request update car KM")
+
+Rel_D(auth_middleware, mobil_controller, "2. Request update car KM")
+Rel_D(mobil_controller, updateCarKM, "3. Request update car KM")
+Rel_D(updateCarKM, updateKM, "4. Update car KM")
+Rel_D(updateKM, database, "5. Update car KM")
+@enduml

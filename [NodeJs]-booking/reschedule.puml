@@ -1,0 +1,29 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title reschedule API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "reschedule API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(booking_order_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(reschedule, "reschedule", "Function | NodeJs", "Function for reschedule booking\n(NodeJs Booking API)")
+Component(rescheduleCheckQuota, "Booking_Order.rescheduleCheckQuota", "Function | NodeJs", "Function for check reschedule quota\n(NodeJs Booking API)")
+Component(getAvailabilityForReschedule, "Booking_Availability.getAvailabilityForReschedule", "Function | NodeJs", "Function for get availability for reschedule\n(NodeJs Booking API)")
+Component(updateScheduleAndAvailablity, "booking_order.updateScheduleAndAvailablity", "Function | NodeJs", "Function for update schedule and availablity\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request reschedule booking")
+Rel_D(auth_middleware, booking_order_controller, "2. Request reschedule booking")
+Rel_D(booking_order_controller, reschedule, "3. Request reschedule booking")
+Rel_D(reschedule, rescheduleCheckQuota, "4. Request Check Reschedule Quota")
+Rel_D(reschedule, getAvailabilityForReschedule, "6. Request Get Reschedule Availability")
+Rel_D(reschedule, updateScheduleAndAvailablity, "8. Request Update Schedule and Availability")
+
+Rel_D(rescheduleCheckQuota, database, "5. Check Reschedule Quota")
+Rel_D(getAvailabilityForReschedule, database, "7. Get Reschedule Availability")
+Rel_D(updateScheduleAndAvailablity, database, "9. Update Schedule and Availability")
+
+@enduml

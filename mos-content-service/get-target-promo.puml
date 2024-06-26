@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getTargetPromo API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getTargetPromo API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(getTargetPromo, "getTargetPromo", "Function | TypeScript", "Function for Get Target Promo data\n(mos-content-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Get Target Promo data")
+
+Rel_D(mainMiddleware, promo_controller, "2. Request Get Target Promo data")
+Rel(promo_controller, getTargetPromo, "3. Request Get Target Promo data")
+
+Rel(getTargetPromo, database, "4. Retrieve Target Promo data")
+
+
+@enduml

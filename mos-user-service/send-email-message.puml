@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title sendEmailMessage API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "sendEmailMessage API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(user_controller, "User Controller", "Controller | TypeScript", "Controller for User Related Function\n(mos-user-service)")
+Component(sendEmailMessage, "sendEmailMessage", "Function | TypeScript", "Function for send email message\n(mos-user-service)")
+Component(sendEmail, "sendEmail", "Function | TypeScript", "Function for send email message\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Topic", "email-event-topic")
+SystemQueue(Kafka, "Kafka")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Send Email")
+
+Rel_D(mainMiddleware, user_controller, "2. Request Send Email")
+Rel_D(user_controller, sendEmailMessage, "3. Request Send Email")
+Rel_R(sendEmailMessage, database, "4. Find User Email")
+Rel_D(sendEmailMessage, sendEmail, "5. Send Email")
+Rel_L(sendEmail, Kafka, "6. Send Email")
+
+@enduml

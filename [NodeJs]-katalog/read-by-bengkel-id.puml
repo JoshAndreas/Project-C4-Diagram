@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readByBengkelID API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "readByBengkelID API\n[Component]"){
+Component(auth_middleware, "user.login", "Function | NodeJs", "Function for login\n(NodeJs Katalog API)")
+
+Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Berkala Controller", "Controller | NodeJs", "Controller for Service Berkala Related function\n(NodeJs Katalog API)")
+Component(readByBengkelID, "readByBengkelID", "Function | NodeJs", "Function for read service berkala data by bengkel ID\n(NodeJs Katalog API)")
+Component(readByBengkelIDWithItems, "ServiceBerkala.readByBengkelIDWithItems", "Function | NodeJs", "Function for read service berkala data with Items\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request read service berkala data by bengkel ID")
+Rel_D(auth_middleware, auth_middlewares, "2. Request read service berkala data by bengkel ID")
+Rel_D(auth_middlewares, reference_controller, "3. Request read service berkala data by bengkel ID")
+Rel_D(reference_controller, readByBengkelID, "4. Request read service berkala data by bengkel ID")
+Rel_D(readByBengkelID, readByBengkelIDWithItems, "5. Request read service berkala data by bengkel ID with items")
+Rel_D(readByBengkelIDWithItems, database, "6. Read service berkala data by bengkel ID with Items")
+
+@enduml

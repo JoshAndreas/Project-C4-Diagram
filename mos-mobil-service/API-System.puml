@@ -1,0 +1,52 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title API System\n[mos-mobil-service]
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+Component(API, "mos-mobil-service", "Repository | TypeScript", "Repository for function related to Mobil")
+Boundary(api, "API System\n[mos-mobil-service]"){
+Component(Models, "Model", "Function | TypeScript", "Function for Show, Detail, Create, Update, Delete Model\n(mos-mobil-service)")
+Component(Brands, "Brand", "Function | TypeScript", "Function for Show, Detail, Create, Update, Delete Brand\n(mos-mobil-service)")
+Component(getYears, "getYears", "Function | TypeScript", "Function for get years data\n(mos-mobil-service)")
+Component(updatePrimaryVehicle, "updatePrimaryVehicle", "Function | TypeScript", "Function for update primary vehicle data\n(mos-mobil-service)")
+Component(deletedCustomerVehicle, "deletedCustomerVehicle", "Function | TypeScript", "Function for delete customer vehicle data\n(mos-mobil-service)")
+Component(saveCustomerVehicle, "saveCustomerVehicle", "Function | TypeScript", "Function for save customer vehicle data\n(mos-mobil-service)")
+Component(getVehicleByCarId, "getVehicleByCarId", "Function | TypeScript", "Function for get vehicle data by car ID\n(mos-mobil-service)")
+Component(getVehicleByCustomerId, "getVehicleByCustomerId", "Function | TypeScript", "Function for get vehicle data by customer ID\n(mos-mobil-service)")
+Component(getYearCar, "getYearCar", "Function | TypeScript", "Function for get year car data\n(mos-mobil-service)")
+Component(getCarBrand, "getYears", "Function | TypeScript", "Function for get car brand data\n(mos-mobil-service)")
+Component(getCarTypesByBrandId, "getCarTypesByBrandId", "Function | TypeScript", "Function for get car types data by brand ID\n(mos-mobil-service)")
+Component(getCarTypes, "getCarTypes", "Function | TypeScript", "Function for get car types data\n(mos-mobil-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, API, "Request use function related to Mobil")
+
+Rel(API, Brands, "Request Show, Detail, Create, Update, Delete Brand")
+Rel(API, Models, "Request Show, Detail, Create, Update, Delete Model")
+Rel(API, getYears, "Request get years data")
+Rel(API, updatePrimaryVehicle, "Request update primary vehicle data")
+Rel(API, deletedCustomerVehicle, "Request delete customer vehicle data")
+Rel(API, saveCustomerVehicle, "Request save customer vehicle data")
+Rel(API, getVehicleByCarId, "Request get vehicle data by car ID")
+Rel(API, getVehicleByCustomerId, "Request get vehicle data by customer ID")
+Rel(API, getYearCar, "Request get year car data")
+Rel(API, getCarBrand, "Request get car brand data")
+Rel(API, getCarTypesByBrandId, "Request get car types data by brand ID")
+Rel(API, getCarTypes, "Request get car types data")
+
+Rel(Brands, database, "Show, Detail, Create, Update, Delete Brand")
+Rel(Models, database, "Show, Detail, Create, Update, Delete Model")
+Rel(getYears, database, "get years data")
+Rel(updatePrimaryVehicle, database, "update primary vehicle data")
+Rel(deletedCustomerVehicle, database, "delete customer vehicle data")
+Rel(saveCustomerVehicle, database, "save customer vehicle data")
+Rel(getVehicleByCarId, database, "get vehicle data by car ID")
+Rel(getVehicleByCustomerId, database, "get vehicle data by customer ID")
+Rel(getYearCar, database, "get year car data")
+Rel(getCarBrand, database, "get car brand data")
+Rel(getCarTypesByBrandId, database, "get car types data by brand ID")
+Rel(getCarTypes, database, "get car types data")
+@enduml

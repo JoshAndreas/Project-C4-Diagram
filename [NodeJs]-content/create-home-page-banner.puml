@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createHomePageBannerImage API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "createHomePageBannerImage API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Content Banner Related Function\n(NodeJs Content API)")
+    Component(createHomePageBannerImage, "createHomePageBannerImage", "Function | NodeJs", "Function for Create Banner Image data\n(NodeJs Content API)")
+    Component(readMoadminBannerDetail, "ContentBanner.readMoadminBannerDetail", "Function | NodeJs", "Function for Read detail Moadmin Banner data\n(NodeJs Content API)")
+    Component(upload, "cloudinary.uploader.upload", "Function | NodeJs", "Function for Upload Cloudinary\n(NodeJs Content API)")
+    Component(update, "ContentBanner.update", "Function | NodeJs", "Function for Update Banner Image data\n(NodeJs Content API)")
+
+}
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/${version}/${cloudinaryPath}")
+System_Ext(Clodinary, "Cloudinary", "External System for Store Image data")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Create Banner data")
+Rel(auth_middleware, content_controller, "2. Request Create Banner data")
+Rel(content_controller, createHomePageBannerImage, "3. Request Create Banner data")
+Rel(createHomePageBannerImage, readMoadminBannerDetail, "4. Request Read detail Banner data")
+Rel(createHomePageBannerImage, upload, "6. Request Upload Banner data")
+Rel(createHomePageBannerImage, update, "8. Request Update Pilihan Lain Image data")
+
+Rel_L(upload, Clodinary, "7. Upload Banner data")
+
+Rel(readMoadminBannerDetail, database, "5. Read detail Banner Image data")
+Rel(update, database, "9. Update Banner Image data")
+
+@enduml

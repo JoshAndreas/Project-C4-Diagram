@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createBooking - approveHO API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createBooking - approveHO API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(booking_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(createBooking, "createBooking", "Function | NodeJs", "Function for create booking\n(NodeJs Booking API)")
+
+Component(approveHO, "approveHO", "Function | NodeJs", "Function for Case if Approved by HO\n(NodeJs Booking API)")
+Component(readByIDWithAdditionalData, "Booking_Order.readByIDWithAdditionalData", "Function | NodeJs", "Function for read by ID with additional data\n(NodeJs Booking API)")
+Component(updateHOBookingCustomerStatus_script, "Booking_Order.updateHOBookingCustomerStatus_script", "Function | NodeJs", "Function for update HO Booking Customer Status\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request create booking")
+Rel_D(auth_middleware, booking_controller, "2. Request create booking")
+Rel_D(booking_controller, createBooking, "3. Create booking and Check booking status")
+
+Rel_D(createBooking, approveHO, "4. Update HO booking status")
+Rel_D(approveHO, readByIDWithAdditionalData, "5. Read by ID with additional data")
+Rel_D(approveHO, updateHOBookingCustomerStatus_script, "7. Update HO Booking Customer Status")
+
+Rel_D(readByIDWithAdditionalData, database, "6. Read by ID with additional data")
+Rel_D(updateHOBookingCustomerStatus_script, database, "8. Update HO Booking Customer Status")
+
+@enduml

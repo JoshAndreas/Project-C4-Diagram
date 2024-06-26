@@ -1,0 +1,37 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readList Video API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readList Video API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Video Controller", "Controller | NodeJs", "Controller for Video Related Function\n(NodeJs Content API)")
+    
+    Component(readList, "readList", "Function | NodeJs", "Function for Read List Video data\n(NodeJs Content API)")
+    Component(readLists, "contentVideo.readList", "Function | NodeJs", "Function for Read list Video data\n(NodeJs Content API)")
+    Component(countList, "contentVideo.countList", "Function | NodeJs", "Function for Count List Video data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read list Video data")
+Rel(auth_middleware, content_controller, "2. Request Read list Video data")
+Rel(content_controller, readList, "3. Request Read list Video data")
+Rel(readList, readLists, "4. Request Read list Video data")
+Rel(readList, countList, "6. Request Count List Video data")
+
+Rel(readLists, database, "5. Read list Video data")  
+Rel(countList, database, "7. Count List Video data")  
+
+@enduml
+    
+    
+    
+    
+    
+    
+

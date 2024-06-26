@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findBookingTransactionByUuid API 
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findBookingTransactionByUuid API\n[Component]"){
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Auth Check\n(mos-booking-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-booking-service)")
+
+Component(booking_transaction_controller, "Booking Transaction Controller", "Controller | TypeScript", "Controller for Booking Transaction Related Function\n(mos-booking-service)")
+Component(findBookingTransactionByUuid, "findBookingTransactionByUuid", "Function | TypeScript", "API for find & search Booking by Uuid\n(mos-booking-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-booking-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Checking User authorization")
+Rel_D(mainMiddleware, auth_middleware, "2. Checking User authorization")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem Key")
+
+Rel_D(auth_middleware, booking_transaction_controller, "4. Find booking transaction by UUID")
+Rel_D(booking_transaction_controller, findBookingTransactionByUuid, "5. Request Finding booking transaction by UUID")
+Rel_D(findBookingTransactionByUuid, database, "6. Retrieve Booking Transaction data By UUID")
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getServiceUmumByID Service Umum API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getServiceUmumByID Service Umum API\n[Component]"){
+Component(reference_controller, "Service Umum Controller", "Controller | NodeJs", "Controller for Service Umum Related function\n(NodeJs Katalog API)")
+Component(getServiceUmumByID, "getServiceUmumByID", "Function | NodeJs", "Function for get Service umum By ID\n(NodeJs Katalog API)")
+Component(getServiceUmumByIDs, "ServiceUmum.getServiceUmumByID", "Function | NodeJs", "Function for get Service umum By ID\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, reference_controller, "1. Request get Service umum By ID")
+Rel_D(reference_controller, getServiceUmumByID, "2. Request get Service umum By ID")
+Rel_D(getServiceUmumByID, getServiceUmumByIDs, "3. Request get Service umum By ID")
+Rel_D(getServiceUmumByIDs, database, "4. Get Service umum By ID")
+
+@enduml

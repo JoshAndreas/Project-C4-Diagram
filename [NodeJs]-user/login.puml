@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title login API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "login API\n[Component]"){
+Component(limiter, "limiter", "Middleware | NodeJs", "Middleware for limit user request\n(NodeJs User API)")
+Component(user_controller, "Users Controller", "Controller | NodeJs", "Controller for User Related function\n(NodeJs User API)")
+Component(login, "login", "Function | NodeJs", "Function for login\n(NodeJs User API)")
+
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, limiter, "1. Request login")
+Rel_D(limiter, user_controller, "2. Request login")
+Rel_D(user_controller, login, "3. login")
+Rel_D(login, database, "4. Store Login data")
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getYears API\n[NodeJs Mobil API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getYears API\n[Component]"){
+Component(mobil_controller, "Mobil Controller", "Controller | NodeJs", "Controller for Mobil Related Function\n(NodeJs Mobil API)")
+Component(getYears, "getYears", "Function | NodeJs", "Function for get years data\n(NodeJs Mobil API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mobil_controller, "1. Request get years data")
+Rel_D(mobil_controller, getYears, "2. Request get years data")
+Rel_D(getYears, database, "3. Retrieve years data")
+
+@enduml

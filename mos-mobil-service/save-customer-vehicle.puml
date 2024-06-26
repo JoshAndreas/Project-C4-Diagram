@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title saveCustomerVehicle API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "saveCustomerVehicle API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-mobil-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-mobil-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Main Function for Get Pemkey\n(mos-mobil-service)")
+
+Component(auth_middleware, "Auth Middleware", "Controller | TypeScript", "Middlware for Authentication\n(mos-mobil-service)")
+Component(mobil_controller, "Mobil Controller", "Controller | TypeScript", "Controller for Mobil Related Function\n(mos-mobil-service)")
+Component(saveCustomerVehicle, "saveCustomerVehicle", "Function | TypeScript", "Main Function for Save Customer Vehicle By Customer ID\n(mos-mobil-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Save Customer Vehicle data")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request Save Customer Vehicle data")
+
+Rel_D(loggerMiddleware, auth_middleware, "3. Request Save Customer Vehicle data")
+Rel_R(auth_middleware, getPemKey, "4. Get Pem Key")
+
+Rel_D(auth_middleware, mobil_controller, "5. Request Save Customer Vehicle data")
+Rel_D(mobil_controller, saveCustomerVehicle, "6. Request Save Customer Vehicle data")
+Rel_D(saveCustomerVehicle, database, "7. Save & Update Customer Vehicle data")
+
+@enduml

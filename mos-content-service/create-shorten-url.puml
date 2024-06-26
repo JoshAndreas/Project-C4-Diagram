@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createShortenURL API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createShortenURL API\n[Component]"){
+Component(shorten_url_controller, "Shorten URL Controller", "Controller | TypeScript", "Controller for Shorten URL Related Function\n(mos-content-service)")
+Component(createShortenURL, "createShortenURL", "Function | TypeScript", "Main Function for Create Shorten URL\n(mos-content-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+}
+AddProperty("URL", "v1/url")
+System_Ext(branchio, "Branch.io", "External System For Shorten URL")
+AddProperty("URL", "v4/shorten")
+System_Ext(bitly, "Bit.ly", "External System For Shorten URL")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Create Shorten URL")
+
+Rel_D(mainMiddleware, shorten_url_controller, "2. Request Create Shorten URL")
+Rel_D(shorten_url_controller, createShortenURL, "3. Request Create Shorten URL, Check if Branch.io or Bit.ly")
+Rel_D(createShortenURL, branchio, "4. If Branch.io, Create Shorten URL")
+Rel_D(createShortenURL, bitly, "5. If Bit.ly, Create Shorten URL")
+
+
+@enduml

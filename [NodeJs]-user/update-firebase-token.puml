@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateFirebaseToken API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updateFirebaseToken API\n[Component]"){
+Component(user_controller, "Bengkelapp FCM Controller", "Controller | NodeJs", "Controller for bengkel App FCM Related function\n(NodeJs User API)")
+Component(updateFirebaseToken, "updateFirebaseToken", "Function | NodeJs", "Function for update Firebase Token\n(NodeJs User API)")
+Component(readByUserIDInstanceID, "DeviceUserBengkel.readByUserIDInstanceID", "Function | NodeJs", "Function for read By User ID Instance ID\n(NodeJs User API)")
+Component(updateFirebaseTokens, "DeviceUserBengkel.updateFirebaseToken", "Function | NodeJs", "Function for update Firebase Token\n(NodeJs User API)")
+Component(insertFirebaseToken, "DeviceUserBengkel.insertFirebaseToken", "Function | NodeJs", "Function for Insert Firebase Token\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, user_controller, "1. Request update Firebase Token")
+Rel_D(user_controller, updateFirebaseToken, "2. Request update Firebase Token")
+Rel_D(updateFirebaseToken, readByUserIDInstanceID, "3. Request Read user device data by ID")
+Rel_D(updateFirebaseToken, updateFirebaseTokens, "5. if (data2.length > 0), update Firebase Token")
+Rel_D(updateFirebaseToken, insertFirebaseToken, "7. Else, Insert Firebase Token")
+
+Rel_D(readByUserIDInstanceID, database, "4. Read user device data by ID")
+Rel_D(updateFirebaseTokens, database, "6. Update User Firebase Token")
+Rel_D(insertFirebaseToken, database, "8. Insert User Firebase Token")
+
+@enduml

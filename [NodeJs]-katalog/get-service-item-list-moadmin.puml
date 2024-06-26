@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getServiceItemList Moadmin API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getServiceCategoryList Moadmin API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Umum Category Item Controller", "Controller | NodeJs", "Controller for Service Umum Category Item Related function\n(NodeJs Katalog API)")
+Component(getServiceCategoryList, "getServiceItemList", "Function | NodeJs", "Function for get service item list\n(NodeJs Katalog API)")
+Component(getCategory, "Ref_service_umum_item.getServiceItem", "Function | NodeJs", "Function for get service item data\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request get service item list")
+Rel_D(auth_middleware, reference_controller, "2. Request get service item list")
+Rel_D(reference_controller, getServiceCategoryList, "3. Request get service item list")
+Rel_D(getServiceCategoryList, getCategory, "4. Request get service item list")
+Rel_D(getCategory, database, "5. Get service item list")
+
+@enduml

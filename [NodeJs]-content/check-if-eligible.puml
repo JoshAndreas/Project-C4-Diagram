@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title checkIfEligible Category API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "checkIfEligible Category API\n[Component]"){
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(auth_middleware, "auth.validate", "Middleware | NodeJs", "Authentication Middleware for validate Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Category Controller", "Controller | NodeJs", "Controller for Content Category Related Function\n(NodeJs Content API)")
+    Component(checkIfEligible, "checkIfEligible", "Function | NodeJs", "Function for Check if category eligible\n(NodeJs Content API)")
+    Component(checkIfEligibles, "ContentCategory.checkIfEligible", "Function | NodeJs", "Function for check if category eligible\n(NodeJs Content API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Check if category eligible")
+Rel(auth_middleware, content_controller, "3. Request Check if category eligible")
+Rel(content_controller, checkIfEligible, "4. Request Check if category eligible")
+Rel(checkIfEligible, checkIfEligibles, "5. Request Check if category eligible")
+
+Rel(checkIfEligibles, database, "6. Check if category eligible")
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index Video API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index Video API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(video_controller, "Video Controller", "Controller | TypeScript", "Controller for Video Related Function\n(mos-content-service)")
+Component(index, "index", "Function | TypeScript", "Main Function for Retrieve Video Data\n(mos-content-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Retrieve Video Data")
+
+Rel_D(mainMiddleware, video_controller, "2. Request Retrieve Video Data")
+Rel(video_controller, index, "3. Request Retrieve Video Data")
+
+Rel(index, database, "4. Retrieve Video Data")
+
+
+@enduml

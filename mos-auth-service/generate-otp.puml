@@ -1,0 +1,47 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title generate OTP API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "generate OTP API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-auth-service)")
+
+Component(otpGenerateRequest, "otpGenerateRequest", "Request | TypeScript", "Request for Generate OTP\n(mos-auth-service)")
+Component(OtpConfigurationHelper, "OtpConfigurationHelper", "Helper | TypeScript", "Helper for OTP Configuration\n(mos-auth-service)")
+Component(validatePhonenumber, "validatePhonenumber", "Function | TypeScript", "Function for Validate Phone Number\n(mos-auth-service)")
+Component(validateEmail, "validateEmail", "Function | TypeScript", "Function for Validate Email\n(mos-auth-service)")
+
+
+Component(otp_controller, "OTP Controller", "Controller | TypeScript", "Controller for OTP Related Function\n(mos-auth-service)")
+Component(generate, "generate", "Function | TypeScript", "Main Function for generate OTP\n(mos-auth-service)")
+Component(generateOTP, "generateOTP", "Function | TypeScript", "Function for generate OTP\n(mos-auth-service)")
+Component(otpDurationCalculation, "otpDurationCalculation", "Function | TypeScript", "Function for get OTP duration\n(mos-auth-service)")
+Component(saveOTP, "OtpRepository.create", "Function | TypeScript", "Function for save OTP data\n(mos-auth-service)")
+Component(sendOtp, "sendOtp", "Function | TypeScript", "Function for send OTP\n(mos-auth-service)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Topic", "otp-register-topic")
+SystemQueue(Kafka, "Kafka")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request generate OTP")
+Rel_D(mainMiddleware, otpGenerateRequest, "2. Request generate OTP")
+Rel_D(otpGenerateRequest, OtpConfigurationHelper, "3. Configure OTP")
+Rel_R(otpGenerateRequest, validatePhonenumber, "4. If there is phone number, Validate Phone Number")
+Rel_D(otpGenerateRequest, validateEmail, "5. If there is email, Validate Email")
+
+Rel_D(otpGenerateRequest, otp_controller, "6. Request generate OTP")
+Rel_D(otp_controller, generate, "7. Request generate OTP")
+Rel_D(generate, generateOTP, "8. Generate OTP")
+Rel_D(generate, otpDurationCalculation, "9. Get OTP Duration")
+Rel_D(generate, saveOTP, "10. Request Save OTP")
+
+
+Rel_D(saveOTP, database, "10. Save OTP")
+Rel_D(generate, sendOtp, "11. Request send OTP")
+Rel_L(sendOtp, Kafka, "12. Send OTP")
+
+@enduml

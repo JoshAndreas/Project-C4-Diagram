@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Banner API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "update Banner API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Banner Related Function\n(NodeJs Content API)")
+    Component(update, "update", "Function | NodeJs", "Function for Update Banner data\n(NodeJs Content API)")
+    Component(updates, "ContentBanner.update", "Function | NodeJs", "Function for Update Banner data\n(NodeJs Content API)")
+
+    Component(deleteMapBannerBengkel, "ContentBanner.deleteMapBannerBengkel", "Function | NodeJs", "Function for Delete Map Banner Bengkel data\n(NodeJs Content API)")
+    Component(insertMapBannerBengkel, "ContentBanner.insertMapBannerBengkel", "Function | NodeJs", "Function for Insert map banner bengkel\n(NodeJs Content API)")
+    
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Update Banner data")
+Rel(auth_middleware, content_controller, "2. Request Update Banner data")
+Rel(content_controller, update, "3. Request Update Banner data")
+
+Rel(update, deleteMapBannerBengkel, "4. if (!data.bengkel_id), Request Delete map banner bengkel")
+Rel(update, insertMapBannerBengkel, "4. Request Insert map banner bengkel")
+
+Rel(update, updates, "6. Request Insert map banner bengkel")
+Rel(updates, database, "7. Insert map banner bengkel")
+
+Rel(deleteMapBannerBengkel, database, "5. Delete Banner data")
+Rel(insertMapBannerBengkel, database, "5. Insert Banner data")
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title validate OTP API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "validate OTP API\n[Component]"){
+Component(otpValidateRequest, "otpValidateRequest", "Request | TypeScript", "Request for Validate OTP\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-notification-service)")
+Component(OtpConfigurationHelper, "OtpConfigurationHelper", "Helper | TypeScript", "Helper for OTP Configuration\n(mos-auth-service)")
+Component(otp_controller, "OTP Controller", "Controller | TypeScript", "Controller for OTP Related Function\n(mos-auth-service)")
+Component(validate, "validate", "Function | TypeScript", "Main Function for validate OTP\n(mos-auth-service)")
+Component(getOtp, "OtpRepository.findOne", "Function | TypeScript", "Function for Get OTP data\n(mos-auth-service)")
+Component(otpDurationCalculation, "otpDurationCalculation", "Function | TypeScript", "Function for Get OTP Duration\n(mos-auth-service)")
+Component(OtpRepositoryupdate, "OtpRepository.update", "Function | TypeScript", "Function for update OTP data\n(mos-auth-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request validate OTP")
+
+Rel_D(mainMiddleware, otpValidateRequest, "2. Request validate OTP")
+Rel_R(otpValidateRequest, OtpConfigurationHelper, "3. Request validate OTP")
+
+Rel_D(otpValidateRequest, otp_controller, "4. Request validate OTP")
+Rel_D(otp_controller, validate, "5. Request validate OTP")
+Rel_D(validate, getOtp, "6. Request Retrieve OTP data")
+Rel_D(validate, otpDurationCalculation, "8. Retrieve OTP duration data")
+Rel_D(validate, OtpRepositoryupdate, "9. If OTP match & Not Time Out, Update OTP data")
+Rel_D(OtpRepositoryupdate, database, "10. Update OTP Data")
+Rel_D(getOtp, database, "7. Retrieve OTP data")
+
+@enduml

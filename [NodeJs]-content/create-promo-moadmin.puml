@@ -1,0 +1,34 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "create Content Promo API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(auth_middlewares, "auth.decoded", "Middleware | NodeJs", "Authentication Middleware for Decode Token Function\n(NodeJs Content API)")
+
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    
+    Component(create, "create", "Function | NodeJs", "Function for Create promo data\n(NodeJs Content API)")
+    Component(creates, "ContentPromo.creates", "Function | NodeJs", "Function for Create promo data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, auth_middleware, "2. Request Create promo data")
+
+Rel(auth_middleware, auth_middlewares, "3. Request Create promo data")
+Rel(auth_middlewares, content_controller, "4. Request Create promo data")
+
+Rel(content_controller, create, "5. Request Create promo data")
+Rel(create, creates, "6. Request Create promo data")
+
+Rel(creates, database, "7. Create promo data")
+
+@enduml

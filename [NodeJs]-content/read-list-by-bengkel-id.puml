@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readListByBengkelID Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readListByBengkelID Content Promo API\n[Component]"){
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    Component(readListByBengkelID, "readListByBengkelIDController", "Function | NodeJs", "Function for Read list promo by Bengkel ID\n(NodeJs Content API)")
+    Component(readListByBengkelIDs, "ContentPromo.readListByBengkelID", "Function | NodeJs", "Function for Read list promo by Bengkel ID\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, content_controller, "2. Request Read list promo by Bengkel ID")
+
+Rel(content_controller, readListByBengkelID, "3. Request Read list promo by Bengkel ID")
+Rel(readListByBengkelID, readListByBengkelIDs, "4. Request Read list promo by Bengkel ID")
+
+Rel(readListByBengkelIDs, database, "5. Read list promo by Bengkel ID")
+
+@enduml

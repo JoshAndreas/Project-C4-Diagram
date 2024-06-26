@@ -1,0 +1,17 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index booking API 
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index booking API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for authentication\n(mos-booking-service)")
+Component(sp_booking_controller, "Sp Booking Controller", "Controller | TypeScript", "Controller for SP Booking Related function\n(mos-booking-service)")
+Component(index, "index", "Controller | TypeScript", "Function for retrieve booking data\n(mos-booking-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, auth_operator_middleware, "1. Request Get Booking data")
+Rel_D(auth_operator_middleware, sp_booking_controller, "2. Request Get Booking data")
+Rel_D(sp_booking_controller, index, "3. Request Get Booking data")
+Rel_D(index, database, "4. Retrieve Booking data")
+@enduml

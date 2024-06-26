@@ -1,0 +1,33 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title inquiry API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "inquiry API\n[Component]"){
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(espay_payment_controller, "Espay Payment Controller", "Controller | TypeScript", "Controller for Espay Payment Related Function\n(mos-payment-service)")
+Component(inquiry, "inquiry", "Function | TypeScript", "Function for Inquiry Payment data by UUID\n(mos-payment-service)")
+Component(paymentData, "PaymentRepository.findOne", "Function | TypeScript", "Function for search payment data\n(mos-payment-service)")
+Component(merchantConfiguration, "MerchantConfigurationRepository.findOne", "Function | TypeScript", "Function for search merchant configuration data\n(mos-payment-service)")
+Component(inquiryRequestSignature, "getInquiryAndPaymentRequestSignature", "Function | TypeScript", "Function for Inquiry request signature\n(mos-payment-service)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Find Payment method data")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request Find Payment method data")
+
+Rel_D(loggerMiddleware, espay_payment_controller, "3. Request Find Payment method data")
+Rel_D(espay_payment_controller, inquiry, "4. Request Find Payment Method data")
+Rel_D(inquiry, paymentData, "5. Request payment data")
+Rel_D(inquiry, merchantConfiguration, "7. Request merchant configuration data")
+Rel_D(inquiry, inquiryRequestSignature, "9. Request Inquiry request Signature data")
+Rel(paymentData, database, "6. Retrieve payment data")
+Rel(merchantConfiguration, database, "8. Retrieve merchant configuration data")
+Rel_R(inquiryRequestSignature, database, "10. Retrieve inquiry Request Signature data")
+
+
+@enduml

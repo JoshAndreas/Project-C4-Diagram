@@ -1,0 +1,51 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title invoice payment API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "invoice payment method API\n[Component]"){
+Component(server_auth_middleware, "Server Auth Middleware", "Middleware | TypeScript", "Middlware for Authentication\n(mos-payment-service)")
+Component(payment_invoice_request, "Payment invoice Request", "Request | TypeScript", "Request for Payment Invoice\n(mos-payment-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(payment_method_controller, "Payment Controller", "Controller | TypeScript", "Controller for payment method Related Function\n(mos-payment-service)")
+Component(invoice, "invoice", "Function | TypeScript", "Function for generate invoice data\n(mos-payment-service)")
+Component(createPaymentRsult, "PaymentItemRepository.create", "Function | TypeScript", "Function for create payment result\n(mos-payment-service)")
+Component(paymentMethod, "paymentMethod.type", "Function | TypeScript", "Function for check payment method data\n(mos-payment-service)")
+Component(invoiceHelper, "invoiceHelper", "Helper | TypeScript", "Helper for connect to espay\n(mos-payment-service)")
+Component(getSendInvoiceSignature, "getSendInvoiceSignature", "Function | TypeScript", "Get Invoice Signature(mos-payment-service)")
+Component(Update, "PaymentRepository.update", "Function | TypeScript", "Get Invoice Signature(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+}
+AddProperty("Service", "Espay")
+AddProperty("URL", "/rest/merchantpg/sendinvoice")
+Component_Ext(Invoice, "invoice", "Helper | TypeScript", "Send Invoice Function")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+Lay_D(paymentMethod, database)
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request generate invoice data")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request generate invoice data")
+
+Rel_D(loggerMiddleware, server_auth_middleware, "3. Request generate invoice data")
+Rel_D(server_auth_middleware, payment_invoice_request, "4. Request generate invoice data")
+Rel_D(payment_invoice_request, payment_method_controller, "5. Request generate invoice data")
+
+Rel_D(payment_method_controller, invoice, "6. Request generate invoice data")
+
+Rel(invoice, createPaymentRsult, "7. Request Create Payment data")
+Rel(createPaymentRsult, database, "8. Create Payment data")
+
+Rel(invoice, paymentMethod, "9. Check Payment Method data")
+Rel(invoice, invoiceHelper, "11. Check Espay Info")
+Rel(paymentMethod, database, "10. Get Payment Method data")
+Rel(invoiceHelper, getSendInvoiceSignature, "12. Get Send Invoice Signature")
+Rel_L(invoiceHelper, Invoice, "13. Send Invoice Payment data")
+Rel(invoice, Update, "14. Request Update Invoice Payment data")
+Rel(Update, database, "15. Update Invoice Payment data")
+
+
+@enduml

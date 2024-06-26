@@ -1,0 +1,32 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title transactionSummary API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "transactionSummary API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-payment-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(payment_controller, "Payment Controller", "Controller | TypeScript", "Controller for Payment Related Function\n(mos-payment-service)")
+Component(transactionSummary, "transactionSummary", "Function | TypeScript", "Function for show transaction Summary data\n(mos-payment-service)")
+Component(getTransactionSummary, "getTransactionSummary", "Function | TypeScript", "Function for get transaction summary data\n(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+AddProperty("Repository", "mos-auth-service")
+AddProperty("URL", "/api/admin/authenticate")
+Component(authenticateAdmin, "authenticateAdmin", "Function | TypeScript", "Function for Authentication Admin")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request show Transaction Summary")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request show Transaction Summary")
+
+Rel_D(loggerMiddleware, auth_operator_middleware, "3. Request show Transaction Summary")
+Rel_L(auth_operator_middleware, authenticateAdmin, "4. Request show Transaction Summary")
+Rel_D(auth_operator_middleware, payment_controller, "5. Request show Transaction Summary")
+Rel_D(payment_controller, transactionSummary, "6. Request show Transaction Summary")
+Rel_D(transactionSummary, getTransactionSummary, "7. Get Transaction Summary")
+Rel_D(getTransactionSummary, database, "8. Retrieve Transaction Summary Data")
+
+
+@enduml

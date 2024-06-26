@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title detail brand API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "detail brand API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-mobil-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-mobil-service)")
+
+Component(spMoadminAuthMiddleware, "Sp Moadmin Auth Middleware", "Middleware | TypeScript", "Middleware for Moadmin Authentication\n(mos-mobil-service)")
+Component(sp_mobil_brand_controller, "Sp Mobil Brand Controller", "Controller | TypeScript", "Controller for Mobil Brand Related Function\n(mos-mobil-service)")
+Component(details, "detail", "Function | TypeScript", "Main Function for Show brands data detail\n(mos-mobil-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, loggerMiddleware, "1. Request Show Car Brands Data details By Using Brand ID")
+Rel_D(loggerMiddleware, mainMiddleware, "2. Request Show Car Brands Data details By Using Brand ID")
+
+Rel_D(mainMiddleware, spMoadminAuthMiddleware, "3. Request Show Car Brands Data details By Using Brand ID")
+Rel_D(spMoadminAuthMiddleware, sp_mobil_brand_controller, "4. Request Show All Car Brands Data details By Using Brand ID")
+
+Rel_D(sp_mobil_brand_controller, details, "5. Request Show All Car Brands Data details By Using Brand ID")
+Rel_D(details, database, "6. Search & Retrieve All Car Brands Data details By Using Brand ID")
+
+@enduml

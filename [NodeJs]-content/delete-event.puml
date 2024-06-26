@@ -1,0 +1,29 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title delete Event API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "delete Event API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Event Controller", "Controller | NodeJs", "Controller for Event Related Function\n(NodeJs Content API)")
+    Component(delete, "delete", "Function | NodeJs", "Function for Delete Event data\n(NodeJs Content API)")
+    Component(deletes, "ContentEvent.delete", "Function | NodeJs", "Function for Delete Event data\n(NodeJs Content API)")
+    Component(deleteMapping, "ContentEvent.deleteMapping", "Function | NodeJs", "Function for Delete Mapping Event data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Delete Event data")
+Rel(auth_middleware, content_controller, "2. Request Delete Event data")
+Rel(content_controller, delete, "3. Request Delete Event data")
+Rel(delete, deletes, "4. Request Delete Event data")
+Rel(delete, deleteMapping, "6. Request Delete Mapping Event data")
+
+Rel(deletes, database, "5. Delete Event data")
+Rel(deleteMapping, database, "7. Delete Mapping Event data")
+
+@enduml

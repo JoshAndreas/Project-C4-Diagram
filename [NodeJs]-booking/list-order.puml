@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title listOrder API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "listOrder API\n[Component]"){
+Component(auth_middleware, "Auth.validateBengkelId", "Middleware | NodeJs", "Authentication Middleware for Validate Bengkel ID\n(NodeJs Booking API)")
+Component(booking_order_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(listOrder, "listOrder", "Function | NodeJs", "Function for retrieve list order\n(NodeJs Booking API)")
+Component(countFilter, "Booking_Order.countFilter", "Function | NodeJs", "Function for count list order\n(NodeJs Booking API)")
+Component(filter, "Booking_Order.filter", "Function | NodeJs", "Function for filter list order\n(NodeJs Booking API)")
+
+}
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for store Image data")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request retrieve list order")
+Rel_D(auth_middleware, booking_order_controller, "2. Request retrieve list order")
+Rel_D(booking_order_controller, listOrder, "3. Request Retrieve list order")
+Rel_D(listOrder, countFilter, "4. Request Count order")
+Rel_D(listOrder, filter, "6. Request Filter order")
+
+Lay_D(filter, database)
+Rel_D(countFilter, database, "5. Count Order")
+Rel_D(filter, database, "8. Filter and Retrieve order list data")
+
+Rel_L(filter, Cloudinary, "7. Filter and Retrieve Image list data")
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title insertMapVideo API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "insertMapVideo API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(insertMapVideo, "insertMapVideo", "Function | NodeJs", "Function for Insert map video\n(NodeJs Bengkel API)")
+    Component(insertMapVideos, "Bengkel.insertMapVideo", "Function | NodeJs", "Function for Insert map video\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Insert map video")
+Rel(auth_middleware, Bengkel, "2. Request Insert map video")
+Rel(Bengkel, insertMapVideo, "3. Request Insert map video")
+Rel(insertMapVideo, insertMapVideos, "4. Insert map video")
+
+Rel(insertMapVideos, database, "5. Insert map video")
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title useClientVoucher API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "useClientVoucher API\n[Component]"){
+Component(clientAuthMiddleware, "Client Auth Middleware", "Middleware | TypeScript", "Middleware for Client Authentication\n(mos-content-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(client_voucher_controller, "Client Voucher Controller", "Controller | TypeScript", "Controller for Client Voucher Related Function\n(mos-content-service)")
+Component(useClientVoucher, "useClientVoucher", "Function | TypeScript", "Main Function for Use Client Voucher\n(mos-content-service)")
+Component(findVoucher, "VoucherRepository.findOne", "Function | TypeScript", "Function for find Voucher\n(mos-content-service)")
+Component(findPromo, "PromoRepository.findOne", "Function | TypeScript", "Function for find Promo\n(mos-content-service)")
+Component(producerUseClientVoucher, "producerUseClientVoucher", "Function | TypeScript", "Main Function for Use Client Voucher\n(mos-content-service)")
+Component(sendKakfa, "sendKakfa", "Function | TypeScript", "Function for send Kafka\n(mos-content-service)")
+}
+AddProperty("Topic", "use-voucher-client-topic")
+SystemQueue(Kafka, "Kafka")
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-auth-service")
+AddProperty("URL", "/api/client/authenticate")
+Component(clientAuthenticate, "clientAuthenticate", "Function | TypeScript", "Function for Authenticate client")
+
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Use Client Voucher")
+Rel_D(mainMiddleware, clientAuthMiddleware, "2. Request Use Client Voucher")
+Rel_L(clientAuthMiddleware, clientAuthenticate, "3. Authenticate Client")
+Rel_D(clientAuthMiddleware, client_voucher_controller, "4. Request Use Client Voucher")
+
+
+Rel_D(client_voucher_controller, useClientVoucher, "5. Request Use Client Voucher")
+Rel_D(useClientVoucher, findVoucher, "6. Request Find Voucher data")
+Rel_D(useClientVoucher, findPromo, "8. Request Find Promo data")
+Rel(findVoucher, database, "7. Retrieve Voucher data")
+Rel(findPromo, database, "9. Retrieve Promo data")
+Rel(useClientVoucher, producerUseClientVoucher, "10. Use client voucher")
+
+Rel(useClientVoucher, sendKakfa, "11. Send Kafka")
+Rel_D(sendKakfa, Kafka, "12. Send Kafka")
+
+@enduml

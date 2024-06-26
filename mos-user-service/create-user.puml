@@ -1,0 +1,39 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createUser API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createUser API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(user_controller, "User Controller", "Controller | TypeScript", "Controller for User Related Function\n(mos-user-service)")
+Component(createUser, "createUser", "Function | TypeScript", "Main Function for create user data\n(mos-user-service)")
+Component(updateUser, "updateUser", "Function | TypeScript", "Function for update user data in database\n(mos-user-service)")
+Component(updateUsers, "UserRepository.update", "Function | TypeScript", "Function for update user data in database\n(mos-user-service)")
+Component(updateCred, "CredentialRepository.update", "Function | TypeScript", "Function for update credential data in database\n(mos-user-service)")
+
+Component(insertUser, "insertUser", "Function | TypeScript", "Function for insert user data in database\n(mos-user-service)")
+Component(insertUsers, "UserRepository.create", "Function | TypeScript", "Function for create user data in database\n(mos-user-service)")
+Component(insertCred, "CredentialRepository.create", "Function | TypeScript", "Function for create credential data in database\n(mos-user-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request create user data")
+
+Rel_D(mainMiddleware, user_controller, "2. Request create user data")
+Rel_D(user_controller, createUser, "3. Create user data")
+Rel_D(createUser, updateUser, "4. If (check.isPhoneNumberExist), Request update user data")
+Rel_D(updateUser, updateUsers, "5. Request update user data")
+Rel_D(updateUser, updateCred, "7. Request update user data")
+
+Rel_D(createUser, insertUser, "4. Else, Request insert user data")
+Rel_D(insertUser, insertUsers, "5. Request insert user data")
+Rel_D(insertUser, insertCred, "7. Request insert user data")
+
+Rel_D(updateUsers, database, "6. Update user data")
+Rel_D(updateCred, database, "8. Update credential data")
+Rel_D(insertUsers, database, "6. Create user data")
+Rel_D(insertCred, database, "8. Create credential data")
+
+@enduml

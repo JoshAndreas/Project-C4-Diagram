@@ -1,0 +1,27 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getStats Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getStats Bengkel API\n[Component]"){
+    Component(bengkel, "Bengkel Stat Controller", "Controller | NodeJs", "Controller for Bengkel Stat Function related\n(NodeJs Bengkel API)")
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+
+    Component(getStats, "getStats", "Function | NodeJs", "Function for Get bengkel Stats data\n(NodeJs Bengkel API)")
+    Component(countAll, "Bengkel.countAll", "Function | NodeJs", "Function for Count All bengkel data\n(NodeJs Bengkel API)")
+    Component(countAlls, "Business.countAll", "Function | NodeJs", "Function for Count All business data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get bengkel Stats data")
+Rel(auth_middleware, bengkel, "2. Request Get bengkel Stats data")
+Rel(bengkel, getStats, "3. Request Get bengkel Stats data")
+Rel(getStats, countAll, "4. Request Count All bengkel data")
+Rel(getStats, countAlls, "6. Request Read Bengkel data")
+
+Rel(countAll, database, "5. Request Count All bengkel data")
+Rel(countAlls, database, "7. Request Count All business data")
+@enduml

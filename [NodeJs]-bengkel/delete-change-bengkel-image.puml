@@ -1,0 +1,50 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteBengkelImagesChangePhotoProfile API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "deleteBengkelImagesChangePhotoProfile API\n[Component]"){
+    Component(Middleware, "multerMiddleware", "Middleware | NodeJs", "Middleware for Upload Files\n(NodeJs Bengkel API)")
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+    Component(deleteBengkelImagesChangePhotoProfile, "deleteBengkelImagesChangePhotoProfile", "Function | NodeJs", "Function for Delete bengkel Image Change Photo Profile data\n(NodeJs Bengkel API)")
+    Component(findImageBengkels, "Bengkel.findImageBengkels", "Function | NodeJs", "Function for Find Image Bengkel\n(NodeJs Bengkel API)")
+    Component(destroy, "cloudinary.uploader.destroy", "Function | NodeJs", "Function for Remove image from Cloudinary\n(NodeJs Bengkel API)")
+    Component(deleteImages, "Bengkel.deleteImages", "Function | NodeJs", "Function for Delete Image Bengkel\n(NodeJs Bengkel API)")
+
+    Component(createImages, "createImages", "Function | NodeJs", "Function for Create bengkel Image data\n(NodeJs Bengkel API)")
+    Component(readByID, "Bengkel.readByID", "Function | NodeJs", "Function for Read bengkel data by ID\n(NodeJs Bengkel API)")
+    Component(uploadCloudinary, "uploadCloudinary", "Function | NodeJs", "Function for Upload image to Cloudinary\n(NodeJs Bengkel API)")
+    Component(createImagesMstBengkel, "Bengkel.createImagesMstBengkel", "Function | NodeJs", "Function for Create Image Bengkel\n(NodeJs Bengkel API)")
+    Component(createImagesFacilityBengkel, "Bengkel.createImagesFacilityBengkel", "Function | NodeJs", "Function for Create Image Facility Bengkel\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for Store Image data")
+Lay_D(database, Cloudinary)
+Rel(Web_Moservice, Middleware, "1. Set Up Storage")
+Rel(Middleware, auth_middleware, "2. Request Create bengkel Image data")
+Rel(auth_middleware, bengkel, "3. Request Create bengkel Image data")
+
+Rel(bengkel, deleteBengkelImagesChangePhotoProfile, "4. Request Delete Change bengkel Image data")
+Rel(deleteBengkelImagesChangePhotoProfile, findImageBengkels, "5. Request Find Image Bengkel")
+Rel(deleteBengkelImagesChangePhotoProfile, destroy, "7. Request Remove image from Cloudinary")
+Rel(deleteBengkelImagesChangePhotoProfile, deleteImages, "9. Request Delete Image Bengkel")
+
+Rel(findImageBengkels, database, "6. Find Image Bengkel data")
+Rel(destroy, Cloudinary, "8. Remove image from Cloudinary")
+Rel(deleteImages, database, "10. Delete Image Bengkel data")
+
+Rel(bengkel, createImages, "11. Request Create bengkel Image data")
+Rel(createImages, readByID, "12. Request Read bengkel data by ID")
+Rel(createImages, uploadCloudinary, "14. Request Upload image to Cloudinary")
+Rel(createImages, createImagesMstBengkel, "16. Request Create Image Bengkel data")
+Rel(createImages, createImagesFacilityBengkel, "18. Request Create Image Facility Bengkel data")
+
+Rel(readByID, database, "13. Read bengkel data by ID")
+Rel(uploadCloudinary, Cloudinary, "15. Upload image to Cloudinary")
+Rel(createImagesMstBengkel, database, "17. Create Image Bengkel data")
+Rel(createImagesFacilityBengkel, database, "19. Create Image Facility Bengkel data")

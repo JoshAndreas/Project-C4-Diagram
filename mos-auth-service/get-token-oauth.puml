@@ -1,0 +1,34 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getToken Oauth API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getToken Oauth API\n[Component]"){
+Component(token_controller, "Oauth Controller", "Controller | TypeScript", "Controller for Oauth Related Function\n(mos-auth-service)")
+Component(getToken, "getToken", "Function | TypeScript", "Main Function for Get Token\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-auth-service)")
+
+Component(CredentialRepository, "CredentialRepository.findOne", "Repository | TypeScript", "Repository for Credential\n(mos-auth-service)")
+
+Component(getPayload, "getPayload", "Function | TypeScript", "Function for get payload\n(mos-auth-service)")
+
+Component(generateToken, "generateToken", "Function | TypeScript", "Function for Generate Token\n(mos-auth-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(mainMiddleware, token_controller, "2. Request get token")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request get token")
+
+Rel_D(token_controller, getToken, "3. Request get token")
+Rel_D(getToken, CredentialRepository, "4. Request Search Credential data")
+
+Rel_D(CredentialRepository, database, "5. Retrieve Credential data")
+
+Rel_D(getToken, getPayload, "6. Request Get Payload")
+
+
+Rel_D(getToken, generateToken, "7. Generate token")
+
+@enduml

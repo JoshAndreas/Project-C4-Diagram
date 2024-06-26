@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title edit merchant configuration API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "edit merchant configuration API\n[Component]"){
+Component(server_auth_middleware, "Server Auth Middleware", "Middleware | TypeScript", "Middleware for server Authentication\n(mos-payment-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(payment_merchant_config_controller, "Payment Merchant Config Controller.edit", "Controller | TypeScript", "Controller for Payment Merchant Config Related Function\n(mos-payment-service)")
+Component(edit, "MerchantConfigurationRepository.edit", "Function | TypeScript", "Function for edit payment merchant config data\n(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request edit payment merchant config data")
+Rel_D(mainMiddleware, loggerMiddleware, "2. Request edit payment merchant config data")
+
+Rel_D(loggerMiddleware, server_auth_middleware, "3. Request edit payment merchant config data")
+Rel_D(server_auth_middleware, payment_merchant_config_controller, "4. Request edit payment merchant config data")
+Rel_D(payment_merchant_config_controller, edit, "5. Request edit payment merchant config data")
+Rel_D(edit, database, "6. Edit payment merchant config data")
+
+
+@enduml

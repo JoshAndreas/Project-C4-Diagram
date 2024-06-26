@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deletePilihanLainImage API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "deletePilihanLainImage API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Pilihan Lain Controller", "Controller | NodeJs", "Controller for Content Pilihan Lain Related Function\n(NodeJs Content API)")
+    Component(deletePilihanLainImage, "deletePilihanLainImage", "Function | NodeJs", "Function for Delete Pilihan Lain Image data\n(NodeJs Content API)")
+    Component(readDetail, "ContentPilihanLain.readDetail", "Function | NodeJs", "Function for Read detail Pilihan Lain data\n(NodeJs Content API)")
+    Component(destroy, "cloudinary.uploader.destroy", "Function | NodeJs", "Function for Delete file from Cloudinary\n(NodeJs Content API)")
+    Component(update, "ContentPilihanLain.update", "Function | NodeJs", "Function for Update Pilihan Lain Image data\n(NodeJs Content API)")
+
+}
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/${version}/${cloudinaryPath}")
+System_Ext(Clodinary, "Cloudinary", "External System for Store Image data")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Delete Pilihan Lain data")
+Rel(auth_middleware, content_controller, "2. Request Delete Pilihan Lain data")
+Rel(content_controller, deletePilihanLainImage, "3. Request Delete Pilihan Lain data")
+Rel(deletePilihanLainImage, readDetail, "4. Request Read detail Pilihan Lain data")
+Rel(deletePilihanLainImage, update, "6. Request Update Pilihan Lain data")
+Rel(deletePilihanLainImage, destroy, "8. Request Delete Pilihan Lain Image data from Cloudinary")
+
+Rel_L(destroy, Clodinary, "9. Request Delete Pilihan Lain data")
+
+Rel(readDetail, database, "5. Read detail Pilihan Lain data")
+Rel(update, database, "7. Update Pilihan Lain Image data")
+
+@enduml

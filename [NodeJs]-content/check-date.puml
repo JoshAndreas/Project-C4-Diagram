@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title checkDate Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "checkDate Content Promo API\n[Component]"){
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Promo Related Function\n(NodeJs Content API)")
+    Component(checkDateController, "checkDateController", "Function | NodeJs", "Function for check date for promo\n(NodeJs Content API)")
+    Component(checkDate, "ContentPromo.checkDate", "Function | NodeJs", "Function for check date for promo data\n(NodeJs Content API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, content_controller, "2. Request Redeem multiple promo")
+
+Rel(content_controller, checkDateController, "3. Request Redeem multiple promo")
+Rel(checkDateController, checkDate, "4. Request Check date for promo")
+Rel(checkDate, database, "5. Check date for Promo, if there is promo Continue to 7. If there is no promo Stop.")
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createByBengkelID API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createByBengkelID API\n[Component]"){
+Component(auth_middleware, "user.login", "Function | NodeJs", "Function for login\n(NodeJs Katalog API)")
+
+Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Berkala Controller", "Controller | NodeJs", "Controller for Service Berkala Related function\n(NodeJs Katalog API)")
+Component(createByBengkelID, "createByBengkelID", "Function | NodeJs", "Function for create service berkala data by bengkel ID\n(NodeJs Katalog API)")
+Component(create, "ServiceBerkala.create", "Function | NodeJs", "Function for create service berkala data\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request create service berkala data by bengkel ID")
+Rel_D(auth_middleware, auth_middlewares, "2. Request create service berkala data by bengkel ID")
+Rel_D(auth_middlewares, reference_controller, "3. Request create service berkala data by bengkel ID")
+Rel_D(reference_controller, createByBengkelID, "4. Request create service berkala data by bengkel ID")
+Rel_D(createByBengkelID, create, "5. Request create service berkala data")
+Rel_D(create, database, "6. Create service berkala data")
+
+@enduml

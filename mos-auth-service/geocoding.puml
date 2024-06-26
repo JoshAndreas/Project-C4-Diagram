@@ -1,0 +1,35 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title geocoding API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "geocoding API\n[Component]"){
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-notification-service)")
+
+Component(geocoding_controller, "Geocoding Controller", "Controller | TypeScript", "Controller for Geocoding Related Function\n(mos-auth-service)")
+Component(geocoding, "geocoding", "Function | TypeScript", "Main Function for Geocoding\n(mos-auth-service)")
+
+Component(findCity, "UserRepository.findOne", "Function | TypeScript", "Function for Find City\n(mos-auth-service)")
+Component(updateResult, "UserRepository.update", "Function | TypeScript", "Function for update Find City Result data\n(mos-auth-service)")
+
+}
+
+
+System_Ext(NodeGeocoder, "NodeGeocoder", "External System for Geocoding")
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel(Web_Moservice, mainMiddleware, "1. Request Geocoding")
+
+Rel(mainMiddleware, auth_middleware, "2. Request Geocoding")
+Rel(auth_middleware, geocoding_controller, "3. Request Geocoding")
+Rel(geocoding_controller, geocoding, "4. Request Geocoding")
+Rel_L(geocoding, NodeGeocoder, "5. Do Geocoding, Retrieve Geocoding data")
+
+Rel_R(geocoding, findCity, "6. Check if City already inserted or not")
+Rel_D(geocoding, updateResult, "8. Insert & Update City name data")
+Rel_D(updateResult, database, "9. Insert & Update City name data")
+
+Rel_D(findCity, database, "7. Check if City already inserted or not, if already process stop if not continue to 7.")
+
+@enduml

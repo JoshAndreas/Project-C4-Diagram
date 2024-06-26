@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findAdminById API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findAdminById API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-user-service)")
+Component(operators_controller, "Operators Controller", "Controller | TypeScript", "Controller for Operator Related Function\n(mos-user-service)")
+Component(findAdminById, "findAdminById", "Function | TypeScript", "Function for find admin by ID\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request find admin data by ID")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request find admin data by ID")
+Rel_D(auth_operator_middleware, operators_controller, "3. Request find admin data by ID")
+Rel_D(operators_controller, findAdminById, "4. Find admin data by ID")
+Rel_D(findAdminById, database, "5. Retrieve admin data by ID")
+
+@enduml

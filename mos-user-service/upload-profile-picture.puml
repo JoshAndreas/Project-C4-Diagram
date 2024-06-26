@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title uploadProfilePicture API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "uploadProfilePicture API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+
+Component(multer_middleware, "Multer Middleware", "Middleware | TypeScript", "Middleware for Uploading Files\n(mos-user-service)")
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-user-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-user-service)")
+
+Component(user_controller, "User Controller", "Controller | TypeScript", "Controller for User Related Function\n(mos-user-service)")
+Component(uploadProfilePicture, "uploadProfilePicture", "Function | TypeScript", "Function for upload profile picture\n(mos-user-service)")
+Component(uploadCloudinary, "uploadCloudinary", "Function | TypeScript", "Function for upload image to cloudinary\n(mos-user-service)")
+Component(UPDATE, "UserRepository.update", "Function | TypeScript", "Function for update data to database\n(mos-user-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryConfig.cloudinary_path}")
+System_Ext(Cloudinary, "Cloudinary", "External System for store image file")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request upload profile picture")
+
+Rel_D(mainMiddleware, multer_middleware, "2. Request upload profile picture")
+Rel_D(multer_middleware, auth_middleware, "3. Request upload profile picture")
+Rel_R(auth_middleware, getPemKey, "4. Get Pem Key")
+
+Rel_D(auth_middleware, user_controller, "5. Request upload profile picture")
+Rel_D(user_controller, uploadProfilePicture, "6. Upload profile picture")
+Rel_D(uploadProfilePicture, uploadCloudinary, "7. Request Upload Profile to cloudinary")
+Rel_L(uploadCloudinary, Cloudinary, "8. Upload Profile to cloudinary")
+Rel_D(uploadProfilePicture, UPDATE, "9. Request Upload Profile to database")
+Rel_R(UPDATE, database, "10. Upload Profile to database")
+@enduml

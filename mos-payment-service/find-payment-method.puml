@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findPaymentMethod API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findPaymentMethod API\n[Component]"){
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-payment-service)")
+Component(payment_method_controller, "Payment Method Controller", "Controller | TypeScript", "Controller for payment method Related Function\n(mos-payment-service)")
+Component(findPaymentMethod, "findPaymentMethod", "Function | TypeScript", "Function for Find Payment Method data\n(mos-payment-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel(Web_Moservice, mainMiddleware, "1. Request Find Payment method data")
+Rel(mainMiddleware, loggerMiddleware, "2. Request Find Payment method data")
+
+Rel(loggerMiddleware, payment_method_controller, "3. Request Find Payment method data")
+Rel(payment_method_controller, findPaymentMethod, "4. Request Find Payment Method data")
+Rel(findPaymentMethod, database, "5. Retrieve payment method data")
+
+
+@enduml

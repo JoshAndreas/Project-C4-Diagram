@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findRole API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findRole API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(operators_controller, "Operators Controller", "Controller | TypeScript", "Controller for Operator Related Function\n(mos-user-service)")
+Component(findRole, "findRole", "Function | TypeScript", "Function for find role data\n(mos-user-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, mainMiddleware, "1. Request find role data")
+
+
+Rel(mainMiddleware, operators_controller, "2. Request find role data")
+Rel(operators_controller, findRole, "3. Find role data")
+Rel(findRole, database, "4. Retrieve role data")
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "update API\n[Component]"){
+Component(auths_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for authentication\n(NodeJs User API)")
+Component(user_controller, "User Workshop Controller", "Controller | NodeJs", "Controller for User Workshop Related function\n(NodeJs User API)")
+Component(update, "update", "Function | NodeJs", "Function for update user workshop data\n(NodeJs User API)")
+Component(updates, "UsersWorkshop.update", "Function | NodeJs", "Function for update user workshop data\n(NodeJs User API)")
+Component(sendEmail, "message.sendEmail", "Function | NodeJs", "Function for send email\n(NodeJs User API)")
+Component(sendMail, "message.sendMail", "Function | NodeJs", "Function for send mail\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, auths_middleware, "1. Request Update user workshop data")
+Rel_D(auths_middleware, user_controller, "2. Request Update user workshop data")
+Rel_D(user_controller, update, "3. Request Update user workshop data")
+Rel_D(update, updates, "4. Request Update user workshop data")
+Rel_L(updates, database, "5. Update user workshop data")
+Rel_D(update, sendEmail, "6. Request Send Email")
+Rel_D(sendEmail, sendMail, "7. Send Email")
+
+@enduml

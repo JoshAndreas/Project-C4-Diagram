@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deletePromo API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "deletePromo API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Authentication Operator\n(mos-content-service)")
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(deletePromo, "deletePromo", "Function | TypeScript", "Main Function for Delete Promo data\n(mos-content-service)")
+Component(update, "PromoRepository.update", "Function | TypeScript", "Main Function for Delete Promo data\n(mos-content-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request delete promo")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request delete promo")
+Rel_D(auth_operator_middleware, promo_controller, "3. Request delete promo Data")
+Rel_D(promo_controller, deletePromo, "4. Request delete promo data by ID")
+Rel_D(deletePromo, update, "5. Delete data")
+Rel_D(update, database, "6. Delete data")
+
+
+@enduml

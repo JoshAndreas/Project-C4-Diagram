@@ -1,0 +1,34 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title setBookingAvailability API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "setBookingAvailability API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify Function\n(NodeJs Booking API)")
+Component(booking_customer_controller, "Booking Customer Controller", "Controller | NodeJs", "Controller for Booking Customer Related Function\n(NodeJs Booking API)")
+Component(setBookingAvailability, "setBookingAvailability", "Function | NodeJs", "Function for set booking availability\n(NodeJs Booking API)")
+Component(getBookAvailabilityByDateHourAndBengkel, "Booking_Availability.getBookAvailabilityByDateHourAndBengkel", "Function | NodeJs", "Function for get Booking Availability By Date Hour And Bengkel\n(NodeJs Booking API)")
+Component(updateBookingAvailability, "Booking_Availability.updateBookingAvailability", "Function | NodeJs", "Function for update Booking Availability\n(NodeJs Booking API)")
+Component(insertBookingAvailability, "Booking_Availability.insertBookingAvailability", "Function | NodeJs", "Function for insert Booking Availability\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request set booking availability")
+Rel_D(auth_middleware, booking_customer_controller, "2. Request set booking availability")
+Rel_D(booking_customer_controller, setBookingAvailability, "3. Request set booking availability")
+Rel_D(setBookingAvailability, getBookAvailabilityByDateHourAndBengkel, "4. Get Booking Availability By Date Hour And Bengkel")
+Rel_D(setBookingAvailability, updateBookingAvailability, "6. Else, update booking availability")
+Rel_D(setBookingAvailability, insertBookingAvailability, "6. If bookavailability || bookavailability.length < 1, Request retrieve order detail by booking ID")
+
+
+Rel_D(getBookAvailabilityByDateHourAndBengkel, database, "5. Retrieve order detail by booking ID")
+Rel_D(updateBookingAvailability, database, "7. Retrieve order detail by booking ID")
+Rel_D(insertBookingAvailability, database, "7. Retrieve order detail by booking ID")
+
+
+
+
+@enduml

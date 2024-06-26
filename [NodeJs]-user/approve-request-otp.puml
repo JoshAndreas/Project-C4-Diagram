@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title approveRequestOTP API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "approveRequestOTP API\n[Component]"){
+Component(auths_middleware, "auth.decoded", "Middleware | NodeJs", "Middleware for verify\n(NodeJs User API)")
+
+Component(auths_middlewares, "jwt.verify", "Middleware | NodeJs", "Middleware for verify\n(NodeJs User API)")
+Component(user_controller, "Management OTP Controller", "Controller | NodeJs", "Controller for Management OTP Related function\n(NodeJs User API)")
+Component(approveRequestOTP, "approveRequestOTP", "Function | NodeJs", "Function for approve Request OTP\n(NodeJs User API)")
+Component(update, "modelManagementOtp.update", "Function | NodeJs", "Function for update otp data\n(NodeJs User API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, auths_middleware, "1. Request approve Request OTP")
+
+Rel_D(auths_middleware, auths_middlewares, "2. Request approve Request OTP")
+Rel_D(auths_middlewares, user_controller, "3. Request approve Request OTP")
+Rel_D(user_controller, approveRequestOTP, "4. Approve Request OTP")
+Rel_D(user_controller, update, "5. Request update otp data")
+
+Rel_D(update, database, "6. Update otp data")
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title read user API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "read user API\n[Component]"){
+Component(auth_middleware, "permission.allow admin", "Middleware | NodeJs", "Middleware for Check if user Permitted (admin)\n(NodeJs User API)")
+Component(user_controller, "Users Controller", "Controller | NodeJs", "Controller for User Related function\n(NodeJs User API)")
+Component(read, "read", "Function | NodeJs", "Function for read user data\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request Read User data")
+Rel_D(auth_middleware, user_controller, "2. Request Read User data")
+Rel_D(user_controller, read, "3. Read User data")
+Rel_D(read, database, "4. Retrieve User data")
+
+@enduml

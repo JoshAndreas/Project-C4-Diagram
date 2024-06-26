@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title saveUser API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "saveUser API\n[Component]"){
+Component(auth_middleware, "permission.allow user, seller", "Middleware | NodeJs", "Middleware for Check if user Permitted (user, seller)\n(NodeJs User API)")
+Component(user_controller, "Users Controller", "Controller | NodeJs", "Controller for User Related function\n(NodeJs User API)")
+Component(checkPayload, "api.checkPayload", "Middleware | NodeJs", "Middleware for check Payload\n(NodeJs User API)")
+
+Component(saveUser, "saveUser", "Function | NodeJs", "Function for save user data\n(NodeJs User API)")
+Component(check, "check", "Function | NodeJs", "Function for check if user exist\n(NodeJs User API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request save User data")
+Rel_D(auth_middleware, user_controller, "2. Request save User data")
+Rel_D(user_controller, checkPayload, "3. Save data")
+
+Rel_D(user_controller, saveUser, "4. Save data")
+Rel_D(saveUser, check, "5. Check user if exist, save user data.")
+Rel_D(check, database, "6. Save user data")
+
+@enduml

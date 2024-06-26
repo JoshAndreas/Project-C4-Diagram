@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title blastPromo Content Promo API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "blastPromo Content Promo API\n[Component]"){
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Promo Controller", "Controller | NodeJs", "Controller for Content Banner Related Function\n(NodeJs Content API)")
+    
+    Component(blastPromo, "blastPromo", "Function | NodeJs", "Function for Get Blast Promo data\n(NodeJs Content API)")
+    Component(getWorksheet, "workbook.getWorksheet", "Function | NodeJs", "Function for Get Worksheet\n(NodeJs Content API)")
+    Component(eachRow, "worksheet.eachRow", "Function | NodeJs", "Function for Count Each row data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, content_controller, "2. Request Get Blast Promo data")
+
+Rel(content_controller, blastPromo, "3. Request Get Blast Promo data")
+Rel(blastPromo, getWorksheet, "4. Request Get Worksheet")
+Rel(blastPromo, eachRow, "6. Request Count Each row data")
+
+Rel(getWorksheet, database, "5. Get Worksheet")
+Rel(eachRow, database, "7. Count Each row data")
+
+@enduml

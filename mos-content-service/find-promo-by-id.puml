@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findPromoById API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findPromoById API\n[Component]"){
+Component(promoIdMiddleware, "Ep Promo Id Middleware", "Middleware | TypeScript", "Middleware for Promo ID list Related\n(mos-content-service)")
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(findPromoById, "findPromoById", "Function | TypeScript", "Main Function for Find Promo by ID\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Find Promo by ID")
+
+Rel_D(mainMiddleware, promoIdMiddleware, "2. Request Find Promo by ID")
+Rel_D(promoIdMiddleware, promo_controller, "3. Request Find Promo by ID")
+
+Rel_D(promo_controller, findPromoById, "4. Request Find Promo by ID")
+Rel_D(findPromoById, database, "5. Retrieve Promo data by ID")
+
+@enduml

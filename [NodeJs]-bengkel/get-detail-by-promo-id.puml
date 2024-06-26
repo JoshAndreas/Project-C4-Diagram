@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getDetailByPromoID Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getDetailByPromoID Bengkel API\n[Component]"){
+    Component(bengkel, "Bengkel Detail Controller", "Controller | NodeJs", "Controller for Bengkel Detail Function related\n(NodeJs Bengkel API)")
+
+    Component(getDetailByPromoID, "getDetailByPromoID", "Function | NodeJs", "Function for Get Detail by promo ID data\n(NodeJs Bengkel API)")
+    Component(getDetailByPromoIDs, "Bengkel.getDetailByPromoID", "Function | NodeJs", "Function for Get Detail by promo ID data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, bengkel, "1. Request Get Detail by promo ID")
+Rel(bengkel, getDetailByPromoID, "2. Request Get Detail by promo ID")
+Rel(getDetailByPromoID, getDetailByPromoIDs, "3. Get Detail by promo ID")
+Rel(getDetailByPromoIDs, database, "4. Get Detail by promo ID")
+
+@enduml

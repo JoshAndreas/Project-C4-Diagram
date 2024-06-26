@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readByID API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "readByID API\n[Component]"){
+    Component(auth_middleware, "validateBengkelId", "Middleware | NodeJs", "Authentication Middleware for Validate Bengkel ID\n(NodeJs Bengkel API)")
+    Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(detail, "Detail Controller", "Controller | NodeJs", "Controller for Detail Function related\n(NodeJs Bengkel API)")
+    
+    Component(readByID, "readByID", "Function | NodeJs", "Function for Read detail by ID\n(NodeJs Bengkel API)")
+    Component(readByIDs, "Bengkel.readByID", "Function | NodeJs", "Function for Read detail by ID\n(NodeJs Bengkel API)")
+    Component(updateNew, "Bengkel.updateNew", "Function | NodeJs", "Function for Update new detail data by ID\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Validate Bengkel ID")
+Rel(auth_middleware, auth_middlewares, "2. Request Read detail by ID")
+Rel(auth_middlewares, detail, "3. Request Read detail by ID")
+
+Rel(detail, readByID, "4. Read detail by ID")
+Rel(detail, readByIDs, "6. Read detail by ID")
+Rel(detail, updateNew, "8. Update new detail data")
+
+Rel(readByID, database, "5. Read detail by ID")
+Rel(readByIDs, database, "7. Read detail by ID")
+Rel(updateNew, database, "9. Update new detail data")

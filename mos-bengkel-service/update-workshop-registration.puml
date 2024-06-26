@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateWorkshopRegistration API\n[mos-bengkel-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updateWorkshopRegistration API\n[Component]"){
+Component(workshop_controller, "Workshop Controller", "Controller | TypeScript", "Controller for Workshop Related Function\n(mos-bengkel-service)")
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Authentication\n(mos-bengkel-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-bengkel-service)")
+Component(updateWorkshopRegistration, "updateWorkshopRegistration", "Function | TypeScript", "Main Function for Update Workshop Registration data\n(mos-bengkel-service)")
+Component(updateWorkshopRegistrationRep, "BengkelRegistrationRepository.update", "Function | TypeScript", "Function for Update Workshop Registration data\n(mos-bengkel-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Update Workshop Registration data")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request Update Workshop Registration data")
+Rel_D(auth_operator_middleware, workshop_controller, "3. Request Update Workshop Registration data")
+Rel_D(workshop_controller, updateWorkshopRegistration, "4. Request Update Workshop Registration data")
+Rel_D(updateWorkshopRegistration, updateWorkshopRegistrationRep, "5. Update Workshop Registration data")
+Rel_D(updateWorkshopRegistrationRep, database, "6. Update Workshop Registration data")
+
+@enduml

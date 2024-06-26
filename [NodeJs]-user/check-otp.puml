@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title checkOTP API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "checkOTP API\n[Component]"){
+Component(pass_controller, "Bengkel Pass Controller", "Controller | NodeJs", "Controller for Bengkel Pass Related function\n(NodeJs User API)")
+Component(checkOTP, "checkOTP", "Function | NodeJs", "Function for check OTP\n(NodeJs User API)")
+Component(verify, "totp.verify", "Function | NodeJs", "Function for validate token\n(NodeJs User API)")
+Component(verifyOTP, "Reset_Pass.verifyOTP", "Function | NodeJs", "Function for verify OTP\n(NodeJs User API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, pass_controller, "1. Request check otp")
+Rel_D(pass_controller, checkOTP, "2. Request check otp")
+Rel_D(checkOTP, verify, "3. Validate Token")
+Rel_D(checkOTP, verifyOTP, "4. Request Verify OTP")
+Rel_D(verifyOTP, database, "5. Verify OTP data")
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title index monthly transaction API 
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "index monthly transaction API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Authentication Operator\n(mos-booking-service)")
+Component(monthly_transaction_controller, "Monthly Transaction Controller", "Controller | TypeScript", "Controller for Monthly Transcation Related Function\n(mos-booking-service)")
+Component(index, "index", "Function | TypeScript", "Main Function for Indexing Monthly Transcation\n(mos-booking-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-booking-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Monthly Transaction Data")
+
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request Monthly Transaction Data")
+Rel_D(auth_operator_middleware, monthly_transaction_controller, "3. Request Monthly Transaction Data")
+
+Rel_D(monthly_transaction_controller, index, "4. Request Monthly Transaction Data")
+Rel_D(index, database, "5. Retrieve Search Monthly Transaction data")
+
+@enduml

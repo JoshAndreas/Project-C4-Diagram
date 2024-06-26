@@ -1,0 +1,46 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title detail API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "detail API\n[Component]"){
+    Component(bengkel, "Bengkel detail Controller", "Controller | NodeJs", "Controller for Bengkel detail Function related\n(NodeJs Bengkel API)")
+    Component(detail, "detail", "Function | NodeJs", "Function for Get bengkel detail data\n(NodeJs Bengkel API)")
+    Component(getDetailByID, "Bengkel.getDetailByID", "Function | NodeJs", "Function for Get detail by ID data\n(NodeJs Bengkel API)")
+    Component(getBrandsByBengkel, "Brand.getBrandsByBengkel", "Function | NodeJs", "Function for Get Brands by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(getServiceTypeByBengkel, "Tipeservice.getServiceTypeByBengkel", "Function | NodeJs", "Function for Get Service Type by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(getOperationalHoursByBengkel, "Bengkel.getOperationalHoursByBengkel", "Function | NodeJs", "Function for Get Operational Hours by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(getBengkelImagesByBengkel, "Bengkel.getBengkelImagesByBengkel", "Function | NodeJs", "Function for Get Bengkel Image by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(getFacilityImagesByBengkel, "Bengkel.getFacilityImagesByBengkel", "Function | NodeJs", "Function for Get Facilities image by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(getFacilityByBengkel, "Bengkel.getFacilityByBengkel", "Function | NodeJs", "Function for Get Facilities by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(getCaraBayarByBengkel, "CaraBayar.getCaraBayarByBengkel", "Function | NodeJs", "Function for Get Cara bayar by Bengkel ID\n(NodeJs Bengkel API)")
+    Component(getServiceUmumByBengkelIDOrderByCategory, "ServiceUmum.getServiceUmumByBengkelIDOrderByCategory", "Function | NodeJs", "Function for Get service umum by Bengkel ID Order by Category\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, bengkel, "1. Request Get bengkel detail data")
+Rel(bengkel, detail, "2. Get bengkel detail data")
+
+Rel(detail, getDetailByID, "3. Request Get detail by ID data")
+Rel(detail, getBrandsByBengkel, "5. Request Get Brands by Bengkel ID")
+Rel(detail, getServiceTypeByBengkel, "7. Request Get Service Type by Bengkel ID")
+Rel(detail, getOperationalHoursByBengkel, "9. Request Get Operational Hours by Bengkel ID")
+Rel(detail, getBengkelImagesByBengkel, "11. Request Get Bengkel Image by Bengkel ID")
+Rel(detail, getFacilityImagesByBengkel, "13. Request Get Facilities image by Bengkel ID")
+Rel(detail, getFacilityByBengkel, "15. Request Get Facilities by Bengkel ID")
+Rel(detail, getCaraBayarByBengkel, "17. Request Get Cara bayar by Bengkel ID")
+Rel(detail, getServiceUmumByBengkelIDOrderByCategory, "19. Request Get service umum by Bengkel ID Order by Category")
+
+Rel(getDetailByID, database, "4. Request Get detail by ID data")
+Rel(getBrandsByBengkel, database, "6. Request Get Brands by Bengkel ID")
+Rel(getServiceTypeByBengkel, database, "8. Request Get Service Type by Bengkel ID")
+Rel(getOperationalHoursByBengkel, database, "10. Request Get Operational Hours by Bengkel ID")
+Rel(getBengkelImagesByBengkel, database, "12. Request Get Bengkel Image by Bengkel ID")
+Rel(getFacilityImagesByBengkel, database, "14. Request Get Facilities image by Bengkel ID")
+Rel(getFacilityByBengkel, database, "16. Request Get Facilities by Bengkel ID")
+Rel(getCaraBayarByBengkel, database, "18. Request Get Cara bayar by Bengkel ID")
+Rel(getServiceUmumByBengkelIDOrderByCategory, database, "20. Request Get service umum by Bengkel ID Order by Category")
+@enduml

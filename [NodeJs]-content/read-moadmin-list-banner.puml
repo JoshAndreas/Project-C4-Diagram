@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readMoadminList Content Banner API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readMoadminList Content Banner API\n[Component]"){
+    Component(multer_middleware, "multer.diskStorage", "Middleware | NodeJs", "Set Multer Storage\n(NodeJs Content API)")
+    Component(content_controller, "Content Banner Controller", "Controller | NodeJs", "Controller for Content Banner Related Function\n(NodeJs Content API)")
+    
+    Component(readMoadminList, "readMoadminList", "Function | NodeJs", "Function for Read Moadmin list data\n(NodeJs Content API)")
+    Component(readMoadminLists, "ContentBanner.readMoadminList", "Function | NodeJs", "Function for Read Moadmin list data\n(NodeJs Content API)")
+    Component(countMoadminList, "ContentBanner.countMoadminList", "Function | NodeJs", "Function for Count Moadmin list data\n(NodeJs Content API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+Rel(multer_middleware, content_controller, "2. Request Read Moadmin list data")
+
+Rel(content_controller, readMoadminList, "3. Request Read Moadmin list data")
+Rel(readMoadminList, readMoadminLists, "4. Request Read Moadmin list data")
+Rel(readMoadminList, countMoadminList, "6. Request Count Moadmin list data")
+
+Rel(readMoadminLists, database, "5. Read Moadmin list data")
+Rel(countMoadminList, database, "7. Count Moadmin list data")
+
+@enduml

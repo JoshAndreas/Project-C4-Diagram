@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleted model API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "deleted model API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-mobil-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-mobil-service)")
+
+Component(sp_moadmin_auth_middleware, "SP Moadmin Auth Middleware", "Middleware | TypeScript", "Middleware for Moadmin Authentication\n(mos-mobil-service)")
+Component(sp_mobil_model_controller, "SP Mobil Model Controller", "Controller | TypeScript", "Controller for Mobil Model Related Function\n(mos-mobil-service)")
+
+Component(deleted, "deleted", "Function | TypeScript", "Main Function for deleted car brands data\n(mos-mobil-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, loggerMiddleware, "1. Request deleted Car Model Data by Model ID")
+Rel_D(loggerMiddleware, mainMiddleware, "2. Request deleted Car Model Data by Model ID")
+
+Rel_D(mainMiddleware, sp_moadmin_auth_middleware, "3. Request deleted Car Model Data by Model ID")
+Rel_D(sp_moadmin_auth_middleware, sp_mobil_model_controller, "4. Request deleted Car Model Data by Model ID")
+Rel_D(sp_mobil_model_controller, deleted, "5. Request deleted Car Model Data by Model ID")
+Rel_D(deleted, database, "6. deleted Car Model Data")
+
+@enduml

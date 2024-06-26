@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title authenticate Admin API\n[mos-auth-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "authenticate Admin API\n[Component]"){
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-auth-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-auth-service)")
+
+Component(auth_controller, "Auth Controller", "Controller | TypeScript", "Controller for Authentication related Function\n(mos-auth-service)")
+Component(authenticate, "authenticate", "Function | TypeScript", "Main Function for authenticate\n(mos-auth-service)")
+}
+
+Rel(Web_Moservice, mainMiddleware, "1. Request authenticate Admin")
+
+Rel(mainMiddleware, auth_operator_middleware, "2. Request authenticate Admin")
+Rel(auth_operator_middleware, auth_controller, "3. Request authenticate Admin")
+Rel(auth_controller, authenticate, "4. Authenticate Admin")
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getCarTypesByBrandId API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getCarTypesByBrandId API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-mobil-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-mobil-service)")
+
+Component(mobil_controller, "Mobil Controller", "Controller | TypeScript", "Controller for Mobil Related Function\n(mos-mobil-service)")
+Component(getCarTypesByBrandId, "getCarTypesByBrandId", "Function | TypeScript", "Main Function for Get Car Types By Brand ID\n(mos-mobil-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, loggerMiddleware, "1. Search Car Types by Brand ID")
+Rel_D(loggerMiddleware, mainMiddleware, "2. Search Car Types by Brand ID")
+
+Rel_D(mainMiddleware, mobil_controller, "3. Search Car Types by Brand ID")
+Rel_D(mobil_controller, getCarTypesByBrandId, "4. Search Car Types by Using Brand ID")
+Rel_D(getCarTypesByBrandId, database, "5. Retrieve Car Types data by using Brand ID")
+
+@enduml

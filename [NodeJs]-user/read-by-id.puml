@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readByID API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "readByID API\n[Component]"){
+Component(auth_middleware, "permission.allow user, seller", "Middleware | NodeJs", "Middleware for Check if user Permitted (user, seller)\n(NodeJs User API)")
+Component(user_controller, "Users Controller", "Controller | NodeJs", "Controller for User Related function\n(NodeJs User API)")
+Component(readByID, "readByID", "Function | NodeJs", "Function for read user data By ID\n(NodeJs User API)")
+Component(checkPayload, "checkPayload", "Function | NodeJs", "Function for check payload\n(NodeJs User API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request retrieve User data by ID")
+Rel_D(auth_middleware, user_controller, "2. Request retrieve User data by ID")
+Rel_D(user_controller, readByID, "3. Retrieve User data by ID")
+Rel_D(readByID, checkPayload, "4. Check payload, if there is payload retrieve user data by ID")
+Rel_D(checkPayload, database, "5. Retrieve User data by ID")
+
+@enduml

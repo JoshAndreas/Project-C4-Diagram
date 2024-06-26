@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteUser API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "deleteUser API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(user_controller, "User Controller", "Controller | TypeScript", "Controller for User Related Function\n(mos-user-service)")
+Component(deleteUser, "deleteUser", "Function | TypeScript", "Function for delete user data\n(mos-user-service)")
+Component(updateUser, "updateUser", "Function | TypeScript", "Function for update user data in database\n(mos-user-service)")
+Component(updateUsers, "UserRepository.update", "Function | TypeScript", "Function for update user data in database\n(mos-user-service)")
+Component(updateCred, "CredentialRepository.update", "Function | TypeScript", "Function for update credential data in database\n(mos-user-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request delete user data")
+
+Rel_D(mainMiddleware, user_controller, "2. Request delete user data")
+Rel_D(user_controller, deleteUser, "3. Delete user data")
+Rel_D(deleteUser, updateUser, "4. Request update user data")
+Rel_D(updateUser, updateUsers, "5. Request update user data")
+Rel_D(updateUser, updateCred, "7. Request update user data")
+
+
+
+Rel_D(updateUsers, database, "6. Update user data")
+Rel_D(updateCred, database, "8. Update Credential data")
+
+@enduml

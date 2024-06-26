@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title listMultiConditionServiceBerkalaItem API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "listMultiConditionServiceBerkalaItem API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Berkala Item Controller", "Controller | NodeJs", "Controller for Service Berkala Item Related function\n(NodeJs Katalog API)")
+Component(listMultiConditionServiceBerkalaItem, "listMultiConditionServiceBerkalaItem", "Function | NodeJs", "Function for list Multi Condition Service Berkala Item\n(NodeJs Katalog API)")
+Component(countAllFilter, "Ref_service_berkala_km.countAllFilter", "Function | NodeJs", "Function for Count all filtered data\n(NodeJs Katalog API)")
+Component(getAllMultiCondition, "Ref_service_berkala_km.getAllMultiCondition", "Function | NodeJs", "Function for get All Multi Condition data\n(NodeJs Katalog API)")
+
+}
+
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request list Multi Condition Service Berkala Item")
+Rel_D(auth_middleware, reference_controller, "2. Request list Multi Condition Service Berkala Item")
+Rel_D(reference_controller, listMultiConditionServiceBerkalaItem, "3. Request list Multi Condition Service Berkala Item")
+Rel_D(listMultiConditionServiceBerkalaItem, countAllFilter, "4. Request Count all filtered data")
+Rel_D(countAllFilter, database, "5. Count all filtered data")
+Rel_D(listMultiConditionServiceBerkalaItem, getAllMultiCondition, "6. Get All Multi Condition data")
+Rel_D(getAllMultiCondition, database, "7. Get All Multi Condition data")
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title uploadImage API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "uploadImage API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(Multer_Middleware, "Multer Middleware", "Middleware | TypeScript", "Middleware for upload file\n(mos-content-service)")
+Component(promo_controller, "Promo Controller", "Controller | TypeScript", "Controller for Promo Related Function\n(mos-content-service)")
+Component(uploadImage, "uploadImage", "Function | TypeScript", "Main Function for Upload Image data\n(mos-content-service)")
+Component(uploadCloudinary, "uploadCloudinary", "Function | TypeScript", "Main Function for Upload Image to cloudinary\n(mos-content-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto,fl_attachment/v1/${cloudinaryConfig.cloudinary_path}")
+System_Ext(Cloudinary, "Cloudinary", "External For Store Image Data")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Upload Image")
+
+Rel_D(mainMiddleware, Multer_Middleware, "2. Request Upload Image")
+Rel_R(Multer_Middleware, promo_controller, "3. Request Upload Image")
+Rel_D(promo_controller, uploadImage, "4. Request Upload Image data")
+Rel_R(uploadImage, database, "7. Upload Image data to database")
+Rel_D(uploadImage, uploadCloudinary, "5. Upload Image data to database")
+Rel_D(uploadCloudinary, Cloudinary, "6. Upload Image data to Cloudinary ")
+@enduml

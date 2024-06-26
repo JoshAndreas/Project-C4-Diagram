@@ -1,0 +1,17 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateBookingMobilKM API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updateBookingMobilKM API\n[Component]"){
+Component(booking_order_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(updateBookingMobilKM, "Booking_Order.updateBookingMobilKM", "Function | NodeJs", "Function for Update Booking KM Mobil\n(NodeJs Booking API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, booking_order_controller, "1. Request update booking KM mobil")
+Rel_D(booking_order_controller, updateBookingMobilKM, "2. Request update booking KM mobil")
+Rel_D(updateBookingMobilKM, database, "3. Update booking KM mobil")
+
+@enduml

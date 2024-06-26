@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title register workshop API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "register workshop API\n[Component]"){
+Component(user_controller, "User Workshop Controller", "Controller | NodeJs", "Controller for User Workshop Related function\n(NodeJs User API)")
+Component(create, "create", "Function | NodeJs", "Function for create bengkel registration data\n(NodeJs User API)")
+Component(getById, "bengkel_registration.getById", "Function | NodeJs", "Function for get bengkel registration By Id\n(NodeJs User API)")
+Component(creates, "UsersWorkshop.creates", "Function | NodeJs", "Function for create user workshop data\n(NodeJs User API)")
+Component(sendEmail, "message.sendEmail", "Function | NodeJs", "Function for send Email\n(NodeJs User API)")
+Component(sendMail, "message.sendMail", "Function | NodeJs", "Function for send mail\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, user_controller, "1. Request register workshop data")
+Rel_D(user_controller, create, "2. Request register workshop data")
+Rel_D(create, getById, "3. Request get workshop registration ID")
+Rel_D(create, creates, "5. Request Create user Workshop data")
+Rel_D(create, sendEmail, "7. Request Send Email")
+Rel_D(sendEmail, sendMail, "8. Send Email")
+
+Rel_D(getById, database, "4. Get workshop registration ID")
+Rel_D(creates, database, "6. Create User Workshop data")
+
+@enduml

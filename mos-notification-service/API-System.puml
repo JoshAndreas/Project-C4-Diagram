@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title API System\n[mos-notification-service]
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+Component(API, "mos-notification-service", "Repository | TypeScript", "Repository for function related to Notification")
+
+Boundary(api, "API System\n[mos-notification-service]"){
+Component(CreateNotification, "Create Notification", "Function | TypeScript", "Function for Create Notification data\n(mos-notification-service)")
+Component(IndexOperateNotification, "Index Operator Notification", "Function | TypeScript", "Function Show All Operator Notification Data\n(mos-notification-service)")
+Component(markRead, "markRead", "Function | TypeScript", "Function for Update Mark Read Notification Status\n(mos-notification-service)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, API, "Request use function related to Notification")
+
+Rel_D(API, CreateNotification, "Request Create Notification data")
+Rel_D(API, IndexOperateNotification, "Request Show All Operator Notification Data")
+Rel_D(API, markRead, "Request Update Mark Read Notification Status")
+
+Rel_D(CreateNotification, database, "Create Notification data")
+Rel_D(markRead, database, "Update Mark Read Notification Status")
+Rel_D(IndexOperateNotification, database, "Show All Operator Notification Data")
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title findBookingByUuid API 
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "findBookingByUuid API\n[Component]"){
+Component(auth_middleware, "Auth Middleware", "Middleware | TypeScript", "Middleware for Auth Check\n(mos-booking-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-booking-service)")
+
+Component(Booking_Controller, "Booking Controller", "Controller | TypeScript", "Controller for Booking Process\n(mos-booking-service)")
+Component(findBookingByUuid, "findBookingByUuid", "Function | TypeScript", "API for find & search Booking by Uuid\n(mos-booking-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-booking-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Checking User authorization")
+Rel_D(mainMiddleware, auth_middleware, "2. Checking User authorization")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem Key")
+
+Rel_D(auth_middleware, Booking_Controller, "4. Find booking by UUID")
+Rel_D(Booking_Controller, findBookingByUuid, "5. Request Finding booking by UUID")
+Rel_D(findBookingByUuid, database, "6. Retrieve data of booking by UUID ")
+
+
+@enduml

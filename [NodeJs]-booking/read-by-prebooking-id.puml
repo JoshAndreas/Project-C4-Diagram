@@ -1,0 +1,19 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readByPrebookID API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "readByPrebookID API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(pre_booking_controller, "Prebooking Controller", "Controller | NodeJs", "Controller for Prebooking Related Function\n(NodeJs Booking API)")
+Component(readByPrebookID, "Pre_Booking.readByPrebookID", "Function | NodeJs", "Function for read prebooking data by prebooking ID\n(NodeJs Booking API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request read prebooking data by prebooking ID")
+Rel_D(auth_middleware, pre_booking_controller, "2. Request read prebooking data by prebooking ID")
+Rel_D(pre_booking_controller, readByPrebookID, "3. Request read prebooking data by prebooking ID")
+Rel_D(readByPrebookID, database, "4. Retrieve prebooking data by prebooking ID")
+
+@enduml

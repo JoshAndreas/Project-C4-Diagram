@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readMultiConditionBusiness Business API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "readMultiConditionBusiness Business API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Business, "Business Controller", "Controller | NodeJs", "Controller for Business Function related\n(NodeJs Bengkel API)")
+
+    Component(readMultiConditionBusiness, "readMultiConditionBusiness", "Function | NodeJs", "Function for Read Multi Condition Business data\n(NodeJs Bengkel API)")
+    Component(getAllMultiCondition, "Business.getAllMultiCondition", "Function | NodeJs", "Function for Get All multicondition data\n(NodeJs Bengkel API)")
+    Component(countAllFilter, "Business.countAllFilter", "Function | NodeJs", "Function for Count all filter data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read Multi Condition Business data")
+Rel(auth_middleware, Business, "2. Request Read Multi Condition Business data")
+Rel(Business, readMultiConditionBusiness, "3. Request Read Multi Condition Business data")
+Rel(readMultiConditionBusiness, getAllMultiCondition, "4. Request Get All multicondition data")
+Rel(readMultiConditionBusiness, countAllFilter, "6. Request Count all filter data")
+
+Rel(getAllMultiCondition, database, "5. Get All multicondition data")
+Rel(countAllFilter, database, "7. Count all filter data")
+
+@enduml

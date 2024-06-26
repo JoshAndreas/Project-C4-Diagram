@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title register moadmin API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "register moadmin API\n[Component]"){
+Component(auths_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for authentication\n(NodeJs User API)")
+
+Component(user_controller, "User Workshop Controller", "Controller | NodeJs", "Controller for User Workshop Related function\n(NodeJs User API)")
+Component(create, "create", "Function | NodeJs", "Function for create bengkel registration data\n(NodeJs User API)")
+Component(getById, "bengkel_registration.getById", "Function | NodeJs", "Function for get bengkel registration By Id\n(NodeJs User API)")
+Component(creates, "UsersWorkshop.creates", "Function | NodeJs", "Function for create user workshop data\n(NodeJs User API)")
+Component(sendEmail, "message.sendEmail", "Function | NodeJs", "Function for send Email\n(NodeJs User API)")
+Component(sendMail, "message.sendMail", "Function | NodeJs", "Function for send mail\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, auths_middleware, "1. Request register moadmin data")
+
+Rel_D(auths_middleware, user_controller, "2. Request register moadmin data")
+Rel_D(user_controller, create, "3. Request register moadmin data")
+Rel_D(create, getById, "4. Request get moadmin registration ID")
+Rel_D(create, creates, "6. Request Create user moadmin data")
+Rel_D(create, sendEmail, "8. Request Send Email")
+Rel_D(sendEmail, sendMail, "9. Send Email")
+
+Rel_D(getById, database, "5. Get moadmin registration ID")
+Rel_D(creates, database, "7. Create User moadmin data")
+
+@enduml

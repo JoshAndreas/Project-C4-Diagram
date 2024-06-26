@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateByServiceBerkalaID API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updateByServiceBerkalaID API\n[Component]"){
+Component(auth_middleware, "user.login", "Function | NodeJs", "Function for login\n(NodeJs Katalog API)")
+
+Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Berkala Controller", "Controller | NodeJs", "Controller for Service Berkala Related function\n(NodeJs Katalog API)")
+Component(updateByServiceBerkalaID, "updateByServiceBerkalaID", "Function | NodeJs", "Function for update data by service berkala ID\n(NodeJs Katalog API)")
+Component(getByServiceBerkalaID, "ServiceBerkala.getByServiceBerkalaID", "Function | NodeJs", "Function for get data by service berkala ID\n(NodeJs Katalog API)")
+Component(updateServiceBerkala, "ServiceBerkala.updateServiceBerkala", "Function | NodeJs", "Function for update data service berkala\n(NodeJs Katalog API)")
+
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request update service berkala data by service berkala ID")
+Rel_D(auth_middleware, auth_middlewares, "2. Request update service berkala data by service berkala ID")
+Rel_D(auth_middlewares, reference_controller, "3. Request update service berkala data by service berkala ID")
+
+Rel_D(reference_controller, updateByServiceBerkalaID, "4. Request update service berkala data by service berkala ID")
+Rel_D(updateByServiceBerkalaID, getByServiceBerkalaID, "5. Request get service berkala data by service berkala ID")
+Rel_D(updateByServiceBerkalaID, updateServiceBerkala, "7. Request Update service berkala data by service berkala ID")
+
+Rel_D(getByServiceBerkalaID, database, "6. Get service berkala data by service berkala ID")
+Rel_D(updateServiceBerkala, database, "8. Update service berkala data by service berkala ID")
+
+@enduml

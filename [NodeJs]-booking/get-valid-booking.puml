@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getValidBooking API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getValidBooking API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(booking_order_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(getValidBooking, "getValidBooking", "Function | NodeJs", "Function for validate booking\n(NodeJs Booking API)")
+Component(getValidBookingfromQR, "Booking_Order.getValidBookingfromQR", "Function | NodeJs", "Function for validate booking from QR\n(NodeJs Booking API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request Validate Booking")
+Rel_D(auth_middleware, booking_order_controller, "2. Request Validate Booking")
+Rel_D(booking_order_controller, getValidBooking, "3. Request Validate Booking")
+Rel_D(getValidBooking, getValidBookingfromQR, "4. Request Validate Booking")
+
+Rel_D(getValidBookingfromQR, database, "5. Validate Booking from QR")
+
+@enduml

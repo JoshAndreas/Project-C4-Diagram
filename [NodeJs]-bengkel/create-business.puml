@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createBusiness Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "createBusiness Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Business, "Business Controller", "Controller | NodeJs", "Controller for Business Function related\n(NodeJs Bengkel API)")
+
+    Component(createBusiness, "createBusiness", "Function | NodeJs", "Function for Create Business data\n(NodeJs Bengkel API)")
+    Component(create, "Business.create", "Function | NodeJs", "Function for Create Business data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Create Business data")
+Rel(auth_middleware, Business, "2. Request Create Business data")
+Rel(Business, createBusiness, "3. Request Create Business data")
+Rel(createBusiness, create, "4. Request Create Business data")
+Rel(create, database, "5. Create Business data")
+
+@enduml

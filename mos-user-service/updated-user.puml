@@ -1,0 +1,36 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updatedUser API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updatedUser API\n[Component]"){
+Component(auth_middleware, "Auth Middleware", "Controller | TypeScript", "Middleware for Authentication\n(mos-user-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(getPemKey, "getPemKey", "Function | TypeScript", "Function for Get Pemkey\n(mos-user-service)")
+
+Component(user_controller, "User Controller", "Controller | TypeScript", "Controller for User Related Function\n(mos-user-service)")
+Component(updatedUser, "updatedUser", "Function | TypeScript", "Function for retrieve updated user data\n(mos-user-service)")
+Component(updateUser, "updateUser", "Function | TypeScript", "Function for update user data in database\n(mos-user-service)")
+Component(updateUsers, "UserRepository.update", "Function | TypeScript", "Function for update user data in database\n(mos-user-service)")
+Component(updateCred, "CredentialRepository.update", "Function | TypeScript", "Function for update credential data in database\n(mos-user-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request update user data")
+
+Rel_D(mainMiddleware, auth_middleware, "2. Request update user data")
+Rel_R(auth_middleware, getPemKey, "3. Get Pem Key")
+
+Rel_D(auth_middleware, user_controller, "4. Request update user data")
+Rel_D(user_controller, updatedUser, "5. Request update user data")
+Rel_D(updatedUser, updateUser, "6. Request Update user data")
+Rel_D(updateUser, updateUsers, "7. Request Update user data")
+Rel_D(updateUser, updateCred, "9. Request Update Credential data")
+
+
+
+Rel_D(updateUsers, database, "8. Update user data")
+Rel_D(updateCred, database, "10. Update Credential data")
+
+@enduml

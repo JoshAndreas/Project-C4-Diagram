@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getHourByDate API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getHourByDate API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify Function\n(NodeJs Booking API)")
+Component(booking_order_controller, "Booking Order Controller", "Controller | NodeJs", "Controller for Booking Order Related Function\n(NodeJs Booking API)")
+Component(getHourByDate, "getHourByDate", "Function | NodeJs", "Function for get hour by date\n(NodeJs Booking API)")
+Component(getHourByDates, "Booking_Order.getHourByDate", "Function | NodeJs", "Function for get hour By date\n(NodeJs Booking API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request get hour by date")
+Rel_D(auth_middleware, booking_order_controller, "2. Request get hour by date")
+Rel_D(booking_order_controller, getHourByDate, "3. Request get hour by date")
+Rel_D(getHourByDate, getHourByDates, "4. get hour by date")
+Rel_D(getHourByDates, database, "5. get hour By Date Bengkel")
+
+
+
+
+
+
+@enduml

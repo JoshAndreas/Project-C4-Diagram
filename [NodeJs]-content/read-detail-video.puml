@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readDetail Video API\n[NodeJs Content API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "readDetail Video API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for verification Function\n(NodeJs Content API)")
+    Component(content_controller, "Content Video Controller", "Controller | NodeJs", "Controller for Video Related Function\n(NodeJs Content API)")
+    Component(readDetail, "readDetail", "Function | NodeJs", "Function for Read Detail Video data\n(NodeJs Content API)")
+    Component(readDetails, "contentVideo.readDetail", "Function | NodeJs", "Function for Read Detail Video data\n(NodeJs Content API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read Detail Video data")
+Rel(auth_middleware, content_controller, "2. Request Read Detail Video data")
+Rel(content_controller, readDetail, "3. Request Read Detail Video data")
+Rel(readDetail, readDetails, "4. Request Read Detail Video data")
+
+Rel(readDetails, database, "5. Read Detail Video data")
+
+@enduml

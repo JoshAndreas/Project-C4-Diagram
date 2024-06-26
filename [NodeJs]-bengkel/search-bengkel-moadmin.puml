@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title searchBengkel Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "searchBengkel Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(searchBengkel, "searchBengkel", "Function | NodeJs", "Function for Search bengkel data\n(NodeJs Bengkel API)")
+    Component(search, "Bengkel.search", "Function | NodeJs", "Function for Search bengkel data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Search bengkel data")
+Rel(auth_middleware, bengkel, "2. Request Search bengkel data")
+Rel(bengkel, searchBengkel, "3. Request Search bengkel data")
+Rel(searchBengkel, search, "4. Request Search bengkel data")
+Rel(search, database, "5. Search bengkel data")
+
+@enduml

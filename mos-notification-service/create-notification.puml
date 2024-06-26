@@ -1,0 +1,35 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Create Notification API\n[mos-mobil-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "markRead API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-notification-service)")
+Component(auth_operator_middleware, "Auth Operator Middleware", "Middleware | TypeScript", "Middleware for Operator Authentication\n(mos-notification-service)")
+Component(validateOperatorBulkNotifMiddleware, "Validate Operator Bulk Notif Middleware", "Middleware | TypeScript", "Middleware for Validate Operator Authentication\n(mos-notification-service)")
+
+Component(operator_notification_controller, "Operator Notification Controller", "Controller | TypeScript", "Controller for Operator Notification Function\n(mos-notification-service)")
+Component(createNotification, "createNotification", "Function | TypeScript", "Function for Create Notification\n(mos-notification-service)")
+Component(createNotificationRep, "MstOperatorNotificationRepository.create", "Function | TypeScript", "Function for Create Notification\n(mos-notification-service)")
+
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+AddProperty("Repository", "mos-auth-service")
+AddProperty("URL", "/api/admin/authenticate")
+Component(MosAuthService, "MosAuthService.authenticateAdmin", "Middleware | TypeScript", "Function For Authenticate Admin by using xToken")
+
+Rel_D(Web_Moservice, mainMiddleware, "1. Request Operator Notification")
+Rel_D(mainMiddleware, auth_operator_middleware, "2. Request Operator Notification")
+
+
+Rel_L(auth_operator_middleware, MosAuthService, "3. Admin Verification")
+Rel_D(auth_operator_middleware, validateOperatorBulkNotifMiddleware, "4. Admin Validation")
+Rel_D(validateOperatorBulkNotifMiddleware, operator_notification_controller, "5. Request Create Notification")
+Rel_D(operator_notification_controller, createNotification, "6. Request Create Notification")
+Rel_D(createNotification, createNotificationRep, "7. Create Notification data")
+Rel_R(createNotificationRep, database, "8. Create Notification data")
+
+
+@enduml

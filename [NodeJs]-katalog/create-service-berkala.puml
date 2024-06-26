@@ -1,0 +1,22 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "create API\n[Component]"){
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+Component(reference_controller, "Service Berkala Item Controller", "Controller | NodeJs", "Controller for Service Berkala Item Related function\n(NodeJs Katalog API)")
+Component(create, "create", "Function | NodeJs", "Function for create service berkala data\n(NodeJs Katalog API)")
+Component(creates, "Ref_service_berkala_km.create", "Function | NodeJs", "Function for create service berkala data\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request create service berkala data")
+Rel_D(auth_middleware, reference_controller, "2. Request create service berkala data")
+Rel_D(reference_controller, create, "3. Request create service berkala data")
+Rel_D(create, creates, "4. Request create service berkala data")
+Rel_D(creates, database, "5. Create service berkala data")
+
+@enduml

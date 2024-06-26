@@ -1,0 +1,34 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create user bengkel API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "create user bengkel API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+Component(validateUserWorkshopRegisterMiddleware, "EP Validate Register Workshop Middleware", "Middleware | TypeScript", "Middleware for Validate Register Workshop\n(mos-user-service)")
+
+Component(user_bengkel_controller, "User Bengkel Controller.create", "Controller | TypeScript", "Controller for User bengkel Related Function\n(mos-user-service)")
+Component(create, "MapUserBengkelRepository.create", "Function | TypeScript", "Function for create bengkel data\n(mos-user-service)")
+Component(sendEmail, "sendEmail", "Function | TypeScript", "Function for send Email\n(mos-bengkel-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-bengkel-service")
+AddProperty("URL", "/api/workshop-registrations/$(registrationId)")
+Component(findBengkelRegistration, "findBengkelRegistration", "Function | TypeScript", "Function for find registered bengkel")
+
+AddProperty("Topic", "email-event-topic")
+SystemQueue(Kafka, "Kafka")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request create user bengkel data")
+
+Rel_D(mainMiddleware, validateUserWorkshopRegisterMiddleware, "2. Request create user bengkel data")
+Rel_L(validateUserWorkshopRegisterMiddleware, findBengkelRegistration, "3. Find user Bengkel Registration")
+Rel_D(validateUserWorkshopRegisterMiddleware, user_bengkel_controller, "4. Request create user bengkel data")
+Rel_D(user_bengkel_controller, create, "5. Request create user bengkel data")
+Rel_R(create, database, "6. Create user bengkel data")
+Rel_D(create, sendEmail, "7. Request Send Email")
+Rel_L(sendEmail, Kafka, "8. Send Email")
+
+@enduml

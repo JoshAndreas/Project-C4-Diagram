@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readMultiConditionUserMoservice API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "readMultiConditionUserMoservice API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(user_controller, "Users Moservice Controller", "Controller | NodeJs", "Controller for Moservice User Related function\n(NodeJs User API)")
+
+Component(readMultiConditionUserMoservice, "readMultiConditionUserMoservice", "Function | NodeJs", "Function for read Multi Condition User Moservice\n(NodeJs Booking API)")
+Component(getAllMultiCondition, "Booking_Order.getAllMultiCondition", "Function | NodeJs", "Function for get all multi condition list\n(NodeJs User API)")
+Component(countAllFilter, "Booking_Order.countAllFilter", "Function | NodeJs", "Function for count All Filter\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request read Multi Condition User Moservice data")
+Rel_D(auth_middleware, user_controller, "2. Request read Multi Condition User Moservice data")
+Rel_D(user_controller, readMultiConditionUserMoservice, "3. Request read Multi Condition User Moservice data")
+Rel_D(readMultiConditionUserMoservice, getAllMultiCondition, "4. Request Get All Multi Condition data")
+Rel_D(readMultiConditionUserMoservice, countAllFilter, "6. Request Count All filtered data")
+Rel_D(getAllMultiCondition, database, "5. Get All Multi Condition data")
+Rel_D(countAllFilter, database, "7. Count All filtered data")
+
+@enduml

@@ -1,0 +1,106 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title payment API\n[mos-payment-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "payment API\n[Component]"){
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+Component(espay_payment_controller, "Espay Payment Controller", "Controller | TypeScript", "Controller for Espay Payment Related Function\n(mos-payment-service)")
+Component(payment, "payment", "Function | TypeScript", "Function for Inquiry Payment data by UUID\n(mos-payment-service)")
+
+Component(paymentData, "PaymentRepository.findOne", "Function | TypeScript", "Function for search payment data\n(mos-payment-service)")
+Component(paymentMethod, "PaymentMethodRepository.findOne", "Function | TypeScript", "Function for search payment method data\n(mos-payment-service)")
+Component(loggerMiddleware, "Logger Middleware", "Middleware | TypeScript", "Logger Middleware for Moservice.id\n(mos-payment-service)")
+
+Boundary(Helper, "Cash Payment"){
+Component(updatePaymentTrPromoUser, "updatePaymentTrPromoUser", "Helper | TypeScript", "Function for update payment promo user data\n(mos-payment-service)")
+Component(Paymentupdate, "PaymentRepository.update", "Function | TypeScript", "Function for update payment data\n(mos-payment-service)")
+}
+
+Boundary(Helpers, "VA Payment"){
+Component(merchantConfiguration, "MerchantConfigurationRepository.findOne", "Function | TypeScript", "Function for search merchant configuration data\n(mos-payment-service)")
+Component(inquiryRequestSignature, "getInquiryAndPaymentRequestSignature", "Function | TypeScript", "Function for Inquiry request signature\n(mos-payment-service)")
+Component(updatePaymentTrPromoUsers, "updatePaymentTrPromoUser", "Helper | TypeScript", "Function for update payment promo user data\n(mos-payment-service)")
+Component(getPaymentNotifSignature, "getPaymentNotifSignature", "Function | TypeScript", "Function for get payment notification signature\n(mos-payment-service)")
+Component(cashbackChecker, "adirakuCashbackHelper", "Function | TypeScript", "Function for check if there is cashback in Adiraku\n(mos-payment-service)")
+Component(Paymentupdates, "PaymentRepository.update", "Function | TypeScript", "Function for update payment data\n(mos-payment-service)")
+}
+}
+AddProperty("Repository", "mos-content-service")
+AddProperty("URL", "/api/vouchers/$(voucherId)")
+Component(updatePayments, "updatePayment", "Function | TypeScript", "Function for update payment promo user data")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-content-service")
+AddProperty("URL", "/api/vouchers/$(voucherId)")
+Component(updatePayment, "updatePayment", "Function | TypeScript", "Function for update payment promo user data")
+
+
+System_Boundary(Adiraku, "Adiraku System"){
+UpdateSystemBoundaryStyle($bgColor="LightGray", $fontColor="Black", $borderColor="white")
+
+AddProperty("Repository", "ms-activity")
+AddProperty("URL", "/referalnumber/check-avail-promo/")
+Component(MsLoyalty, "adirakuCheckAvailPromo", "Function | TypeScript", "Function for check available promo in Adiraku")
+
+AddProperty("Repository", "ms-activity")
+AddProperty("URL", "/referalnumber/cashback-save")
+Component(MsLoyaltys, "adirakuSaveCashback", "Function | TypeScript", "Function for save cashback")
+
+AddProperty("Repository", "ms-support")
+AddProperty("URL", "/gamification/master-data-referral")
+Component(MsActivity, "getAdirakuMasterDataReferal", "Function | TypeScript", "Function for get adiraku master referal in Adiraku")
+
+AddProperty("Repository", "ms-activity")
+AddProperty("URL", "/activity")
+Component(MsActivitys, "adirakuSendNotification.Nasabah", "Function | TypeScript", "Function for send notification to nasabah")
+
+AddProperty("Repository", "ms-loyalty")
+AddProperty("URL", "/formulaEvent")
+Component(MsSupport, "sendCashbackAdirakuPoint", "Function | TypeScript", "Function for send cashback adiraku point\n(ms-support)")
+
+}
+
+Lay_D(updatePayment, database)
+Lay_D(updatePaymentTrPromoUsers, updatePayments)
+
+
+Rel(Web_Moservice, mainMiddleware, "1. Request Find Payment method data")
+Rel(mainMiddleware, loggerMiddleware, "2. Request Find Payment method data")
+
+Rel(loggerMiddleware, espay_payment_controller, "3. Request Find Payment method data")
+Rel(espay_payment_controller, payment, "4. Request Find Payment Method data")
+Rel(payment, paymentData, "5. Request payment data")
+Rel(paymentData, database, "6. Retrieve Payment data")
+Rel(paymentMethod, database, "7. Retrieve Payment Method data")
+Rel(payment, paymentMethod, "8. Request merchant configuration data")
+
+Rel(payment, updatePaymentTrPromoUser, "9. If Payment Method is Cash, Update Payment Transaction data")
+Rel(updatePaymentTrPromoUser, updatePayment, "110. Update Promo user data")
+Rel(payment, Paymentupdate, "11. Update Promo user data")
+Rel(Paymentupdate, database, "12. Update Payment data, Cash Payment Done")
+
+
+
+Rel(payment, merchantConfiguration, "9. If Payment Method is VA, Check Merchant Configuration")
+Rel(merchantConfiguration, database, "10. Retrieve Merchant Configuration data")
+Rel(payment, inquiryRequestSignature, "11. Retrieve inquiry Request Signature data")
+Rel(payment, cashbackChecker, "12. Check if there is cashback")
+
+Rel(cashbackChecker, MsLoyalty, "13. Check Available Promo")
+Rel(cashbackChecker, MsActivity, "14. Get Master data referal")
+Rel(cashbackChecker, MsLoyaltys, "15. Save Cashback data")
+Rel(cashbackChecker, MsSupport, "16. Send Cashback Adiraku Point")
+Rel(cashbackChecker, MsActivitys, "17. Send Notification to Nasabah")
+
+Rel(payment, updatePaymentTrPromoUsers, "18. Update Payment Transaction data")
+Rel(updatePaymentTrPromoUsers, updatePayments, "19. Update Promo user data")
+Rel(payment, Paymentupdates, "20. Update Promo user data")
+Rel(Paymentupdates, database, "21. Update Payment data")
+Rel(payment, getPaymentNotifSignature, "22. Get Payment Notif Signature, VA Payment Done")
+
+
+@enduml

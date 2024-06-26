@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createItemByCategoryID Service Umum API\n[NodeJs Katalog API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "createItemByCategoryID Service Umum API\n[Component]"){
+Component(login, "user.login", "Function | NodeJs", "Function for login\n(NodeJs Katalog API)")
+
+Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Middleware for Verification\n(NodeJs Katalog API)")
+
+Component(reference_controller, "Service Umum Category Item Controller", "Controller | NodeJs", "Controller for Service Umum Category Item Related function\n(NodeJs Katalog API)")
+Component(createItemByCategoryID, "createItemByCategoryID", "Function | NodeJs", "Function for create Item By Category ID\n(NodeJs Katalog API)")
+Component(create, "Ref_service_umum_item.create", "Function | NodeJs", "Function for create Item By Category ID\n(NodeJs Katalog API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, login, "1. Request create Item By Category ID")
+Rel_D(login, auth_middleware, "2. Request create Item By Category ID")
+
+Rel_D(auth_middleware, reference_controller, "3. Request create Item By Category ID")
+Rel_D(reference_controller, createItemByCategoryID, "4. Request create Item By Category ID")
+Rel_D(createItemByCategoryID, create, "5. Request create Item By Category ID")
+Rel_D(create, database, "6. Create Item By Category ID")
+
+@enduml

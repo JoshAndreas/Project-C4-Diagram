@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getAvailability API 
+Container(A, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "getAvailability API\n[Component]"){
+Component(B, "Booking Controller", "Controller | TypeScript", "Controller for Booking Process\n(mos-booking-service)")
+Component(C, "getAvailability", "Function | TypeScript", "Function for Checking Booking Availability\n(mos-booking-service)")
+Component(E, "getAvailableHours", "Function | TypeScript", "Function for Checking Bengkel Available Hours\n(mos-booking-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-booking-service)")
+
+}
+ContainerDb(F, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(A, mainMiddleware, "1. Checking Booking Availability")
+Rel_D(mainMiddleware, B, "2. Checking Booking Availability")
+
+Rel(B, C, "3. Request Checking Booking Availability by BengkelId, date")
+Rel(C, E, "4. Checking Availability Of Bengkel Operation Hours By Date, Bengkel ID")
+Rel(E, F, "5. Searching & Get data Availability Of Bengkel Operation Hours By Date, Bengkel ID")
+
+
+@enduml

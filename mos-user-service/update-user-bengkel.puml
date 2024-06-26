@@ -1,0 +1,29 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update user bengkel API\n[mos-user-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "update user bengkel API\n[Component]"){
+Component(validateUserWorkshopRegisterMiddleware, "EP Validate Register Workshop Middleware", "Controller | TypeScript", "Middleware for Validate Register Workshop\n(mos-user-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-user-service)")
+
+Component(user_bengkel_controller, "User Bengkel Controller.update", "Controller | TypeScript", "Controller for User bengkel Related Function\n(mos-user-service)")
+Component(update, "MstUserWorkshopRepository.update", "Function | TypeScript", "Function for update user bengkel data\n(mos-user-service)")
+Component(sendEmail, "sendEmail", "Function | TypeScript", "Function for send Email\n(mos-bengkel-service)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+AddProperty("Topic", "email-event-topic")
+SystemQueue(Kafka, "Kafka")
+Rel_D(Web_Moservice, mainMiddleware, "1. Request update user bengkel data")
+
+Rel_D(mainMiddleware, validateUserWorkshopRegisterMiddleware, "2. Request update user bengkel data")
+Rel_D(validateUserWorkshopRegisterMiddleware, user_bengkel_controller, "3. Request update user bengkel data")
+Rel_D(user_bengkel_controller, update, "4. Request update user bengkel data")
+Rel_R(update, database, "5. Update user bengkel data")
+Rel_D(update, sendEmail, "6. Request Send Email")
+Rel_L(sendEmail, Kafka, "7. Send Email")
+
+@enduml

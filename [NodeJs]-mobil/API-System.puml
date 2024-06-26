@@ -1,0 +1,42 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title NodeJs Service Platform Mobil API API
+
+Component(Web_Moservice, "API Gateway", "Services | TypeScript", "All API used by moservice.id")
+Component(API, "NodeJs Service Platform Mobil API", "Repository | NodeJs", "Repository for NodeJs Mobil Related Function")
+
+Boundary(api, "NodeJs Mobil API\n[Component]"){
+Component(deleteMapping, "deleteMapping", "Function | TypeScript", "Main Function for Delete Mapping data\n(NodeJs Mobil API)")
+Component(getListMobilbyUserID, "getListMobilbyUserID", "Function | TypeScript", "Main Function for Get list mobil by user ID\n(NodeJs Mobil API)")
+Component(getMobilbyCarID, "getMobilbyCarID", "Function | TypeScript", "Main Function for Get Mobil by Car ID\n(NodeJs Mobil API)")
+Component(getYears, "getYears", "Function | NodeJs", "Function for Get years data\n(NodeJs Mobil API)")
+Component(insertCarData, "insertCarData", "Function | NodeJs", "Function for Insert car data\n(NodeJs Mobil API)")
+Component(setPrimary, "setPrimary", "Function | NodeJs", "Function for Set primary vehicle\n(NodeJs Mobil API)")
+Component(updateCarData, "updateCarData", "Function | NodeJs", "Function for Update car data\n(NodeJs Mobil API)")
+Component(updateCarKM, "updateCarKM", "Function | NodeJs", "Function for Update car KM\n(NodeJs Mobil API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, API, "Request use Function Related to Mobil")
+
+Rel_D(API, deleteMapping, "Request Delete Mapping data")
+Rel_D(API, getListMobilbyUserID, "Request Get list mobil by user ID")
+Rel_D(API, getMobilbyCarID, "Request Get Mobil by Car ID")
+Rel_D(API, getYears, "Request Get years data")
+Rel_D(API, insertCarData, "Request Insert car data")
+Rel_D(API, setPrimary, "Request Set primary vehicle")
+Rel_D(API, updateCarData, "Request Update car data")
+Rel_D(API, updateCarKM, "Request Update car KM")
+
+
+Rel_D(deleteMapping, database, "Delete Mapping data")
+Rel_D(getListMobilbyUserID, database, "Get list mobil by user ID")
+Rel_D(getMobilbyCarID, database, "Get Mobil by Car ID")
+Rel_D(getYears, database, "Get years data")
+Rel_D(insertCarData, database, "Insert car data")
+Rel_D(setPrimary, database, "Set primary vehicle")
+Rel_D(updateCarData, database, "Update car data")
+Rel_D(updateCarKM, database, "Update car KM")

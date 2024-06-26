@@ -1,0 +1,73 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+LAYOUT_WITH_LEGEND()
+title updateVoucherStatus API\n[mos-content-service]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updateVoucherStatus API\n[Component]"){
+Component(voucher_controller, "Voucher Controller", "Controller | TypeScript", "Controller for Voucher Related Function\n(mos-content-service)")
+Component(server_auth_middleware, "Server Auth Middleware", "Middleware | TypeScript", "Middleware for Server Authentication\n(mos-content-service)")
+
+Component(updateVoucherStatus, "updateVoucherStatus", "Function | TypeScript", "Main Function for Update Voucher Status\n(mos-content-service)")
+Component(IVoucherRepositoryUpdateData, "IVoucherRepositoryUpdateData", "Function | TypeScript", "Function for Update Voucher Data\n(mos-content-service)")
+Component(VoucherRepositoryFindone, "VoucherRepository.findOne", "Function | TypeScript", "Function for Find Voucher Data\n(mos-content-service)")
+Component(PromoRepositoryfindOne, "PromoRepository.findOne", "Function | TypeScript", "Function for Find Promo Data\n(mos-content-service)")
+Component(voucherHelper, "Voucher Helper", "Helper | TypeScript", "Helper For Voucher Integration\n(mos-content-service)")
+
+Component(voucherIntergrationHelper, "voucherIntergrationHelper", "Function | TypeScript", "Helper For Voucher Integration\n(mos-content-service)")
+Component(sendNotifAdirakuSuccesReddemHelper, "sendNotifAdirakuSuccesReddemHelper", "Function | TypeScript", "Helper for Send Notif Adiraku for success redeem\n(mos-content-service)")
+Component(sendNotifAdirakuVocherCodeHelper, "sendNotifAdirakuVocherCodeHelper", "Function | TypeScript", "Helper for Send Notif Adiraku for voucher redeem\n(mos-content-service)")
+Component(VoucherRepositoryupdate, "VoucherRepository.update", "Function | TypeScript", "Main Function for Find Voucher Data by ID\n(mos-content-service)")
+Component(mainMiddleware, "Main Middleware", "Middleware | TypeScript", "Main Middleware for Moservice.id\n(mos-content-service)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("Repository", "mos-bengkel-service")
+AddProperty("URL", "/api/bengkel/$(bengkelId)")
+Component(getBengkelById, "getBengkelById", "Function | TypeScript", "Main Function for get bengkel data by ID")
+
+
+UpdateSystemBoundaryStyle($bgColor="LightGray", $fontColor="Black", $borderColor="white")
+System_Boundary(Adiraku, "Adiraku System"){
+AddProperty("Repository", "ms-activity")
+AddProperty("URL", "/activity/")
+Component(adirakuSendNotifNasabah, "adirakuSendNotifNasabah", "Function Adiraku for send Notif to Nasabah")
+
+AddProperty("Repository", "ms-activity")
+AddProperty("URL", "/activity/prospect")
+Component(adirakuSendNotifProspect, "adirakuSendNotifProspect", "Function Adiraku for send Notif to Prospect")
+}
+AddProperty("Topic", "voucher-integration")
+SystemQueue(Kafka, "Kafka")
+Rel(Web_Moservice, mainMiddleware, "1. Request update Voucher Status")
+
+Rel(mainMiddleware, server_auth_middleware, "2. Request update Voucher Status")
+Rel(server_auth_middleware, voucher_controller, "3. Request update Voucher Status")
+Rel(voucher_controller, updateVoucherStatus, "4. Request update Voucher Status")
+Rel(updateVoucherStatus, IVoucherRepositoryUpdateData, "5. Retrieve data update")
+Rel(updateVoucherStatus, VoucherRepositoryFindone, "7. Request Search Voucher data")
+Rel(updateVoucherStatus, PromoRepositoryfindOne, "9. Request Search Promo data")
+Rel(updateVoucherStatus, getBengkelById, "11. Request Search bengkel by ID data")
+
+Rel(updateVoucherStatus, voucherHelper, "13. Submit data")
+
+Rel(VoucherRepositoryFindone, database, "8. Retrieve Voucher data")
+Rel(PromoRepositoryfindOne, database, "10. Retrieve Promo data")
+Rel(IVoucherRepositoryUpdateData, database, "6. Update data")
+Rel(getBengkelById, database, "12. Retrieve Bengkel By ID")
+
+Rel_L(voucherHelper, voucherIntergrationHelper, "14. Checking Voucher Integration Status")
+Rel(voucherHelper, sendNotifAdirakuVocherCodeHelper, "16. Send Notification If redeem voucher")
+Rel(voucherHelper, sendNotifAdirakuSuccesReddemHelper, "19. Send Notification if success redeem voucher")
+
+Rel_L(voucherIntergrationHelper, Kafka, "15. Retrieve Voucher Integration Status")
+Rel(sendNotifAdirakuVocherCodeHelper, adirakuSendNotifNasabah, "17. Send Notification for Nasabah")
+Rel(sendNotifAdirakuVocherCodeHelper, adirakuSendNotifProspect, "18. Send Notification for Prospect")
+Rel(sendNotifAdirakuSuccesReddemHelper, adirakuSendNotifNasabah, "20. Send Notification for Nasabah")
+Rel(sendNotifAdirakuSuccesReddemHelper, adirakuSendNotifProspect, "21. Send Notification for Prospect")
+
+Rel(updateVoucherStatus, VoucherRepositoryupdate, "22. Update Voucher data")
+
+Rel(VoucherRepositoryupdate, database, "23.Update Voucher data")
+
+@enduml

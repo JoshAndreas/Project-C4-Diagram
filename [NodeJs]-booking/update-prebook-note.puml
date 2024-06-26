@@ -1,0 +1,19 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updatePrebookNote API\n[NodeJs Booking API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+Boundary(api, "updatePrebookNote API\n[Component]"){
+Component(auth_middleware, "Auth.verify", "Middleware | NodeJs", "Authentication Middleware for verify\n(NodeJs Booking API)")
+Component(pre_booking_controller, "Prebooking Controller", "Controller | NodeJs", "Controller for Prebooking Related Function\n(NodeJs Booking API)")
+Component(updatePrebookNote, "Pre_Booking.updatePrebookNote", "Function | NodeJs", "Function for update Prebook Note data\n(NodeJs Booking API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel_D(Web_Moservice, auth_middleware, "1. Request update Prebook Note data")
+Rel_D(auth_middleware, pre_booking_controller, "2. Request update Prebook Note data")
+Rel_D(pre_booking_controller, updatePrebookNote, "3. Request update Prebook Note data")
+Rel_D(updatePrebookNote, database, "4. Update Prebook Note data")
+
+@enduml

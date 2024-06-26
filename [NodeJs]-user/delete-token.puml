@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteToken API\n[NodeJs User API]
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
+
+Boundary(api, "deleteToken API\n[Component]"){
+Component(user_controller, "User Workshop Controller", "Controller | NodeJs", "Controller for User Workshop Related function\n(NodeJs User API)")
+Component(deleteToken, "deleteToken", "Function | NodeJs", "Function for delete Token\n(NodeJs User API)")
+Component(readByUserIDInstanceID, "DeviceUserBengkel.readByUserIDInstanceID", "Function | NodeJs", "Function for read By User ID Instance ID\n(NodeJs User API)")
+Component(deleteTokens, "DeviceUserBengkel.deleteToken", "Function | NodeJs", "Function for delete Token data\n(NodeJs User API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+Rel_D(Web_Moservice, user_controller, "1. Request Update user workshop data")
+Rel_D(user_controller, deleteToken, "2. Request Update user workshop data")
+Rel_D(deleteToken, readByUserIDInstanceID, "3. Request Read data by User ID Instance ID")
+Rel_D(deleteToken, deleteTokens, "5. Request delete token")
+
+Rel_D(readByUserIDInstanceID, database, "4. Read data by User ID Instance ID")
+Rel_D(deleteTokens, database, "6. Delete Token data")
+
+@enduml
