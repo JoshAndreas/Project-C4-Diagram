@@ -2,10 +2,10 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
-title createBusiness Bengkel API\n[NodeJs Bengkel API]
+title createBusiness API\n[NodeJs Bengkel API]
 
 Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
-Boundary(api, "createBusiness Bengkel API\n[Component]"){
+Boundary(api, "createBusiness API\n[Component]"){
     Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
     Component(Business, "Business Controller", "Controller | NodeJs", "Controller for Business Function related\n(NodeJs Bengkel API)")
 

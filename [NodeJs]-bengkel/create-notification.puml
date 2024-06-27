@@ -1,0 +1,42 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create Notification API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "create Notification API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Notifikasi Controller", "Controller | NodeJs", "Controller for Notifikasi Function related\n(NodeJs Bengkel API)")
+
+    Component(create, "create", "Function | NodeJs", "Function for Create Notification data\n(NodeJs Bengkel API)")
+    Component(createsNew, "Notifikasi.createsNew", "Function | NodeJs", "Function for Create Notification data\n(NodeJs Bengkel API)")
+
+    Component(sendBlastNotif, "sendBlastNotif", "Function | NodeJs", "Function for Send Blast Notif\n(NodeJs Bengkel API)")
+    Component(getFcmList, "Notifikasi.getFcmList", "Function | NodeJs", "Function for Get FCM List\n(NodeJs Bengkel API)")
+    Component(insertMapNotifikasiUser, "Notifikasi.insertMapNotifikasiUser", "Function | NodeJs", "Function for Insert Map Notifikasi User\n(NodeJs Bengkel API)")
+    Component(delete_inactive_device, "Notifikasi.delete_inactive_device", "Function | NodeJs", "Function for Delete Inactive Device\n(NodeJs Bengkel API)")
+}
+AddProperty("URL", "/fcm/send")
+AddProperty("Service", "Notification Service")
+Component(send, "sendNotification.send", "Function | NodeJs", "Function for Send Notification\n(NodeJs Bengkel API)")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get HO data by Bengkel ID")
+
+Rel(auth_middleware, bengkel, "2. Request Get HO data by Bengkel ID")
+Rel(bengkel, create, "3. Request Get HO data by Bengkel ID")
+
+Rel(create, createsNew, "4. Request Create Notification data")
+Rel(create, sendBlastNotif, "6. Request Send Blast Notif")
+Rel(create, getFcmList, "8. Get FCM List")
+Rel(create, insertMapNotifikasiUser, "9. Request Insert Map Notifikasi User data")
+Rel(create, send, "11. Send Notification")
+Rel(create, delete_inactive_device, "12. Request Delete Inactive Device")
+
+Rel(createsNew, database, "5. Create Notification data")
+Rel(sendBlastNotif, database, "7. Send Blast Notif")
+Rel(insertMapNotifikasiUser, database, "10. Insert Map Notifikasi User data")
+Rel(delete_inactive_device, database, "13. Delete Inactive Device")
+@enduml

@@ -2,10 +2,10 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
-title readByID API\n[NodeJs Bengkel API]
+title readByID detail API\n[NodeJs Bengkel API]
 
 Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
-Boundary(api, "readByID API\n[Component]"){
+Boundary(api, "readByID detail API\n[Component]"){
     Component(auth_middleware, "validateBengkelId", "Middleware | NodeJs", "Authentication Middleware for Validate Bengkel ID\n(NodeJs Bengkel API)")
     Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
     Component(detail, "Detail Controller", "Controller | NodeJs", "Controller for Detail Function related\n(NodeJs Bengkel API)")
@@ -27,3 +27,5 @@ Rel(detail, updateNew, "8. Update new detail data")
 Rel(readByID, database, "5. Read detail by ID")
 Rel(readByIDs, database, "7. Read detail by ID")
 Rel(updateNew, database, "9. Update new detail data")
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Ref Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "update Ref Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Ref Bengkel Ds Controller", "Controller | NodeJs", "Controller for Ref Bengkel Ds Function related\n(NodeJs Bengkel API)")
+
+    Component(update, "update", "Function | NodeJs", "Function for Update Ref Bengkel data\n(NodeJs Bengkel API)")
+    Component(updates, "RefBengkelDs.update", "Function | NodeJs", "Function for Update Ref Bengkel\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Update Ref Bengkel Ds data")
+Rel(auth_middleware, bengkel, "2. Request Update Ref Bengkel Ds data")
+
+Rel(bengkel, update, "3. Update Ref Bengkel Dd data")
+Rel(update, updates, "4. Update Ref Bengkel Ds data")
+Rel(updates, database, "5. Update Ref Bengkel Ds data")
+
+@enduml

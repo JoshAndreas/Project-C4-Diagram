@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title delete Notifikasi API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "delete Notifikasi API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Notifikasi Controller", "Controller | NodeJs", "Controller for Notification Function related\n(NodeJs Bengkel API)")
+
+    Component(delete, "delete", "Function | NodeJs", "Function for Delete Notification data\n(NodeJs Bengkel API)")
+    Component(deletes, "Notifikasi.delete", "Function | NodeJs", "Function for Delete Notification data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Delete Notification data")
+
+Rel(auth_middleware, bengkel, "2. Request Delete Notification data")
+Rel(bengkel, delete, "3. Request Delete Notification data")
+Rel(delete, deletes, "4. Delete Notification data")
+Rel(deletes, database, "5. Delete Notification data")
+
+@enduml

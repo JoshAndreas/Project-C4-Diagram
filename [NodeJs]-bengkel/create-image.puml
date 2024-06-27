@@ -33,3 +33,5 @@ Rel(readByID, database, "6. Read bengkel data by ID")
 Rel_L(uploadCloudinary, Cloudinary, "8. Upload image to Cloudinary")
 Rel(createImagesMstBengkel, database, "10. Create Image Bengkel data")
 Rel(createImagesFacilityBengkel, database, "12. Create Image Facility Bengkel data")
+
+@enduml

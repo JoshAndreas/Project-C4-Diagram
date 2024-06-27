@@ -1,0 +1,66 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "update Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+    Component(update, "update", "Function | NodeJs", "Function for Update bengkel data\n(NodeJs Bengkel API)")
+        
+    Component(getDetailByID, "Bengkel.getDetailByID", "Function | NodeJs", "Function for Get detail By ID\n(NodeJs Bengkel API)")
+    Component(clearMapBengkel, "Bengkel.clearMapBengkel", "Function | NodeJs", "Function for Clear Map Bengkel\n(NodeJs Bengkel API)")
+    Component(updates, "Bengkel.updates", "Function | NodeJs", "Function for Update Bengkel data\n(NodeJs Bengkel API)")
+    Component(checkIfBidDuplicate, "bengkelUser.checkIfBidDuplicate", "Function | NodeJs", "Function for Check if BID duplicated\n(NodeJs Bengkel API)")
+    Component(updater, "bengkelUser.update", "Function | NodeJs", "Function for Update Bengkel user data\n(NodeJs Bengkel API)")
+    Component(create, "bengkelUser.create", "Function | NodeJs", "Function for Create Bengkel user data\n(NodeJs Bengkel API)")
+
+}
+AddProperty("URL", "/api/merchant-configurations?bengkelId=${bengkel_id}")
+AddProperty("Service", "Payment Service")
+Component(getPaymentMerchantConfigByBengkelId, "getPaymentMerchantConfigByBengkelId", "Function | NodeJs", "Function for Get Payment Merchant Config by Bengkel ID")
+
+AddProperty("URL", "/api/merchant-configurations/update/${data.id}")
+AddProperty("Service", "Payment Service")
+Component(updateMerchantConfig, "updateMerchantConfig", "Function | NodeJs", "Function for Update Merchant Config data")
+
+AddProperty("URL", "/api/merchant-configurations/create")
+AddProperty("Service", "Payment Service")
+Component(createMerchantConfig, "createMerchantConfig", "Function | NodeJs", "Function for Create Merchant Config data")
+
+AddProperty("URL", "/maps/api/place/details/json?${queryParamString}")
+AddProperty("Service", "Google Place Services")
+Component(getRatingandReviewCount, "getRatingandReviewCount", "Function | NodeJs", "Function for Get Rating and Review Count data")
+
+AddProperty("URL", "v4/shorten")
+AddProperty("Service", "Bitly Service")
+Component(getBitly, "getBitly", "Function | NodeJs", "Function for Get Bitly")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Update bengkel data")
+Rel(auth_middleware, bengkel, "2. Request Update bengkel data")
+Rel(bengkel, update, "3.Request Update bengkel data")
+
+Rel(update, getPaymentMerchantConfigByBengkelId, "4. Get Payment Merchant Config by Bengkel ID")
+Rel(update, updateMerchantConfig, "5. Update Merchant Config data")
+Rel(update, createMerchantConfig, "6. Create Merchant Config data")
+
+Rel(update, getDetailByID, "7. Request Get detail By ID")
+Rel(update, getRatingandReviewCount, "9. Request Get Rating and Review Count data")
+Rel(update, clearMapBengkel, "10. Request Clear Map Bengkel")
+Rel(update, updates, "12. Request Update Bengkel data")
+Rel(update, getBitly, "14. Get Bitly")
+Rel(update, checkIfBidDuplicate, "15. Request Check if BID duplicated")
+Rel(update, updater, "17. Request Update Bengkel user data")
+Rel(update, create, "19. Request Create Bengkel user data")
+
+Rel(getDetailByID, database, "8. Get detail By ID")
+Rel(clearMapBengkel, database, "11. Clear Map Bengkel")
+Rel(updates, database, "13. Update Bengkel data")
+Rel(checkIfBidDuplicate, database, "16. Check if BID duplicated")
+Rel(updater, database, "18. Update Bengkel user data")
+Rel(create, database, "20. Create Bengkel user data")
+@enduml

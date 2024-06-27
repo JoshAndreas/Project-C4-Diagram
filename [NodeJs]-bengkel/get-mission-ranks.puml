@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getMissionRanks API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getMissionRanks API\n[Component]"){
+    Component(auth_middleware, "auth.decoded", "Middleware | NodeJs", "Authentication Middleware for Decode Token\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Controller", "Controller | NodeJs", "Controller for Mission  Function related\n(NodeJs Bengkel API)")
+
+    Component(getMissionRanks, "getMissionRanks", "Function | NodeJs", "Function for Get Mission Rank data\n(NodeJs Bengkel API)")
+    Component(ranks, "Mission.ranks", "Function | NodeJs", "Function for Retrieve Mission ranks data by Mission UUID\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Decode Token")
+Rel(auth_middleware, bengkel, "2. Request Get Mission Rank data")
+Rel(bengkel, getMissionRanks, "3.Request Get Mission Rank data")
+Rel(getMissionRanks, ranks, "4. Get Mission Rank data")
+Rel(ranks, database, "5. Retrieve Mission ranks data by Mission UUID")
+
+
+@enduml

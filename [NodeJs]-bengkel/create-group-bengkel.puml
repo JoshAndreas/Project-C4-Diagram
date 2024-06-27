@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title create Group Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "create Group Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Group Bengkel Controller", "Controller | NodeJs", "Controller for Group Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(create, "create", "Function | NodeJs", "Function for Create Group bengkel data Moadmin\n(NodeJs Bengkel API)")
+    Component(creates, "GroupBengkel.creates", "Function | NodeJs", "Function for Create Group bengkel data Moadmin\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Create Group bengkel data Moadmin")
+
+Rel(auth_middleware, bengkel, "2. Request Create Group bengkel data Moadmin")
+Rel(bengkel, create, "3. Request Create Group bengkel data Moadmin")
+Rel(create, creates, "4. Create Group bengkel data Moadmin")
+Rel(creates, database, "5. Create Group bengkel data Moadmin")
+
+@enduml

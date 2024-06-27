@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createMission API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "createMission API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Decode Token\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Controller", "Controller | NodeJs", "Controller for Mission  Function related\n(NodeJs Bengkel API)")
+
+    Component(createMission, "createMission", "Function | NodeJs", "Function for Create mission data\n(NodeJs Bengkel API)")
+    Component(list, "Mission.list", "Function | NodeJs", "Function for Check if Mission is Available To Insert\n(NodeJs Bengkel API)")
+    Component(creates, "Mission.creates", "Function | NodeJs", "Function for Create Mission data\n(NodeJs Bengkel API)")
+    Component(createMapMissionTier, "Mission.createMapMissionTier", "Function | NodeJs", "Function for Create Mission Tier Mapping data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Verification")
+Rel(auth_middleware, bengkel, "2. Request Create mission data")
+Rel(bengkel, createMission, "3.Request Create mission data")
+
+Rel(createMission, list, "4. Request Check if Mission is Available To Insert")
+Rel(createMission, creates, "6. Request Create Mission data")
+Rel(createMission, createMapMissionTier, "8. Request Create Mission Tier Mapping data")
+
+Rel(list, database, "5. Check if Mission is Available To Insert")
+Rel(creates, database, "7. Create Mission data")
+Rel(createMapMissionTier, database, "9. Create Mission Tier Mapping data")
+@enduml

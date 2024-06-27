@@ -2,10 +2,10 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
-title updateQuotaByBengkelID API\n[NodeJs Bengkel API]
+title getCountByBengkelID API\n[NodeJs Bengkel API]
 
 Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
-Boundary(api, "updateQuotaByBengkelID API\n[Component]"){
+Boundary(api, "getCountByBengkelID API\n[Component]"){
     Component(auth_middleware, "validateBengkelId", "Middleware | NodeJs", "Authentication Middleware for Validate Bengkel ID\n(NodeJs Bengkel API)")
     Component(auth_middlewares, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
     Component(detail, "Daily Quota Controller", "Controller | NodeJs", "Controller for Daily Quota Function related\n(NodeJs Bengkel API)")
@@ -22,3 +22,5 @@ Rel(detail, getCountByBengkelID, "4. Request Get Daily quota count data by Bengk
 
 Rel(getCountByBengkelID, count, "5. Get Daily quota count data by Bengkel ID")
 Rel(count, database, "6. Count Daily Quota data")
+
+@enduml

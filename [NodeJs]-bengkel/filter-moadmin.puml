@@ -2,9 +2,9 @@
 !includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
-title filter API\n[NodeJs Bengkel API]
+title filter Moadmin API\n[NodeJs Bengkel API]
 Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "moservice.id main services for Customer")
-Boundary(api, "filter API\n[Component]"){
+Boundary(api, "filter Moadmin API\n[Component]"){
 Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
 Component(bengkel_controller, "Bengkel Filter Controller", "Controller | NodeJs", "Controller for Bengkel Filter Related Function\n(NodeJs Bengkel API)")
 Boundary(apis, "filter Function"){

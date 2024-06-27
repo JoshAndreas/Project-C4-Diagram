@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createImages Moadmin API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "createImages Moadmin API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+    Component(createImages, "createImages", "Function | NodeJs", "Function for Create bengkel Image data\n(NodeJs Bengkel API)")
+    Component(readByID, "Bengkel.readByID", "Function | NodeJs", "Function for Read bengkel data by ID\n(NodeJs Bengkel API)")
+    Component(uploadCloudinary, "uploadCloudinary", "Function | NodeJs", "Function for Upload image to Cloudinary\n(NodeJs Bengkel API)")
+    Component(createImagesMstBengkel, "Bengkel.createImagesMstBengkel", "Function | NodeJs", "Function for Create Image Bengkel\n(NodeJs Bengkel API)")
+    Component(createImagesFacilityBengkel, "Bengkel.createImagesFacilityBengkel", "Function | NodeJs", "Function for Create Image Facility Bengkel\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for Store Image data")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Create bengkel Image data")
+Rel(auth_middleware, bengkel, "2. Request Create bengkel Image data")
+Rel(bengkel, createImages, "3. Request Create bengkel Image data")
+Rel(createImages, readByID, "4. Request Read bengkel data by ID")
+Rel(createImages, uploadCloudinary, "6. Request Upload image to Cloudinary")
+Rel(createImages, createImagesMstBengkel, "8. Request Create Image Bengkel data")
+Rel(createImages, createImagesFacilityBengkel, "10. Request Create Image Facility Bengkel data")
+
+Rel(readByID, database, "5. Read bengkel data by ID")
+Rel_L(uploadCloudinary, Cloudinary, "7. Upload image to Cloudinary")
+Rel(createImagesMstBengkel, database, "9. Create Image Bengkel data")
+Rel(createImagesFacilityBengkel, database, "11. Create Image Facility Bengkel data")
+@enduml

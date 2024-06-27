@@ -2,10 +2,10 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
-title getProvinceCity Bengkel API\n[NodeJs Bengkel API]
+title getProvinceCity API\n[NodeJs Bengkel API]
 
 Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
-Boundary(api, "getProvinceCity Bengkel API\n[Component]"){
+Boundary(api, "getProvinceCity API\n[Component]"){
     Component(Business, "Business Controller", "Controller | NodeJs", "Controller for Business Function related\n(NodeJs Bengkel API)")
 
     Component(getProvinceCity, "getProvinceCity", "Function | NodeJs", "Function for Get Province City data\n(NodeJs Bengkel API)")

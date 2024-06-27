@@ -22,3 +22,5 @@ Rel(detail, updateQuotaByBengkelID, "4. Request Update Daily quota data by Bengk
 
 Rel(updateQuotaByBengkelID, update, "5. Update Daily quota data by Bengkel ID")
 Rel(update, database, "6. Update Daily quota data")
+
+@enduml

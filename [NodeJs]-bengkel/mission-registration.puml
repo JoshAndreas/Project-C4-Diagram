@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title missionRegistration API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "missionRegistration API\n[Component]"){
+    Component(auth_middleware, "auth.decoded", "Middleware | NodeJs", "Authentication Middleware for Decode Token\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Registration Controller", "Controller | NodeJs", "Controller for Mission Registration Function related\n(NodeJs Bengkel API)")
+
+    Component(missionRegistration, "missionRegistration", "Function | NodeJs", "Function for Register Mission data\n(NodeJs Bengkel API)")
+    Component(findOne, "Mission.findOne", "Function | NodeJs", "Function for Find Mission UUID\n(NodeJs Bengkel API)")
+    Component(checkRegistered, "MapMissionBengkel.checkRegistered", "Function | NodeJs", "Function for Check if Mission is Registered\n(NodeJs Bengkel API)")
+    Component(create, "MapMissionBengkel.create", "Function | NodeJs", "Function for Create Mission data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Decode Token")
+Rel(auth_middleware, bengkel, "2. Request Register Mission data")
+
+Rel(bengkel, missionRegistration, "3.Request Register Mission data")
+Rel(missionRegistration, findOne, "4. Request Find Mission UUID")
+Rel(missionRegistration, checkRegistered, "6. Request Check if Mission is Registered")
+Rel(missionRegistration, create, "6. Request Create Mission data")
+
+Rel(findOne, database, "4. Request Find Mission UUID")
+Rel(checkRegistered, database, "6. Request Check if Mission is Registered")
+Rel(create, database, "6. Request Create Mission data")
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createImagePath API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "createImagePath API\n[Component]"){
+    Component(multerMiddleware, "multerMiddleware", "Middleware | NodeJs", "Middleware for Upload File\n(NodeJs Bengkel API)")
+
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Controller", "Controller | NodeJs", "Controller for Mission  Function related\n(NodeJs Bengkel API)")
+
+    Component(createImagePath, "createImagePath", "Function | NodeJs", "Function for Create Mission Image Path\n(NodeJs Bengkel API)")
+    Component(upload, "cloudinary.uploader.upload", "Function | NodeJs", "Function for Upload Image to Cloudinary\n(NodeJs Bengkel API)")
+    Component(update, "Mission.update", "Function | NodeJs", "Function for Update Mission data\n(NodeJs Bengkel API)")    
+}
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for Upload Image data")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multerMiddleware, "1. Set Up Storage")
+Rel(multerMiddleware, auth_middleware, "2. Request Create Mission Image Path")
+Rel(auth_middleware, bengkel, "3.Request Create Mission Image Path")
+
+Rel(bengkel, createImagePath, "4. Request Create Mission Image Path")
+
+Rel(createImagePath, upload, "5. Upload Image to Cloudinary")
+Rel(createImagePath, update, "7. Request Update Mission data")
+
+Rel_L(upload, Cloudinary, "6. Retrieve Mission detail data")
+Rel(update, database, "8. Update Mission data")
+
+@enduml

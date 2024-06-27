@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title readById Business Moadmin API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "readById Business Moadmin API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(Business, "Business Controller", "Controller | NodeJs", "Controller for Business Function related\n(NodeJs Bengkel API)")
+
+    Component(readById, "readById", "Function | NodeJs", "Function for Read by ID Business data\n(NodeJs Bengkel API)")
+    Component(getById, "Business.getById", "Function | NodeJs", "Function for Get By ID Business data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Read by ID Business dataa")
+Rel(auth_middleware, Business, "2. Request Read by ID Business data")
+Rel(Business, readById, "3. Request Read by ID Business data")
+Rel(readById, getById, "4. Request Get By ID Business data")
+Rel(getById, database, "5. Get By ID Business data")
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getTierByMissionId API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getTierByMissionId API\n[Component]"){
+    Component(auth_middleware, "auth.decoded", "Middleware | NodeJs", "Authentication Middleware for Decode Token\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Controller", "Controller | NodeJs", "Controller for Mission  Function related\n(NodeJs Bengkel API)")
+
+    Component(getTierByMissionId, "getTierByMissionId", "Function | NodeJs", "Function for Get Tier by Mission ID\n(NodeJs Bengkel API)")
+    Component(details, "Mission.details", "Function | NodeJs", "Function for Retrieve Mission detail data\n(NodeJs Bengkel API)")
+    Component(mapMissionTier, "Mission.mapMissionTier", "Function | NodeJs", "Function for Map Mission tier data\n(NodeJs Bengkel API)")    
+    Component(tierMission, "Mission.tierMission", "Function | NodeJs", "Function for Get Tier Mission list data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Decode Token")
+Rel(auth_middleware, bengkel, "2. Request Get Tier data by Mission ID")
+
+Rel(bengkel, getTierByMissionId, "3.Request Get Tier data by Mission ID")
+Rel(getTierByMissionId, details, "4. Request Mission Detail data")
+Rel(getTierByMissionId, mapMissionTier, "6. Request Get List Mission")
+Rel(getTierByMissionId, tierMission, "8. Request Get Tier Mission list data")
+
+Rel(details, database, "5. Find Mission data")
+Rel(mapMissionTier, database, "7. Map Mission tier data")
+Rel(tierMission, database, "9. Get Tier Mission list data")
+@enduml

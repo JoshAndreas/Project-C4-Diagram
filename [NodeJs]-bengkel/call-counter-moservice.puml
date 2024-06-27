@@ -2,10 +2,10 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
-title Call Counter API\n[NodeJs Bengkel API]
+title Call Counter Moservices API\n[NodeJs Bengkel API]
 
 Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
-Boundary(api, "Call Counter API\n[Component]"){
+Boundary(api, "Call Counter Moservices  API\n[Component]"){
     Component(callCounter, "Call Counter Controller", "Controller | NodeJs", "Controller for Call Counter Function related\n(NodeJs Bengkel API)")
     Component(read, "read", "Function | NodeJs", "Function for Read Call Counter data\n(NodeJs Bengkel API)")
     Component(getCounterCall, "Bengkel.getCounterCall", "Function | NodeJs", "Function for Get Counter Call data\n(NodeJs Bengkel API)")

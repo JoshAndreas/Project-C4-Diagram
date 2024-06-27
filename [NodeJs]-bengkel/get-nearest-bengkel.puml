@@ -2,10 +2,10 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 LAYOUT_WITH_LEGEND()
-title getNearestBengkel Bengkel API\n[NodeJs Bengkel API]
+title getNearestBengkel API\n[NodeJs Bengkel API]
 
 Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
-Boundary(api, "getNearestBengkel Bengkel API\n[Component]"){
+Boundary(api, "getNearestBengkel API\n[Component]"){
     Component(bengkel, "Bengkel Filter Controller", "Controller | NodeJs", "Controller for Bengkel Filter Function related\n(NodeJs Bengkel API)")
 
     Component(getNearestBengkel, "getNearestBengkel", "Function | NodeJs", "Function for Get Nearest bengkel data\n(NodeJs Bengkel API)")

@@ -1,0 +1,27 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deletedMission API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "deletedMission API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Controller", "Controller | NodeJs", "Controller for Mission  Function related\n(NodeJs Bengkel API)")
+
+    Component(deletedMission, "deletedMission", "Function | NodeJs", "Function for Delete Mission data\n(NodeJs Bengkel API)")
+    Component(details, "Mission.details", "Function | NodeJs", "Function for Retrieve Mission detail data\n(NodeJs Bengkel API)")
+    Component(update, "Mission.update", "Function | NodeJs", "Function for Update Mission data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Verification")
+Rel(auth_middleware, bengkel, "2. Request Delete Mission data")
+Rel(bengkel, deletedMission, "3.Request Delete Mission data")
+Rel(deletedMission, details, "4. Request Retrieve Tier Mission Detail data")
+Rel(deletedMission, update, "6. Request Update Mission data")
+
+Rel(details, database, "5. Retrieve Tier Mission Detail data")
+Rel(update, database, "7. Update Mission data")
+@enduml

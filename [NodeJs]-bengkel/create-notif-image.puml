@@ -1,0 +1,40 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title createNotifImage API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "createNotifImage API\n[Component]"){
+    Component(multer_middleware, "multerMiddleware", "Middleware | NodeJs", "Middleware for Upload File")
+
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Notifikasi Controller", "Controller | NodeJs", "Controller for Notifikasi Function related\n(NodeJs Bengkel API)")
+
+    Component(createNotifImage, "createNotifImage", "Function | NodeJs", "Function for Create Notification Image data\n(NodeJs Bengkel API)")
+    Component(getDetailNew, "Notifikasi.getDetailNew", "Function | NodeJs", "Function for Get Notification detail data\n(NodeJs Bengkel API)")
+    Component(upload, "cloudinary.uploader.upload", "Function | NodeJs", "Function for Upload Image to Cloudinary\n(NodeJs Bengkel API)")
+    Component(updateNew, "Notifikasi.updateNew", "Function | NodeJs", "Function for Update Notification data\n(NodeJs Bengkel API)")
+}
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for Store Image data")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, multer_middleware, "1. Set Up Storage")
+
+Rel(multer_middleware, auth_middleware, "2. Request Create Notification Image data")
+Rel(auth_middleware, bengkel, "3. Request Create Notification Image data")
+Rel(bengkel, createNotifImage, "4. Request Create Notification Image data")
+
+Rel(createNotifImage, getDetailNew, "5. Request Get Notification detail data")
+Rel(createNotifImage, upload, "7. Request Upload Image to Cloudinary")
+Rel(createNotifImage, updateNew, "9. Request Update Notification data")
+
+Rel_L(upload, Cloudinary, "8. Upload Image to Cloudinary")
+
+Rel(getDetailNew, database, "6. Get Notification detail data")
+
+Rel(updateNew, database, "10. Update Notification data")
+
+@enduml

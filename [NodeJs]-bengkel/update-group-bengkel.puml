@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title update Group Bengkel API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "update Group Bengkel API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Group Bengkel Controller", "Controller | NodeJs", "Controller for Group Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(update, "update", "Function | NodeJs", "Function for Update Group bengkel data Moadmin\n(NodeJs Bengkel API)")
+    Component(updates, "GroupBengkel.updates", "Function | NodeJs", "Function for Update Group bengkel data Moadmin if there is mapping data\n(NodeJs Bengkel API)")
+    Component(updated, "GroupBengkel.update", "Function | NodeJs", "Function for Update Group bengkel data Moadmin if there is no mapping data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Update Group bengkel data Moadmin")
+Rel(auth_middleware, bengkel, "2. Request Update Group bengkel data Moadmin")
+Rel(bengkel, update, "3. Request Update Group bengkel data Moadmin")
+
+Rel(update, updates, "4. If there is (data.mapping_data), Update Group bengkel data Moadmin")
+Rel(update, updated, "4. Else, Update Group bengkel data Moadmin")
+
+Rel(updates, database, "4. If there is (data.mapping_data), Update Group bengkel data Moadmin")
+Rel(updated, database, "4. Else, Update Group bengkel data Moadmin")
+
+@enduml

@@ -1,0 +1,50 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title updateMissionRegistration API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "updateMissionRegistration API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Registration Controller", "Controller | NodeJs", "Controller for Mission Registration Function related\n(NodeJs Bengkel API)")
+    Component(updateMissionRegistration, "updateMissionRegistration", "Function | NodeJs", "Function for Update Mission Registration data\n(NodeJs Bengkel API)")
+    Component(findOne, "MapMissionBengkel.findOne", "Function | NodeJs", "Function for Find Mission bengkel data\n(NodeJs Bengkel API)")
+    Component(findById, "Mission.findById", "Function | NodeJs", "Function for Find Mission data by ID\n(NodeJs Bengkel API)")
+    Component(update, "MapMissionBengkel.update", "Function | NodeJs", "Function for Update Mission data\n(NodeJs Bengkel API)")
+
+    Component(sendNotif, "sendNotif", "Function | NodeJs", "Function for Send Notification\n(NodeJs Bengkel API)")
+    Component(getUserListByBengkel, "getUserListByBengkel", "Function | NodeJs", "Function for Get User list by Bengkel\n(NodeJs Bengkel API)")
+    Component(insertMapNotifikasiUser, "insertMapNotifikasiUser", "Function | NodeJs", "Function for Insert Map Notifikasi User\n(NodeJs Bengkel API)")
+    Component(getFCMListByBengkelAndUser, "getFCMListByBengkelAndUser", "Function | NodeJs", "Function for Get FCM List by Bengkel and User\n(NodeJs Bengkel API)")
+
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+AddProperty("URL", "/fcm/send")
+AddProperty("Service", "Notification Service")
+Component(send, "Notification.send", "Function | NodeJs", "Function for Send Notification")
+
+
+Rel(Web_Moservice, auth_middleware, "1. Request Update Mission Registration data")
+Rel(auth_middleware, bengkel, "2. Request Update Mission Registration data")
+ 
+Rel(bengkel, updateMissionRegistration, "3.Request Update Mission Registration data")
+Rel(updateMissionRegistration, findOne, "4. Request Find Mission bengkel data")
+Rel(updateMissionRegistration, findById, "6. Request Find Mission data by ID")
+Rel(updateMissionRegistration, update, "8. Request Update Mission data")
+Rel_R(updateMissionRegistration, sendNotif, "10. Request Send Notif")
+
+Rel(sendNotif, getUserListByBengkel, "11. Request Get User list by Bengkel")
+Rel(sendNotif, insertMapNotifikasiUser, "13. Request Insert Map Notifikasi User")
+Rel(sendNotif, getFCMListByBengkelAndUser, "15. Request Get FCM List by Bengkel and User")
+Rel(sendNotif, send, "17. Send Notif")
+
+Rel(findOne, database, "5. Find Mission bengkel data")
+Rel(findById, database, "7. Find Mission data by ID")
+Rel(update, database, "9. Update Mission data")
+
+Rel(getUserListByBengkel, database, "12. Get User list by Bengkel")
+Rel(insertMapNotifikasiUser, database, "14. Insert Map Notifikasi User")
+Rel(getFCMListByBengkelAndUser, database, "16. Get FCM List by Bengkel and User")
+@enduml

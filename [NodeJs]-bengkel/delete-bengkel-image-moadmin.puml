@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteBengkelImages Moadmin API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "deleteBengkelImages Moadmin API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Bengkel Controller", "Controller | NodeJs", "Controller for Bengkel Function related\n(NodeJs Bengkel API)")
+    Component(deleteBengkelImages, "deleteBengkelImages", "Function | NodeJs", "Function for Delete bengkel Image data\n(NodeJs Bengkel API)")
+    Component(findImageBengkels, "Bengkel.findImageBengkels", "Function | NodeJs", "Function for Find Image Bengkel\n(NodeJs Bengkel API)")
+    Component(destroy, "cloudinary.uploader.destroy", "Function | NodeJs", "Function for Remove image from Cloudinary\n(NodeJs Bengkel API)")
+    Component(deleteImages, "Bengkel.deleteImages", "Function | NodeJs", "Function for Delete Image Bengkel\n(NodeJs Bengkel API)")
+
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+AddProperty("URL", "https://res.cloudinary.com/adiramoservice/q_auto,f_auto/v1/${cloudinaryPath}")
+System_Ext(Cloudinary, "Cloudinary", "External System for Store Image data")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Delete bengkel Image data")
+Rel(auth_middleware, bengkel, "2. Request Delete bengkel Image data")
+
+Rel(bengkel, deleteBengkelImages, "3. Request Delete bengkel Image data")
+Rel(deleteBengkelImages, findImageBengkels, "4. Request Find Image Bengkel")
+Rel(deleteBengkelImages, destroy, "8. Request Remove image from Cloudinary")
+Rel(deleteBengkelImages, deleteImages, "6. Request Delete Image Bengkel")
+
+Rel(findImageBengkels, database, "5. Find Image Bengkel data")
+Rel_L(destroy, Cloudinary, "9. Remove image from Cloudinary")
+Rel(deleteImages, database, "7. Delete Image Bengkel data")
+
+@enduml

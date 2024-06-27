@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getFcmList Notification API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getFcmList Notification API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Notifikasi Controller", "Controller | NodeJs", "Controller for Notifikasi Function related\n(NodeJs Bengkel API)")
+
+    Component(getFcmList, "Notifikasi.getFcmList", "Function | NodeJs", "Function for Get FCM List\n(NodeJs Bengkel API)")
+    Component(insertMapNotifikasiUser, "Notifikasi.insertMapNotifikasiUser", "Function | NodeJs", "Function for Insert Map Notifikasi User\n(NodeJs Bengkel API)")
+    Component(delete_inactive_device, "Notifikasi.delete_inactive_device", "Function | NodeJs", "Function for Delete Inactive Device\n(NodeJs Bengkel API)")
+}
+AddProperty("URL", "/fcm/send")
+AddProperty("Service", "Notification Service")
+Component(send, "sendNotification.send", "Function | NodeJs", "Function for Send Notification\n(NodeJs Bengkel API)")
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get FCM List")
+Rel(auth_middleware, bengkel, "2. Request Get FCM List")
+Rel(bengkel, getFcmList, "3. Request Get FCM List")
+
+Rel(getFcmList, insertMapNotifikasiUser, "4. Request Insert Map Notifikasi User data")
+Rel(getFcmList, send, "6. Send Notification")
+Rel(getFcmList, delete_inactive_device, "7. Request Delete Inactive Device")
+
+
+Rel(insertMapNotifikasiUser, database, "5. Insert Map Notifikasi User data")
+Rel(delete_inactive_device, database, "8. Delete Inactive Device")
+
+@enduml

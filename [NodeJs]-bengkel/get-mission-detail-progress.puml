@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getMissionDetailProgress API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getMissionDetailProgress API\n[Component]"){
+    Component(auth_middleware, "auth.decoded", "Middleware | NodeJs", "Authentication Middleware for Decode Token\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Controller", "Controller | NodeJs", "Controller for Mission  Function related\n(NodeJs Bengkel API)")
+
+    Component(getMissionDetailProgress, "getMissionDetailProgress", "Function | NodeJs", "Function for Get Mission detail Progress data\n(NodeJs Bengkel API)")
+    Component(findOne, "Mission.findOne", "Function | NodeJs", "Function for Find Mission data\n(NodeJs Bengkel API)")
+    Component(mapMissionTier, "Mission.mapMissionTier", "Function | NodeJs", "Function for Map Mission tier data\n(NodeJs Bengkel API)")    
+    Component(mapMissionBengkel, "Mission.mapMissionBengkel", "Function | NodeJs", "Function for Map Mission bengkel data\n(NodeJs Bengkel API)")
+    Component(tierMission, "Mission.tierMission", "Function | NodeJs", "Function for Get Tier Mission list data\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Decode Token")
+Rel(auth_middleware, bengkel, "2. Request Get Mission detail Progress data")
+
+Rel(bengkel, getMissionDetailProgress, "3.Request Get Mission detail Progress data")
+Rel(getMissionDetailProgress, findOne, "4. Request Find Mission data")
+Rel(getMissionDetailProgress, mapMissionTier, "6. Else, Request Get List Mission")
+Rel(getMissionDetailProgress, mapMissionBengkel, "8. Request Count List Mission data")
+Rel(getMissionDetailProgress, tierMission, "10. Request Get Tier Mission list data")
+
+Rel(findOne, database, "5. Find Mission data")
+Rel(mapMissionTier, database, "7. Map Mission tier data")
+Rel(mapMissionBengkel, database, "9. Count List Mission data")
+Rel(tierMission, database, "11. Get Tier Mission list data")
+@enduml

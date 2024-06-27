@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getGroupBengkelsMoadmin API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getGroupBengkelsMoadmin API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Group Bengkel Controller", "Controller | NodeJs", "Controller for Group Bengkel Function related\n(NodeJs Bengkel API)")
+
+    Component(getGroupBengkelsMoadmin, "getGroupBengkelsMoadmin", "Function | NodeJs", "Function for Get Group bengkel data Moadmin\n(NodeJs Bengkel API)")
+    Component(getGroupBengkelsMoadmins, "GroupBengkel.getGroupBengkelsMoadmin", "Function | NodeJs", "Function for Get Group bengkel data Moadmin\n(NodeJs Bengkel API)")
+
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Request Get Group bengkel data Moadmin")
+
+Rel(auth_middleware, bengkel, "2. Request Get Group bengkel data Moadmin")
+Rel(bengkel, getGroupBengkelsMoadmin, "3. Request Get Group bengkel data Moadmin")
+Rel(getGroupBengkelsMoadmin, getGroupBengkelsMoadmins, "4. Get Group bengkel data Moadmin")
+Rel(getGroupBengkelsMoadmins, database, "5. Get Group bengkel data Moadmin")
+
+@enduml

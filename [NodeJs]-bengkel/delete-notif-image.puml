@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title deleteNotifImage API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "deleteNotifImage API\n[Component]"){
+
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification")
+    Component(bengkel, "Notifikasi Controller", "Controller | NodeJs", "Controller for Notifikasi Function related\n(NodeJs Bengkel API)")
+
+    Component(deleteNotifImage, "deleteNotifImage", "Function | NodeJs", "Function for Delete Notification Image data\n(NodeJs Bengkel API)")
+    Component(getDetailNew, "Notifikasi.getDetail", "Function | NodeJs", "Function for Get Notification detail data\n(NodeJs Bengkel API)")
+    Component(updateNew, "Notifikasi.update", "Function | NodeJs", "Function for Update Notification data\n(NodeJs Bengkel API)")
+}
+
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+
+Rel(Web_Moservice, auth_middleware, "1. Request Delete Notification Image data")
+Rel(auth_middleware, bengkel, "2. Request Delete Notification Image data")
+Rel(bengkel, deleteNotifImage, "3. Request Delete Notification Image data")
+
+Rel(deleteNotifImage, getDetailNew, "4. Request Get Notification detail data")
+Rel(deleteNotifImage, updateNew, "6. Request Update Notification data")
+
+Rel(getDetailNew, database, "5. Get Notification detail data")
+Rel(updateNew, database, "7. Update Notification data")
+
+@enduml

@@ -32,3 +32,4 @@ Rel(findImageFacilityBengkels, database, "5. Find Image Facility Bengkel data")
 Rel_L(destroy, Cloudinary, "9. Remove image from Cloudinary")
 Rel(deleteImages, database, "7. Delete Image Facility Bengkel data")
 
+@enduml

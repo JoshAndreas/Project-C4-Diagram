@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title getListTier API\n[NodeJs Bengkel API]
+
+Container(Web_Moservice, "Web Moservice", "Website | JavaScript", "Moservice.id Main Services for Customer")
+Boundary(api, "getListTier API\n[Component]"){
+    Component(auth_middleware, "auth.verify", "Middleware | NodeJs", "Authentication Middleware for Verification\n(NodeJs Bengkel API)")
+    Component(bengkel, "Mission Controller", "Controller | NodeJs", "Controller for Mission  Function related\n(NodeJs Bengkel API)")
+
+    Component(getListTier, "getListTier", "Function | NodeJs", "Function for Get Tier List data\n(NodeJs Bengkel API)")
+    Component(tierMission, "Mission.tierMission", "Function | NodeJs", "Function for Retrieve Tier Mission list data\n(NodeJs Bengkel API)")
+}
+ContainerDb(database, "Moservice Storage", "mySQL Database", "All store for save data and content for Moservice.id")
+
+Rel(Web_Moservice, auth_middleware, "1. Verification")
+Rel(auth_middleware, bengkel, "2. Request Retrieve Tier Mission list data")
+Rel(bengkel, getListTier, "3.Request Retrieve Tier Mission list data")
+Rel(getListTier, tierMission, "4. Retrieve Tier Mission list data")
+Rel(tierMission, database, "5. Retrieve Tier Mission list data")
+
+
+@enduml
