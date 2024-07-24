@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Download Ikhtisar by Contract Number\n (api/v1/ikhtisar/download-ikhtisar-byContractNo)
+AddProperty("URL", "/api/v1/ecm/list-documents-ecm")
+AddProperty("Repository", "ms-support")
+Component(Adiraku, "listDocumentsEcm", "Function | NodeJs")
+
+Boundary(api, "downloadFileIkhtisarDetailContract API\n[Component]") {
+    AddProperty("Path", "ms-insurance\api\v1\ikhtisar\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Ikhtisar Related Function")
+
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+    Component(downloadFileIkhtisarDetailContract, "downloadFileIkhtisarDetailContract", "Function | NodeJs", "Function for Download File Ikhtisar Detail by Contract Number")
+}
+
+ContainerDb(database, "Adiraku Storage", "Database | mySql", "DocIkhtisar")
+Rel(Adiraku, verifyTokenV2, "1. Verify Token")
+
+Rel(verifyTokenV2, controller, "2. Request Download File Ikhtisar Detail by Contract Number")
+Rel(controller, downloadFileIkhtisarDetailContract, "3. Request Download File Ikhtisar Detail by Contract Number")
+Rel(downloadFileIkhtisarDetailContract, database, "4. Check Table Document Ikhtisar")
+
+
+SHOW_LEGEND()
+
+@enduml

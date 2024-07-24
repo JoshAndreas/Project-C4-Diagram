@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Send and Download Ikhtisar By Mail\n (api/v1/ikhtisar/send-email-ikhtisar-file)
+
+Container(Adiraku, "Adiraku App", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(api, "Send and Download Ikhtisar By Mail API\n[Component]") {
+	AddProperty("Path", "ms-insurance\api\v1\ikhtisar\controller.js")
+	Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Ikhtisar Related Function")
+	Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")    
+	Component(sendAndDownloadIkhtisarByMail, "sendAndDownloadIkhtisarByMail", "Function | NodeJs", "Function for Send and Download Ikhtisar By Mail")
+	Component(sendGridMailer, "sendGridMailer", "Function | NodeJs", "Function for Send Email")
+	Component(sendMail, "sendMail", "Function | NodeJs", "Function for Send Email")
+}
+
+ContainerDb(database, "Adiraku Storage", "Redis", "Redis data")
+Rel(Adiraku, verifyTokenV2, "1. Verify Token")
+
+Rel(verifyTokenV2, controller, "2. Request Send and Download Ikhtisar By Mail")
+Rel(controller, sendAndDownloadIkhtisarByMail, "3. Request Send and Download Ikhtisar By Mail")
+Rel_R(sendAndDownloadIkhtisarByMail, database, "4. Retrieve DocIkhtisar data")
+Rel(sendAndDownloadIkhtisarByMail, sendGridMailer, "5. Request Send Email")
+Rel(sendGridMailer, sendMail, "6. Send Email")
+
+SHOW_LEGEND()
+
+@enduml

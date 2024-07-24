@@ -1,0 +1,26 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Update OTP Same Device API (/api/v1/auth/update-otp-same-device)
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/find-mobile-number-login")
+Container(findMobileNumberLogin, "Find Mobile Number Login API", "Microservices | NodeJs", "API Check Mobile Number")
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/find-mobile-number-v2")
+Container(findMobileNumberV2, "Find Mobile Number V2 API", "Microservices | NodeJs", "API Check Mobile Number for Register")
+
+System_Boundary(referralStatusAPI, "Referral Status API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+Rel(findMobileNumberLogin, controller, "1. API Call [JSON/HTTPS]")
+Rel(findMobileNumberV2, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, database, "2. Update data")
+
+SHOW_LEGEND()
+
+@enduml

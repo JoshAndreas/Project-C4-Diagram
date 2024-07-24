@@ -1,0 +1,38 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+
+title Component Diagram for Notif / Activity from Loyalty\n (/api/v1/activity/info-reward)
+
+Boundary(api, "lastLocation API\n[Component]"){
+AddProperty("URL", "process.env.MS_AUTH_URL + '/channel/token/verify'")
+AddProperty("Repository", "ms-auth")
+Component(verifyChannelBearerToken, "verifyChannelBearerToken", "Middleware | NodeJs", "Middleware for Verify Channel Bearer Token")
+
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(infoReward, "infoReward", "Function | NodeJs", "Function for Retrieve Info Reward data")
+    Component(mainPathFirestore, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity/data-activity`")
+    Component(sendActivity, "sendActivity", "Function | NodeJs", "Function for Send Activity")  
+}
+
+AddProperty("URL", "process.env.MS_ACCOUNT_BASE_URL + '/account/get-account-by'")
+AddProperty("Repository", "ms-account")
+Component(getAccountBy, "getAccountBy", "Function | NodeJs", "Function for Get Account")
+
+AddProperty("URL", "api/v1/notification-insider/request-notification")
+AddProperty("Repository", "ms-notification")
+Component(requestPushNotification, "requestPushNotification", "Function | NodeJs", "Function for Request Push Notification")
+
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrActivity")
+
+Rel(verifyChannelBearerToken, controller, "2. Request Retrieve Info Reward data")
+Rel(controller, infoReward, "3. Request Retrieve Info Reward data")
+Rel(infoReward, getAccountBy, "4. Get Account data")
+Rel(infoReward, database, "5. Create AdrActivity data")
+Rel(infoReward, mainPathFirestore, "6. Define Main Path Firestore")
+Rel(infoReward, sendActivity, "7. Send AdrActivity data")
+Rel(infoReward, requestPushNotification, "8. Push Notification Info Reward")

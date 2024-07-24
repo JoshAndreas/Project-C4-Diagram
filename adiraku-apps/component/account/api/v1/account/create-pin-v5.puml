@@ -1,0 +1,81 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Create PIN
+
+LAYOUT_LANDSCAPE()
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/pin-v4")
+Component(createOrValidatePINAPI, "Create or Validate PIN API", "Microservices | NodeJS", "Create or Validate PIN Adiraku")
+
+System_Boundary(createPinV5, "Create Pin V5 API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(getLastBPNo, "Get Last BP", "function", "Function to get last BP number")
+    Boundary(pointFirstLogin, "Earning Point First Login"){
+        Component(checkingActivities, "Checking Activities", "function", "Process to get point after register adiraku")
+        AddProperty("messaging", "RabbitMQ")
+        AddProperty("queue", "log_activity")
+        Component(logActivityQueue, "Log Activity Queue", "Microservices | Broker", "Messaging log activity")
+    }
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account, adr_account_history, adr_va, adr_account_sap, adr_sequence")
+
+AddProperty("url", "/api/i5/aol/v1/inquiryMobileKtpNew")
+System_Ext(inquiryMobileKTPNewAPI, "ESB API", "Inquiry Mobile KTP API V2")
+
+
+Rel(createOrValidatePINAPI, controller, 1. API Call [JSON/HTTPS])
+Rel(controller, database, 2. Read data adr_account, where condition mobile number)
+
+'If data adr_account exists
+Rel(controller, inquiryMobileKTPNewAPI, 3.Inquiry mobile number, if data adr_account exists and pin = null)
+Rel(controller, database, 4. update data adr_account, if data adr_account exists and pin = null)
+Rel(controller, database, 5. insert data adr_account_history, if data adr_account exists and pin = null)
+
+'If data adr_account not exists
+AddProperty("url", "/api/aol/v1/submitInboundSap")
+System_Ext(sapAPI, "ESB API", "Outbound SAP")
+
+Rel(controller, inquiryMobileKTPNewAPI, 3.Inquiry mobile number, if data adr_account not exists)
+Rel(controller, getLastBPNo, 4. Get last BP no, if data adr_account not exists)
+Rel(getLastBPNo, database, 5. Read latest BP no, if data adr_account not exists)
+Rel(controller, database, 6. Create data adr_account, if data adr_account not exists)
+Rel(controller, database, 7. insert data adr_account_history, if data adr_account not exists)
+Rel(controller, database, 8. update adr_va, if data adr_account not exists)
+Rel(controller, database, 9. insert data adr_account_sap, if data adr_account not exists)
+Rel(controller, database, 10. update adr_sequence, if data adr_account not exists)
+Rel(controller, sapAPI, 11. submit outbound sap API, if data adr_account not exists)
+
+'If submit outbound sap success
+Rel(controller, database, 12. update request_number adr_account_sap, if submit outbound success)
+Rel(controller, database, 13. create adr_account_history, if submit outbound success)
+Rel(controller, database, 14. create bp_no adr_account, if submit outbound success)
+
+'If submit outbound sap failed
+Rel(controller, database, 10. update respon & respon_code adr_account_sap, if submit outbound failed)
+
+AddProperty("repository", "ms-loyalty")
+AddProperty("url", "/checking-activities/:key/:value1/:value2")
+Component(checkingActivitiesLoyalty, "Checking Activities API", "Checking Activities API")
+
+AddProperty("repository", "ms-activity")
+AddProperty("url", "/api/v1/referalnumber")
+Component(referalNumberAPI, "Referal Number API", "Microservices | NodeJS", "API for insert data referal")
+
+AddProperty("repository", "ms-loyalty")
+AddProperty("url", "/api/v1/formulaEvent")
+Component(formulaEventAPI, "Formula Event API", "Microservices | NodeJS", "API for earning point")
+
+Rel(controller, checkingActivities, 15. process get point)
+Rel(checkingActivities, checkingActivitiesLoyalty, 16. check event)
+Rel(checkingActivities, referalNumberAPI, 17. Insert data)
+Rel(checkingActivities, formulaEventAPI, 18. Earning Point)
+Rel(checkingActivities, logActivityQueue, 19. Send Log)
+
+
+
+
+SHOW_LEGEND()
+@enduml

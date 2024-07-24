@@ -1,0 +1,87 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Credit Application Process\n (api/v1/creditapplication/)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(api, "credit_application API\n[Component]"){
+    AddProperty("URL", "process.env.MS_SUPPORT_URL + '/syspref/maintenance/' + page")
+    AddProperty("Repository", "ms-support")
+    Component(pageMode, "utils.pageMode", "Middleware | NodeJs", "Middleware for Check Maintenance Mode")
+    Component(verifyTokenCreditApp, "utils.verifyTokenCreditApp", "Middleware | NodeJs", "Middleware for Verify token credit App")
+
+    AddProperty("Path", "ms-activity\api\v1\creditapplication\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Credit Application Related Function")
+
+    Component(credit_application, "credit_application", "Function | NodeJs", "Function for Credit Application Process")
+    Component(kafkaProducer, "utils.kafkaProducer", "Function | NodeJs", "Function for Send Message to Kafka")
+
+Boundary(Nasabah, "Nasabah Process"){
+    Component(mainPathFirestore, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity/data-activity`")
+    Component(sendActivity, "sendActivity", "Function | NodeJs", "Function for Send Activity")
+    Component(sendGridMailer, "mailer.sendGridMailer", "Function | NodeJs", "Function for Send Email")
+}
+Boundary(Prospect, "Prospect Process"){
+    Component(mainPathFirestores, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity-prospect/data-activity-prospect`")
+    Component(sendActivitys, "sendActivity", "Function | NodeJs", "Function for Send Activity")
+    Component(sendGridMailers, "mailer.sendGridMailer", "Function | NodeJs", "Function for Send Email")
+}
+}
+
+AddProperty("URL", "/api/v1/auth/find-mobile-number-v2")
+AddProperty("Repository", "MS-Authentication")
+Component(findMobileNumberV2API, "findMobileNumberV2API", "Function | NodeJS", "Function for Find Mobile Number")
+
+AddProperty("URL", "/api/v1/create-profile-prospect")
+AddProperty("Repository", "MS-loyalty")
+Component(createProfileProspect, "createProfileProspect", "Function | NodeJS", "Function for Create Profile Prospect")
+
+AddProperty("URL", "process.env.MS_ACCOUNT_BASE_URL + '/account/get-account-by")
+AddProperty("Repository", "ms-account")
+Component(getAccountBy, "getAccountBy", "Function | NodeJs", "Function for Get Account")
+
+AddProperty("URL", "${process.env.AOL_API_BASE_URL}/api/i5/telecenter/v1/InsertNewLeadtoStaging")
+Component(esb, "esb", "Service", "ESB Services")
+
+AddProperty("URL", "process.env.MS_MARKETING_URL + '/referral-engine/submit-pengajuan-application'")
+AddProperty("Repository", "ms-marketing")
+Component(submitPengajuanAppl, "submitPengajuanAppl", "Function | NodeJs", "Function for Submit Pengajuan Application")
+
+ComponentDb(database, "Adiraku Storage Nasabah", "mysql database", "AdrCreditApplication,\n AdrActivity,\n AdrAccount,\n AdrActivityProspect,\n Profile,\n, AdrKcusProvince,\n AdrSequence")
+
+Lay_D(database, Prospect)
+
+Rel(adirakuAPP, pageMode, "1. API CALL, Check Maintenance Mode")
+Rel(pageMode, verifyTokenCreditApp, "2. Verify token credit App")
+Rel(verifyTokenCreditApp, controller, "3. Request Credit Application")
+Rel(controller, credit_application, "4. Request Credit Application")
+Rel_R(credit_application, database, "5. Get AdrCreditApplication data")
+Rel_R(credit_application, database, "6. If Nasabah, Create AdrActivity data")
+Rel(credit_application, mainPathFirestore, "7. Define Main Path Firestore")
+Rel(credit_application, sendActivity, "8. Send Activity")
+Rel_R(credit_application, database, "9. checkingEmail AdrAccount data")
+Rel(credit_application, sendGridMailer, "10. Send Email to Nasabah")
+
+Rel(credit_application, mainPathFirestores, "6. If Prospect, Define Main Path Firestore")
+Rel(credit_application, sendActivitys, "7. Send Activity")
+Rel_R(credit_application, database, "8. Create AdrActivityProspect data")
+Rel_R(credit_application, database, "9. checkingEmail Profile data")
+Rel(credit_application, sendGridMailers, "10. Send Email to Nasabah")
+
+Rel_R(credit_application, database, "11. Find AdrKcusProvince data")
+Rel_R(credit_application, database, "12. Find AdrSequence data")
+Rel_R(credit_application, database, "13. Create AdrCreditApplication data")
+Rel_R(credit_application, database, "14. Update AdrSequence data")
+Rel(credit_application, findMobileNumberV2API, "15. Find Mobile Number data")
+Rel(credit_application, createProfileProspect, "16. if (e.response.data.err_code === '03017'),\n Create Profile Prospect")
+Rel(credit_application, getAccountBy, "17. if (account_id && statusNasabah == 'nasabah'),\n Get Account Data")
+Rel(credit_application, esb, "18. if (process.env.APITELECENTER == 'true'),\n Retrieve dataEsb")
+Rel(credit_application, submitPengajuanAppl, "19. if(!await formatData.isEmpty(referral_code)),\n Submit Pengajuan Application")
+Rel(credit_application, database, "20. Create AdrTeleIntegration data")
+Rel_R(credit_application, kafkaProducer, "21. Send Message to Kafka")
+
+@enduml

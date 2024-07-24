@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get details Micro Insurance data\n (api/v1/micro-insurance/get-details)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(orderMicroInsuranceHistory)")
+Boundary(api, "Get Details API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+
+
+    Component(getDetails, "getDetails", "Function | NodeJs", "Function for Get Detail Micro Insurance data")
+    Component(AdrPembelianMicroInsurance, "AdrPembelianMicroInsurance.update", "Function | NodeJs", "Function for Update AdrPembelianMicroInsurance data")
+
+}    
+    AddProperty("URL", "process.env.URL_AUTOCILIN_V2 + `api/v1/claim/track?apiKey=${process.env.API_KEY_AUTOCILIN}&ticketNo=${noticket}`")
+    AddProperty("Service", "autocilin")
+    Component_Ext(trackingClaim, "autocilin.trackingClaim", "Function | NodeJs", "Function for Tracking Claim data")
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrPembelianMicroInsurance,\nAdrKeepCashback")
+
+Rel(adiraku, verifyTokenV2, "1. Verify Token Admin Panel")
+Rel(verifyTokenV2, controller, "2. Verify Token Admin Panel")
+Rel(controller, getDetails, "3. Request Admin Delete Product data")
+Rel(getDetails, database, "4. Find all\n(AdrPembelianMicroInsurance)\ndata")
+Rel(getDetails, database, "5. Find detailCashback\n(AdrKeepCashback)\ndata")
+
+
+Rel_R(getDetails, trackingClaim, "6. Tracking Claim data")
+Rel_L(getDetails, AdrPembelianMicroInsurance, "7. Request Update AdrPembelianMicroInsurance data")
+Rel(AdrPembelianMicroInsurance, database, "8. Update AdrPembelianMicroInsurance data")

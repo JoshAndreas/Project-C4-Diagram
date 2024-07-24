@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Get IP Info API (/api/v1/ipinfo/)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(referralStatusAPI, "Referral Status API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+AddProperty("vendor", "Firebase")
+AddProperty("url", "/v1/projects/adiraku-xxxxx/remoteConfig")
+Container_Ext(firebaseURL, "Firebase Remote Config API", "Software System")
+
+Rel(adirakuAPP, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, firebaseURL, "2. Get config data")
+
+SHOW_LEGEND()
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Generate OTP Vdata API (/api/v1/auth/generate-otp-vdata)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(generateOTPAPI, "Generate OTP Vdata API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+System_Ext(generateOTP, "Generate OTP", "Library")
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+AddProperty("Vendor", "Infobip")
+AddProperty("url", "/sms/2/text/single")
+Container_Ext(infobipSMS, "INFOBIP SMS API", "API system", "External API for send SMS.")
+
+AddProperty("Vendor", "Infobip")
+AddProperty("url", "/whatsapp/1/message/template")
+Container_Ext(infobipWA, "INFOBIP WA API", "API system", "External API for send WA.")
+
+Rel(adirakuAPP, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, generateOTP, "2. Generate OTP")
+Rel(generateOTP, database, "3. Create / Update data OTP")
+Rel(generateOTP, infobipSMS, "4. If channel SMS, send SMS")
+Rel(generateOTP, infobipWA, "4. If channel WA, send WA")
+
+SHOW_LEGEND()
+@enduml

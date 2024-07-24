@@ -1,0 +1,82 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Adiraku APP API (ms-order)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+    Component(order, "ms-order", "Repository | NodeJs", "Repository for Function Related to Order")
+
+System_Boundary(APIsystem, "API System"){
+Boundary(loyalto, "v1/loyalto"){
+    AddProperty("URL", "/api/v1/loyalto/campaign-convert")
+    Component(campaignConvert, "campaignConvert", "Function | NodeJs", "Function for Convert Campaign")
+
+    AddProperty("URL", "/api/v1/loyalto/campaign-coupon-inquiry/:product_id")
+    Component(campaignCouponInquiry, "campaignCouponInquiry", "Function | NodeJs", "Function for Retrieve Campaign Coupon data by Product ID")
+
+    AddProperty("URL", "/api/v1/loyalto/campaign-convert")
+    Component(campaignDetails, "campaignDetails", "Function | NodeJs", "Function for Retrieve Campaign details")
+
+    AddProperty("URL", "/api/v1/loyalto/harcilnas-convert")
+    Component(harcilnasConvert, "harcilnasConvert", "Function | NodeJs", "Function for Convert Harcilnas")
+
+    AddProperty("URL", "/api/v1/loyalto/harcilnas-leaderboard")
+    Component(harcinasLeadBoard, "harcinasLeadBoard", "Function | NodeJs", "Function for Retrieve Harcilnas Leaderboard data")
+    
+    AddProperty("URL", "/api/v1/loyalto/harcilnas-inquiry")
+    Component(harcilnasINQ, "harcilnasINQ", "Function | NodeJs", "Function for Inquiry Harcilnas data")
+
+    AddProperty("URL", "/harcilnas-get-point-lucky-draw-contract/:oid/:contract/:limit/:offset")
+    Component(hclPointLuckyDrCR, "hclPointLuckyDrCR", "Function | NodeJs", "Function for Retrieve Lucky Draw Harcilnas data (Contract)")
+
+    AddProperty("URL", "/api/v1/loyalto/harcilnas-get-point-lucky-draw/:oid/:limit/:offset")
+    Component(hclPointLuckyDr, "hclPointLuckyDr", "Function | NodeJs", "Function for Retrieve Lucky Draw Point Harcilnas data")
+
+    AddProperty("URL", "/api/v1/loyalto/campaign-product")
+    Component(campaignProduct, "campaignProduct", "Function | NodeJs", "Function for Retrieve Campaign Product data")
+}
+
+    AddProperty("URL", "ms-order\consumer.js")
+    Component(consumeRoutingMQ, "consumeRoutingMQ", "Function | NodeJs", "Function for Consume Routing MQ")
+
+Boundary(loyalto, "v1/oneconnect"){
+    AddProperty("URL", "/api/v1/oneconnect/docompare")
+    Component(doCompare, "doCompare", "Function | NodeJs", "Function for Do compare User Photo data")
+
+    AddProperty("URL", "/api/v1/oneconnect/facerecognition")
+    Component(facerecognition, "facerecognition", "Function | NodeJs", "Function for Face Recognition")
+
+    AddProperty("URL", "/api/v1/oneconnect/OCR")
+    Component(OCR, "OCR", "Function | NodeJs", "Function for OCR")
+}
+}
+ComponentDb(database, "Adiraku Storage", "mysql database, redis", "All store for save data and content")
+Rel(adirakuAPP, order, "Request use Function Related to Order")
+
+Rel(order, campaignConvert, "Request Convert Campaign")
+Rel(order, campaignCouponInquiry, "Request Retrieve Campaign Coupon data by Product ID")
+Rel(order, campaignDetails, "Request Retrieve Campaign details")
+Rel(order, campaignProduct, "Request Retrieve Campaign Product data")
+Rel(order, consumeRoutingMQ, "Request Consume Routing MQ")
+Rel(order, doCompare, "Request Do compare User Photo data")
+Rel(order, facerecognition, "Request Face Recognition")
+Rel(order, harcilnasConvert, "Request Convert Harcilnas")
+Rel(order, harcilnasINQ, "Request Inquiry Harcilnas data")
+Rel(order, hclPointLuckyDrCR, "Request Retrieve Lucky Draw Point Harcilnas data (Contract)")
+Rel(order, hclPointLuckyDr, "Request Retrieve Lucky Draw Point Harcilnas data")
+Rel(order, OCR, "Request OCR")
+Rel(order, harcinasLeadBoard, "Request Retrieve Harcilnas Leaderboard data")
+
+Rel(campaignConvert, database, "Convert Campaign")
+Rel(campaignCouponInquiry, database, "Retrieve Campaign Coupon data by Product ID")
+Rel(campaignDetails, database, "Retrieve Campaign details")
+Rel(campaignProduct, database, "Retrieve Campaign Product data")
+Rel(consumeRoutingMQ, database, "Consume Routing MQ")
+Rel(doCompare, database, "Do compare User Photo data")
+Rel(facerecognition, database, "Face Recognition")
+Rel(harcilnasConvert, database, "Convert Harcilnas")
+Rel(harcilnasINQ, database, "Inquiry Harcilnas data")
+Rel(hclPointLuckyDrCR, database, "Retrieve Lucky Draw Point Harcilnas data (Contract)")
+Rel(hclPointLuckyDr, database, "Retrieve Lucky Draw Point Harcilnas data")
+Rel(OCR, database, "OCR")
+Rel(harcinasLeadBoard, database, "Retrieve Harcilnas Leaderboard data")

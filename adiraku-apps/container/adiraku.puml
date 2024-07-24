@@ -1,0 +1,39 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Container Diagram for Adiraku
+
+Person(user, "Adiraku Customer", "[Member : Nasabah & Prospect] A Customer of the Adira, with personal Adiraku accounts.")
+Person(userBusiness, "Adiraku User", "[Business] A Customer of the Adiraku Admin Panel with personal accounts.")
+
+System_Boundary(adiraku, "Adiraku System") {
+    Container(adirakuAdminPanel, "Adiraku Admin Panel", "Website | Angular", "View menu banner, article, maintenance mode and campagin adiraku")
+    Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+    Container(adirakuAPI, "API System", "Microservices | NodeJS", "All API used by Adiraku")
+    ContainerDb(adirakuDB, "Adiraku Storage", "mysql database, redis", "All store for save data and content")
+}
+
+'Container External
+Container_Ext(esb, "ESB", "software system", "Core system Adira")
+Container_Ext(danamon, "Danamon", "software system", "API service for support Top Up & Withdraw balance")
+Container_Ext(external, "External System", "software system", "External API for send email notification, SMS, WA, etc.")
+
+'Relational Internal
+Rel(userBusiness, adirakuAdminPanel, "Set banner, article, maintenance & campaign Adiraku")
+Rel(user, adirakuAPP, "Topup, Payment & Withdraw")
+Rel(adirakuAdminPanel, adirakuAPI, "Request Data")
+Rel(adirakuAPP, adirakuAPI, "Request Data")
+Rel(adirakuAPI, adirakuDB, "CRUD Request")
+
+'Relational External
+Rel_U(adirakuAPI, danamon, "Withdraw Balance")
+Rel(danamon, adirakuAPI, "Topup Balance")
+
+Rel(adirakuAPI, esb, "Get Data Customer & Payment Installment")
+
+Rel_L(adirakuAPI, external, "Send Notification")
+Rel(external, user, "Send Notification")
+Rel(external, userBusiness, "Send Notification")
+
+SHOW_LEGEND()
+@enduml

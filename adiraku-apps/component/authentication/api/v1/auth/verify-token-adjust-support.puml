@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Verify Token Adjust Support API (/api/v1/auth/verify-token-adjust-support)
+
+'Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(verifyTokenAPI, "Verify Token API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(verify, "Verify Token", "Function", "Verify JWT Token")
+    Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+Rel(controller, verify, "1. Verify data")
+Rel(verify, decrypt, "2. Decrypt data")
+Rel(decrypt, database, "3. Read data")
+
+SHOW_LEGEND()
+@enduml

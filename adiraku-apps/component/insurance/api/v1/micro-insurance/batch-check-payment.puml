@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Batch Checking Payment Micro Insurance\n (api/v1/micro-insurance/batch-checking-payment)
+AddProperty("URL", "api/v1/micro-insurance/controller.js")
+AddProperty("Repository", "ms-batch")
+Component(batchCheckPayment, "batchCheckPayment", "Function | NodeJs", "Batch of Function for Check Payment Micro Insurance")
+
+Boundary(api, "Batchi Checking Micro Insurance API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+
+    Component(batchCheckPayments, "batchCheckPayment", "Function | NodeJs", "Function for Batching Check Payment Micro Insurance")
+
+    Component(findAll, "AdrPembelianMicroInsurance.findAll", "Function | NodeJs", "Function for Find All AdrPembelianMicroInsurance data")
+    AddProperty("URL", "/api/v1/micro-insurance/get-status-payment")
+    AddProperty("Repository", "ms-insurance")
+    Component(getStatusPayment, "getStatusPayment", "Function | NodeJs", "Function for Get Micro Insurance Status Payment")
+
+}    
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrPembelianMicroInsurance, AdrDetailPembelian")
+
+
+Rel(batchCheckPayment, controller, "1. API CALL")
+Rel(controller, batchCheckPayments, "2. Request Check Payment Micro Insurance data")
+Rel(batchCheckPayments, findAll, "3. Request Find all AdrPembelianMicroInsurance data")
+Rel(batchCheckPayments, database, "5. Find (Polis) AdrDetailPembelian data")
+Rel(batchCheckPayments, getStatusPayment, "6. Get Micro Insurance Status Payment")
+
+Rel(findAll, database, "4. Find all AdrPembelianMicroInsurance data")
+
+@enduml

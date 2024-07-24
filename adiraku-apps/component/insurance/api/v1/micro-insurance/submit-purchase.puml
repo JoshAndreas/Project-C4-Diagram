@@ -1,0 +1,66 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Submit Purchase\n (api/v1/micro-insurance/submit-purchase)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(api, "Submit Purchase API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+    Component(submitPurchase, "submitPurchase", "Function | NodeJs", "Function for Submit Purchase data")
+    Component(purchaseValidation, "purchaseValidation", "Function | NodeJs", "Function for Purchase Validation")
+Boundary(apis, "If there is Cashback"){
+    AddProperty("URL", "/gamification/search-referal")
+    AddProperty("Repository", "ms-support")
+    Component(searchRef, "searchRef", "Function | NodeJs", "Function for Search Referal data")
+
+    AddProperty("URL", "/referalnumber/cashback-save")
+    AddProperty("Repository", "ms-activity")
+    Component(cashbackSave, "cashbackSave", "Function | NodeJs", "Function for Cashback Save")
+    Component(create, "AdrKeepCashback.create", "Function | NodeJs", "Function for Create AdrKeepCashback data")
+}
+
+    Component(creates, "AdrPembelianMicroInsurance.create", "Function | NodeJs", "Function for Create AdrPembelianMicroInsurance data")
+    Component(creater, "AdrDetailPembelian.create", "Function | NodeJs", "Function for Create AdrDetailPembelian data")
+
+}
+    AddProperty("URL", "/find-account-by-id")
+    AddProperty("Repository", "ms-account")
+    Component(findAccountByid, "findAccountByid", "Function | NodeJs", "Function for Find Account by ID")
+Boundary(autocilin, "autocilin"){
+    AddProperty("URL", "${process.env.URL_AUTOCILIN}/valencia/v1/authenticate/authtoken")
+    AddProperty("Service", "autocilin")
+    Component_Ext(requestToken, "autocilin.requestToken", "Function | NodeJs", "Function for Request Token Autocilin")
+
+    AddProperty("URL", "process.env.URL_AUTOCILIN + '/valencia/v1/datapool/submit_v2'")
+    AddProperty("Repository", "autocilin")
+    Component_Ext(submitPolicy, "autocilin.submitPolicy", "Function | NodeJs", "Function for Submit Policy Autocilin")
+}
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrMicroProduct,\n AdrPembelianMicroInsurance,\n AdrDetailPembelian")
+Lay_D(cashbackSave, database)
+Lay_D(cashbackSave, database)
+Lay_D(cashbackSave, database)
+Lay_D(searchRef, database)
+Lay_D(searchRef, database)
+Rel(adiraku, verifyTokenV2, "1. Verify Token")
+Rel(verifyTokenV2, controller, "2. Request Submit Purchase data")
+Rel(controller, submitPurchase, "3. Request Submit Purchase data")
+Rel_L(submitPurchase, findAccountByid, "4. if\n(req.type_account == 'contract')\nFind Account data by ID")
+Rel(submitPurchase, database, "5. Find Product details\n(AdrMicroProduct)\ndata")
+Rel(submitPurchase, purchaseValidation, "6. Validate Purchase")
+Rel(submitPurchase, searchRef, "7. If there is Cashback, Search Ref")
+Rel(submitPurchase, cashbackSave, "8. Save Cashback to Ms Activity")
+Rel(submitPurchase, create, "9. Request Create AdrKeepCashback data")
+Rel(create, database, "10. Create AdrKeepCashback data")
+
+Rel(submitPurchase, requestToken, "11. Request Token")
+Rel(submitPurchase, submitPolicy, "12. Submit Policy to Autocilin")
+Rel(submitPurchase, creates, "13. Request Create AdrPembelianMicroInsurance data")
+Rel(creates, database, "14. Create AdrPembelianMicroInsurance data")
+
+Rel(submitPurchase, creater, "15. Request Create AdrDetailPembelian data")
+Rel(creater, database, "16. Create AdrDetailPembelian data, Purchase With Cashback Process done.")
+
+@enduml

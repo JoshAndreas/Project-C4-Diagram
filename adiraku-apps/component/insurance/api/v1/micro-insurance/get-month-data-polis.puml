@@ -1,0 +1,33 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get Monthly data Micro Insurance Polis\n (api/v1/micro-insurance/get-monthdata-polis)
+AddProperty("URL", "api/v1/micro-insurance/controller.js")
+AddProperty("Repository", "ms-batch")
+Component(EOMReconMIData, "EOMReconMIData", "Function | NodeJs", "Batch of Function for Reconing EOM Micro Insurance data")
+
+Boundary(api, "Get Month Data Polis API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+
+    Component(getMonthDataPolis, "getMonthDataPolis", "Function | NodeJs", "Function for Batching status Micro Insurance")
+
+    Component(findAll, "AdrPembelianMicroInsurance.findAll", "Function | NodeJs", "Function for Find All AdrPembelianMicroInsurance data")
+
+    Component(count, "AdrPembelianMicroInsurance.count", "Function | NodeJs", "Function for Count AdrPembelianMicroInsurance data")
+
+}    
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrPembelianMicroInsurance")
+
+
+Rel(EOMReconMIData, controller, "1. Request Get Insurance status payment data")
+Rel(controller, getMonthDataPolis, "2. Request Get Micro Insurance Product data")
+Rel(getMonthDataPolis, findAll, "3. Else, Request Find all AdrPembelianMicroInsurance data")
+Rel(getMonthDataPolis, count, "3. If (count) = Request Count AdrPembelianMicroInsurance data")
+
+Rel(findAll, database, "4. Find all AdrPembelianMicroInsurance data")
+Rel(count, database, "4. Count AdrPembelianMicroInsurance data")
+
+@enduml

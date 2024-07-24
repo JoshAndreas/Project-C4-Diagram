@@ -1,0 +1,27 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Download Manual\n (api/v1/ikhtisar/downloadIkhtisar)
+
+Container(Adiraku, "Adiraku App", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(downloadIkhtisar, "Download Manual API\n[Component]") {
+    AddProperty("Path", "ms-insurance\api\v1\ikhtisar\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Ikhtisar Related Function")
+    Component(downloadManual, "downloadManual", "Function | NodeJs", "Function for Download Manual")
+    Component(downloadIkhtisarV2, "downloadIkhtisarV2", "Function | NodeJs", "Function for Download Manual V2")
+    Component(generatePDF, "utils.generatePDF", "Function | NodeJs", "Function for Generate PDF File")
+
+}
+
+ContainerDb(database, "Adiraku Storage", "Redis", "Redis data")
+
+Rel(Adiraku, controller, "1. Request Download Manual")
+Rel(controller, downloadManual, "2. Request Download Manual")
+Rel(downloadManual, downloadIkhtisarV2, "3. Request Download Manual")
+Rel_R(downloadIkhtisarV2, database, "4. Retrieve Redis data")
+Rel(downloadIkhtisarV2, generatePDF, "5. Generate PDF File")
+
+SHOW_LEGEND()
+
+@enduml

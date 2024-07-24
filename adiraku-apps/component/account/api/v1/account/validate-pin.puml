@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Validate PIN API (/api/v1/account/validate-pin)
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/pin-v4")
+Container(createOrValidatePINAPI, "Create or Validate PIN API", "Microservices | NodeJS", "Create or Validate PIN Adiraku")
+
+System_Boundary(validatePINapi, "Validate PIN API"){
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account, adr_account_history")
+System_Ext(bcrypt, "bcrypt", "Library")
+
+Rel(createOrValidatePINAPI, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, database, 2. Read Data Account)
+
+'if available counter > 2
+Rel(controller, database, 3. Read data account next available, if available counter > 2 and checkblock true)
+Rel(controller, database, 4. Create account history and update account, if available counter > 2 and checkblock false)
+
+'if (available counter <= 2) or (available counter > 2 and checkblock false)
+Rel(controller, bcrypt, 5. check pin, if (available counter <= 2) or (available counter > 2 and checkblock false))
+
+Rel(controller, database, 6. Create account history and update account, if check pin == true)
+Rel(controller, database, 7. Create account history and update account, if check pin == false)
+
+@enduml

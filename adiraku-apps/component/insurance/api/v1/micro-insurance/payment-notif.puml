@@ -1,0 +1,52 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Micro Insurance Payment Notification\n (api/v1/micro-insurance/payment-notif)
+AddProperty("URL", "api/v1/micro-insurance/controller.js")
+AddProperty("Repository", "ms-batch")
+Component(paymentMicroInsuranceProcess, "paymentMicroInsuranceProcess", "Function | NodeJs", "Batch of Function for Payment Micro Insurance Process")
+
+Boundary(api, "Batchi Checking Micro Insurance API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+
+    Component(paymentNotif, "paymentNotif", "Function | NodeJs", "Function for Batching Check Payment Micro Insurance")
+
+    Component(update, "AdrPembelianMicroInsurance.update", "Function | NodeJs", "Function for Update AdrPembelianMicroInsurance data")
+    Component(updates, "AdrKeepCashback.update", "Function | NodeJs", "Function for Update AdrKeepCashback data")
+
+}    
+    AddProperty("URL", "/api/v1/account/get-account-by")
+    AddProperty("Repository", "ms-account")
+    Component(getAccountBy, "getAccountBy", "Function | NodeJs", "Function for Get Account data by ID")
+
+    AddProperty("URL", "/api/v1/activity")
+    AddProperty("Repository", "ms-activity")
+    Component(logActivity, "logActivity", "Function | NodeJs", "Function for Create Activity")
+
+    AddProperty("URL", "/api/v1/notification-insider/request-notification")
+    AddProperty("Repository", "ms-notification")
+    Component(senPushNotificationV2, "senPushNotificationV2", "Function | NodeJs", "Function for Send Push Notification")
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrPembelianMicroInsurance,\n AdrDetailPembelian,\n AdrKeepCashback,\n AdrMicroProduct")
+
+
+Rel(paymentMicroInsuranceProcess, controller, "1. Request Check Payment Micro Insurance data")
+Rel(controller, paymentNotif, "2. Request Check Payment Micro Insurance data")
+Rel(paymentNotif, database, "3. Find (detalPembelian) AdrDetailPembelian data")
+Rel(paymentNotif, database, "4. Find (masterData) AdrPembelianMicroInsurance data")
+Rel(paymentNotif, database, "5. Find (dataCashback) AdrKeepCashback data")
+Rel(paymentNotif, database, "6. Find (dataProduct) AdrMicroProduct data")
+
+Rel(paymentNotif, update, "7. Request Update AdrPembelianMicroInsurance data")
+Rel(paymentNotif, updates, "9. Request Update AdrKeepCashback data")
+Rel(update, database, "8. Update AdrPembelianMicroInsurance data")
+Rel(updates, database, "10. Update AdrKeepCashback data")
+
+Rel(paymentNotif, getAccountBy, "11. Get Account data by ID")
+Rel(paymentNotif, logActivity, "12. Create Activity")
+Rel(paymentNotif, senPushNotificationV2, "13. Send Push Notification")
+
+
+@enduml

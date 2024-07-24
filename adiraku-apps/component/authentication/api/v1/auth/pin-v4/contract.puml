@@ -1,0 +1,42 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Contract
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/pin-v4")
+Component(createValidatePIN, "Create or Validate PIN API", "microservices | NodeJS", "Create or Validate PIN")
+
+System_Boundary(pinv4, "Controller API pin-v4") {
+    Component(encrypt, "Enkripsi Key", "Function")
+    Component(jwt, "Sign JWT", "Function")
+}
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/validate-pin")
+Component(validatePIN, "Validate PIN API", "microservices | NodeJS", "Validate pin")
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/update-active-device-id")
+Component(updateActiveDeviceId, "Update Device ID API", "microservices | NodeJS", "Update Device ID")
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/create-pin-v5")
+Component(createPIN, "Create PIN API", "microservices | NodeJS", "Create pin")
+
+AddProperty("repository", "MS-Support")
+AddProperty("url", "/api/v1/syspref/maintenance/:param")
+Component(maintenanceAPI, "Maintenance API", "microservices | NodeJS", "Check Maintenance")
+
+'PIN
+Rel(createValidatePIN, validatePIN, "1. IF have PIN, validate PIN")
+Rel(validatePIN, encrypt, "2. Encrypt Data")
+Rel(encrypt, jwt, "3. Create new JWT")
+Rel(jwt, updateActiveDeviceId, "4. Send Token, update Device Id")
+
+'Don't Have PIN
+Rel(createValidatePIN, maintenanceAPI, "1a. If don't have PIN, check maintenance")
+Rel(maintenanceAPI, createPIN, "1b. If ok, create PIN")
+Rel(createPIN, encrypt, "2. Encrypt Data")
+
+@enduml

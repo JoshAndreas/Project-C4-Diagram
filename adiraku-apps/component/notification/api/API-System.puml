@@ -1,0 +1,135 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Adiraku APP API (ms-notification)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+    Component(notification, "ms-notification", "Repository | NodeJs", "Repository for Function Related to Notification")
+
+System_Boundary(APIsystem, "API System"){
+Boundary(notifications, "v1/notification"){
+    AddProperty("URL", "api/v1/notification/channel-push-notification")
+    Component(channelNotification, "channelNotification", "Function | NodeJs", "Function for Channel push Notification")
+
+    AddProperty("URL", "api/v1/notification/notification-by-phone-number")
+    Component(notificationByPhoneNumber, "notificationByPhoneNumber", "Function | NodeJs", "Function for Push Notification by Phone Number")
+
+    AddProperty("URL", "api/v1/notification/payment")
+    Component(paymentNotification, "paymentNotification", "Function | NodeJs", "Function for Payment Notification")
+
+    AddProperty("URL", "api/v1/notification/request-birthday-notification")
+    Component(requestBDNotification, "requestBDNotification", "Function | NodeJs", "Function for Request Birthday Notification")
+
+    AddProperty("URL", "api/v1/notification/request-email")
+    Component(requestSendEmail, "requestSendEmail", "Function | NodeJs", "Function for Request Send Email")
+    
+    AddProperty("URL", "api/v1/notification/request-notif-riplay")
+    Component(requestPushNotificationRiplay, "requestPushNotificationRiplay", "Function | NodeJs", "Function for Request Push notification Riplay")
+
+    AddProperty("URL", "api/v1/notification/request-wa")
+    Component(requestSendWA, "requestSendWA", "Function | NodeJs", "Function for Request Send Whatsapp")
+}
+
+Boundary(insider, "v1/notification-insider"){
+    AddProperty("URL", "api/v1/notification-insider/notification-insider-omni")
+    Component(insiderAsOmnichannel, "insiderAsOmnichannel", "Function | NodeJs", "Function for Insider As Omni Channel") 
+
+    AddProperty("URL", "api/v1/notification-insider/request-notification-bulk-prospect")
+    Component(requestPushNotificationBulkProspect, "requestPushNotificationBulkProspect", "Function | NodeJs", "Function for Request Push Notification bulk Prospect") 
+
+    AddProperty("URL", "api/v1/notification-insider/request-notification-bulk")
+    Component(requestPushNotificationBulk, "requestPushNotificationBulk", "Function | NodeJs", "Function for Request Push Notification bulk") 
+
+    AddProperty("URL", "api/v1/notification-insider/request-notification")
+    Component(requestPushNotification, "requestPushNotification", "Function | NodeJs", "Function for Request Push Notification")
+}
+
+Boundary(promo, "v1/notification-promo"){
+
+    AddProperty("URL", "api/v1/notification/inq-opt-in-app-push")
+    Component(getOptInAppPush, "getOptInAppPush", "Function | NodeJs", "Function for Inquiry the opt-in process for push notification App")
+    
+    AddProperty("URL", "api/v1/notification/opt-in-app-push")
+    Component(optInAppPush, "optInAppPush", "Function | NodeJs", "Function for Handling the opt-in process for push notification App")
+}
+
+Boundary(consumer, "consumer/index.js"){
+
+    AddProperty("URL", "consumer/index.js")
+    Component(insertNotificationBulk, "insertNotificationBulk", "Function | NodeJs", "Function for Insert Notification Bulk")
+    
+    AddProperty("URL", "consumer/index.js")
+    Component(notificationPendingProcess, "notificationPendingProcess", "Function | NodeJs", "Function for Handle Notification Pending Process")
+}
+
+Boundary(utils, "utils/utils.js"){
+    AddProperty("URL", "utils/utils.js")
+    Component(consumeBD, "consumeBD", "Function | NodeJs", "Function for Consume messages from a RabbitMQ queue related to birthday notifications")
+
+    AddProperty("URL", "utils/utils.js")
+    Component(mqConsumeEmail, "mqConsumeEmail", "Function | NodeJs", "Function for Consume Email Message from MQ")
+
+    AddProperty("URL", "utils/utils.js")
+    Component(mqConsumeNotifInsider, "mqConsumeNotifInsider", "Function | NodeJs", "Function for Consume Notif Insider Message from MQ")
+
+    AddProperty("URL", "utils/utils.js")
+    Component(mqConsumeNotifRiplay, "mqConsumeNotifRiplay", "Function | NodeJs", "Function for Consume Notif Riplay Message from MQ")
+
+    AddProperty("URL", "utils/utils.js")
+    Component(mqConsumeWA, "mqConsumeWA", "Function | NodeJs", "Function for Consume Email Message from MQ")
+
+}
+
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database, redis", "All store for save data and content")
+
+Rel(adirakuAPP, notification, "Request use Function Related to Order")
+
+Rel(notification, channelNotification, "Request Channel push Notification")
+Rel(notification, notificationByPhoneNumber, "Request Push Notification by Phone Number")
+Rel(notification, paymentNotification, "Request Payment Notification")
+Rel(notification, requestBDNotification, "Request Birthday Notification")
+Rel(notification, requestSendEmail, "Request Send Email")
+Rel(notification, requestPushNotificationRiplay, "Request Push notification Riplay")
+Rel(notification, requestSendWA, "Request Send Whatsapp")
+
+Rel(notification, insiderAsOmnichannel, "Request Insider As Omni Channel")
+Rel(notification, requestPushNotificationBulkProspect, "Request Push Notification bulk Prospect")
+Rel(notification, requestPushNotificationBulk, "Request Push Notification bulk")
+Rel(notification, requestPushNotification, "Request Push Notification")
+
+Rel(notification, getOptInAppPush, "Request Inquiry the opt-in process for push notification App")
+Rel(notification, optInAppPush, "Request Handling the opt-in process for push notification App")
+
+Rel(notification, insertNotificationBulk, "Request Insert Notification Bulk")
+Rel(notification, notificationPendingProcess, "Request Handle Notification Pending Process")
+
+Rel(notification, consumeBD, "Request Consume messages from MQ queue related to birthday notifications")
+Rel(notification, mqConsumeEmail, "Request Consume Email Message from MQ")
+Rel(notification, mqConsumeNotifInsider, "Request Consume Notif Insider Message from MQ")
+Rel(notification, mqConsumeNotifRiplay, "Request Consume Notif Riplay Message from MQ")
+Rel(notification, mqConsumeWA, "Request Consume WA Message from MQ")
+
+Rel(channelNotification, database, "Channel push Notification")
+Rel(notificationByPhoneNumber, database, "Push Notification by Phone Number")
+Rel(paymentNotification, database, "Payment Notification")
+Rel(requestBDNotification, database, "Birthday Notification")
+Rel(requestSendEmail, database, "Send Email")
+Rel(requestPushNotificationRiplay, database, "Push notification Riplay")
+Rel(requestSendWA, database, "Send Whatsapp")
+Rel(insiderAsOmnichannel, database, "Insider As Omni Channel")
+Rel(requestPushNotificationBulkProspect, database, "Push Notification bulk Prospect")
+Rel(requestPushNotificationBulk, database, "Push Notification bulk")
+Rel(requestPushNotification, database, "Push Notification")
+Rel(getOptInAppPush, database, "Inquiry the opt-in process for push notification App")
+Rel(optInAppPush, database, "Handling the opt-in process for push notification App")
+Rel(insertNotificationBulk, database, "Insert Notification Bulk")
+Rel(notificationPendingProcess, database, "Handle Notification Pending Process")
+Rel(consumeBD, database, "Consume messages from MQ queue related to birthday notifications")
+Rel(mqConsumeEmail, database, "Consume Email Message from MQ")
+Rel(mqConsumeNotifInsider, database, "Consume Notif Insider Message from MQ")
+Rel(mqConsumeNotifRiplay, database, "Consume Notif Riplay Message from MQ")
+Rel(mqConsumeWA, database, "Consume WA Message from MQ")
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Check Document data\n (api/v2/micro-insurance/check-documents)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(getListDocInsurance)")
+Boundary(api, "Check Document API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v2\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+    Component(checkDocuments, "checkDocumentsV2", "Function | NodeJs", "Function for Check Document Micro Insurance")
+}
+AddProperty("URL", "process.env.URL_AUTOCILIN_V2 + `api/v1/documents?apiKey=${process.env.API_KEY_AUTOCILIN}&productCategoryId=${productCategoryId}&productInsuranceId=${productInsuranceId}`")
+AddProperty("Service", "autocilin")
+Component_Ext(checkDocumentsClaim, "checkDocumentsClaim", "Function | NodeJs", "Function for Check Claim Documents Autocilin")
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrDetailPembelian,\nAdrPembelianMicroInsurance,\nAdrKeepCashback,\n AdrMicroProduct")
+
+Rel(adiraku, verifyTokenV2, "1. Verify Token Admin Panel")
+Rel(verifyTokenV2, controller, "2. Request Check Document Micro Insurance")
+Rel(controller, checkDocuments, "3. Request Check Document Micro Insurance")
+Rel(checkDocuments, database, "4. Retrieve\n (AdrPembelianMicroInsurance)\n data")
+Rel(checkDocuments, database, "5. Retrieve product\n (AdrMicroProduct)\n data")
+Rel(checkDocuments, database, "6. Retrieve productDetails\n (AdrDetailPembelian)\n data")
+
+Rel_R(checkDocuments, checkDocumentsClaim, "7. Check Claim Document Autocilin")
+
+@enduml

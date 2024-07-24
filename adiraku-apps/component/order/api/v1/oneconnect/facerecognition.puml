@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Face Recognition\n (/api/v1/oneconnect/facerecognition)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(selfieValidation)")
+
+Boundary(api, "facerecognition API\n[Component]"){
+    Component(middleware, "verifyTokenV2", "Middleware | Function", "Middleware for Verify Token")
+
+    AddProperty("Path", "ms-order\api\v1\oneconnect\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Oneconnect Related Function")
+    Component(facerecognition, "facerecognition", "Function | NodeJs", "Function for Face Recognition")
+    Component(toMqLogActivity, "toMqLogActivity", "Function for Send a log activity message to a message queue (MQ)")
+}
+    AddProperty("URL", "process.env.ACCOUNT_BASE_URL + '/get-account-by'")
+    Component(getAccountBy, "getAccountBy", "Function for Get Account By Custom Param")
+   
+
+Rel(adiraku, middleware, "1. API CALL & Verify Token")
+
+Rel(middleware, controller, "2. Request Face Recognition")
+Rel(controller, facerecognition, "3. Request Face Recognition")
+Rel_R(facerecognition, getAccountBy, "4. Get Account By Custom Param")
+Rel(facerecognition, toMqLogActivity, "5. Send a log activity message to a message queue (MQ)")
+
+
+
+@enduml

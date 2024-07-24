@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Convert Wallet Adirapay to Kaspro API (/api/v1/account/convert-adirapay-to-kaspro)
+
+'Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(updateMobileNumberAPI, "Update Mobile Number API") {
+    Component(middleware, "Middleware", "Function", "Middleware for Verify Token")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account, adr_va")
+
+Rel(AdminPanelAPI, middleware, "1. API call [JSON/HTTPS]")
+Rel(middleware, controller, "2. Send request data")
+Rel(controller, database, "3. Check mobile number wallet")
+Rel(controller, database, "4. If Adirapay, update data adr_account")
+Rel(controller, database, "5. Update data adr_va")
+
+SHOW_LEGEND()
+@enduml

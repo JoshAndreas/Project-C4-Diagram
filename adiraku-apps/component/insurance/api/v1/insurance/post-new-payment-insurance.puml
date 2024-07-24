@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Post New Payment Insurance\n (api/v1/insurance/new-payment)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(api, "Post New Payment Insurance API\n[Component]"){
+    Component(middleware, "verifyTokenV2", "Middleware | Function", "Middleware for Verify Token")
+
+    AddProperty("Path", "ms-insurance\api\v1\insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Insurance Related Function")
+
+    Component(postNewPaymentInsurance, "postNewPaymentInsurance", "Function | NodeJs", "Function for Post New Payment Insurance data")
+    
+    Component(removeRedis, "utils.removeRedis", "Function | NodeJs", "Function for Remove Redis data")
+    
+}
+    AddProperty("URL", "/api/v1/account/find-account-by-id")
+    AddProperty("Repository", "ms-account")
+    Component(findAccountByid, "findAccountByid", "Function | NodeJs", "Function for Get user data information by ID")
+    
+    AddProperty("URL", "/api/v1/insurance/kaspro-wallet/submit-renewal-ins")
+    AddProperty("Repository", "ms-kaspro")
+    Component(submitRenewIns, "submitRenewIns", "Function | NodeJs", "Function for Submit Renew Ins Kaspro Wallet")
+
+ContainerDb(Redis, "Adiraku Storage", "Redis Database", "Data Redis")
+
+Rel(adiraku, middleware, "1. API CALL & Verify Token")
+Rel(middleware, controller, "2. Request Post New Payment Insurance data")
+Rel(controller, postNewPaymentInsurance, "3. Request Post New Payment Insurance data")
+Rel(postNewPaymentInsurance, findAccountByid, "4. Get user data information by ID")
+Rel(postNewPaymentInsurance, submitRenewIns, "5. Submit Renew Ins Kaspro Wallet")
+
+Rel(postNewPaymentInsurance, removeRedis, "6. Request Remove Redis data")
+Rel(removeRedis, Redis, "7. Remove Redis data")
+@enduml

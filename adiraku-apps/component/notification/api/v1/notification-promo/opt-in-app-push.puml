@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Handling the opt-in process for push notifications App\n (api/v1/notification/opt-in-app-push)
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku\n Function(setUserNotification)")
+
+Boundary(api, "optInAppPush API\n[Component]"){
+    AddProperty("Path", "ms-notification\api\v1\Notification-promo\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Notification Promo Related Function")
+
+    Component(optInAppPush, "optInAppPush", "Function | NodeJs", "Function for Handling the opt-in process for push notification App")
+}
+ComponentDb(database, "Adiraku Storage", "mySql database", "settingPromo")
+
+Rel(adirakuAPP, controller, "1. Request Handling the opt-in process for push notification App")
+
+Rel(controller, optInAppPush, "2. Request Handling the opt-in process for push notification App")
+Rel(optInAppPush, database, "3. Find Account data")
+Rel(optInAppPush, database, "4. If (findAccount), Update pushOptInPromo")
+Rel(optInAppPush, database, "4. Else, Create pushOptInPromo")
+
+@enduml

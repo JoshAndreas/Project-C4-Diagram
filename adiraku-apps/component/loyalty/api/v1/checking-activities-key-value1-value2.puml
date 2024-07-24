@@ -1,0 +1,10 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/create-pin-v5")
+Container(createPINAPI, "Create PIN API", "Microservices | NodeJS", "Create PIN Adiraku")
+
+@enduml

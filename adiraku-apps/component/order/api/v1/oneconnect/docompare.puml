@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Do Compare User Photo data\n (/api/v1/oneconnect/docompare)
+AddProperty("Repository", "ms-marketing")
+Component(marketing, "ms-marketing", "API")
+
+AddProperty("Repository", "ms-batch")
+Component(batch, "ms-batch", "API")
+
+Boundary(api, "Get User Property API\n[Component]"){
+    Component(middleware, "verifyTokenV2", "Middleware | Function", "Middleware for Verify Token")
+
+    AddProperty("Path", "ms-order\api\v1\oneconnect\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Oneconnect Related Function")
+    Component(doCompare, "doCompare", "Function | NodeJs", "Function for Do compare User Photo data")
+}
+    AddProperty("URL", "process.env.URL_EKYC + '/compare'")
+    Component(ekyc, "compare", "Function for Compare User Photo data")
+    
+Rel(marketing, middleware, "1. API CALL & Verify Token")
+Rel(batch, middleware, "1. API CALL & Verify Token")
+
+Rel(middleware, controller, "2. Request Do Compare User Photo data")
+Rel(controller, doCompare, "3. Request Compare User Photo data")
+Rel(doCompare, ekyc, "4. Compare User Photo data")
+
+
+
+
+@enduml

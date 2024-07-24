@@ -1,0 +1,34 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Reset PIN API (/api/v1/auth/reset-pin-v2)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(resetPINAPI, "Reset PIN API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+AddProperty("repository", "MS-Loyalty")
+AddProperty("url", "/api/v1/find-mobile-number-prospect")
+Component(findMobileNumberProspect, "Find Mobile Number Prospect API", "microservices | NodeJS", "Find mobile number prospect")
+
+AddProperty("repository", "MS-Loyalty")
+AddProperty("url", "/api/v1/reset-pin-prospect")
+Component(resetPINProspect, "Reset PIN Prospect API", "microservices | NodeJS", "Reset PIN prospect")
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/reset-pin")
+Component(resetPIN, "Reset PIN API", "microservices | NodeJS", "Reset PIN")
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+Rel(adirakuAPP, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, findMobileNumberProspect, "2. Check mobile number")
+Rel(findMobileNumberProspect, resetPINProspect, "3. If prospect, use reset pin prospect API")
+Rel(findMobileNumberProspect, resetPIN, "3. If contract, use reset-pin API")
+Rel(resetPINProspect, database, "4. read / update data")
+Rel(resetPIN, database, "4. read / update data")
+
+
+@enduml

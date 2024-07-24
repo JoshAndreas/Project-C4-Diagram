@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Remote Config API (/api/v1/auth/remote-config-firestore)
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/login-v2")
+Container(registrationAPI, "Registration API", "microservices | NodeJS", "Registration API")
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/new-login")
+Container(loginAPI, "Login API", "microservices | NodeJS", "Login API")
+
+System_Boundary(remoteConfigAPI, "Remote Config API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+AddProperty("vendor", "Firebase")
+AddProperty("url", "/v1/projects/adiraku-xxxx/remoteConfig")
+Container_Ext(firebaseURL, "Firebase Remote Config API", "Software System")
+
+
+Rel(registrationAPI, controller, "1. API Call [JSON/HTTPS]")
+Rel(loginAPI, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, firebaseURL, "2. Call API")
+
+
+@enduml

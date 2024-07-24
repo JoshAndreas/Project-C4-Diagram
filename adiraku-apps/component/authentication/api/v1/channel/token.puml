@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Create Token Channel API (/api/v1/channel/token)
+
+System_Ext(ESB, "ESB System", "ESB Adira System")
+
+System_Boundary(referralStatusAPI, "Referral Status API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/channel/token")
+Component(createToken, "Create Token API", "microservices | NodeJS", "Create Token API")
+
+Rel(ESB, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, createToken, "2. Create data")
+
+SHOW_LEGEND()
+
+@enduml

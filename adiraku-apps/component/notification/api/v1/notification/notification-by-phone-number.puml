@@ -1,0 +1,51 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Push Notification by Phone Number\n (api/v1/notification/notification-by-phone-number)
+
+AddProperty("URL", "process.env.MS_AUTH_URL + '/channel/token/verify'")
+AddProperty("Repository", "ms-auth")
+Component(verifyChannelBearerToken, "verifyChannelBearerToken", "Middleware | NodeJs", "Middleware for Verify Channel Bearer Token")
+
+Boundary(api, "notificationByPhoneNumber API\n[Component]"){
+    AddProperty("Path", "ms-notification\api\v1\Notification\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Notification Related Function")
+
+    Component(notificationByPhoneNumber, "notificationByPhoneNumber", "Function | NodeJs", "Function for Push Notification by Phone Number")
+}
+
+Boundary(1, "Nasabah account"){
+AddProperty("URL", "process.env.MS_ACTIVITY_URL + '/activity'")
+AddProperty("Repository", "ms-activity")
+Component(activity, "activity", "Function | NodeJs", "Function for Create Activity")
+
+AddProperty("URL", "http://localhost:${process.env.PORT}/api/v1/notification-insider/request-notification")
+AddProperty("Repository", "ms-notification")
+Component(requestPushNotification, "requestPushNotification", "Function | NodeJs", "Function for Request Push Notification")
+ComponentDb(database, "Adiraku Storage", "mySql Storage", "AdrAccount")
+}
+
+Boundary(2, "Prospect account"){
+AddProperty("URL", "process.env.MS_ACTIVITY_URL + '/activity-prospect'")
+AddProperty("Repository", "ms-activity")
+Component(activitys, "activityProspect", "Function | NodeJs", "Function for Create Activity Prospect")
+
+AddProperty("URL", "http://localhost:${process.env.PORT}/api/v1/notification-insider/request-notification")
+AddProperty("Repository", "ms-notification")
+Component(requestPushNotifications, "requestPushNotification", "Function | NodeJs", "Function for Request Push Notification")
+ComponentDb(databases, "Adiraku Storage", "mySql Storage", "AdrAccount")
+}
+Rel(verifyChannelBearerToken, controller, "2. Request Channel push Notification")
+
+Rel(controller, notificationByPhoneNumber, "3. Request Channel push Notification")
+Rel(notificationByPhoneNumber, database, "4. Check AdrAccount data for Nasabah, If (!resultAccount) = Check Prospect")
+Rel(notificationByPhoneNumber, databases, "4. Check Profile data for Prospect Account")
+
+Rel(notificationByPhoneNumber, requestPushNotification, "5. Request Push Notification")
+Rel(notificationByPhoneNumber, activity, "6. Create Activity")
+
+Rel(notificationByPhoneNumber, activitys, "5. Create Activity")
+Rel(notificationByPhoneNumber, requestPushNotifications, "6. Request Push Notification")
+
+@enduml

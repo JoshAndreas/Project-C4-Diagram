@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Admin Delete Product data\n (api/v1/micro-insurance/admin/product-delete)
+Container(adiraku, "Akses Admin Panel BE", "Repository | NodeJs", "Admin Panel Backend Repository for Adiraku Function (deletefromlist)")
+
+Boundary(api, "Admin Product Delete API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenAdmPanel, "utils.verifyTokenAdmPanel", "Function | NodeJs", "Function for Verify Token from Admin Panel")
+
+    Component(adminProductDelete, "adminProductDelete", "Function | NodeJs", "Function for Admin Delete Product data")
+    
+}    
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrMicroProduct")
+
+Rel(adiraku, verifyTokenAdmPanel, "1. Verify Token Admin Panel")
+Rel(verifyTokenAdmPanel, controller, "2. Request Admin Delete Product data")
+Rel(controller, adminProductDelete, "3. Request Admin Delete Product data")
+Rel(adminProductDelete, database, "4. Find\n(AdrMicroProduct)\ndata")
+Rel(adminProductDelete, database, "5. Update\n(AdrMicroProduct)\ndata")
+
+@enduml

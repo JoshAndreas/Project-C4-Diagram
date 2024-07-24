@@ -1,0 +1,19 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Get Account Prospect API (/api/v1/auth/generate-email-otp)
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("method", "POST")
+AddProperty("url", "/api/v1/auth/generate-email-otp-prospect")
+Component(generateEmailOTP, "Generate OTP Email Prospect API", "microservices | NodeJS", "Generate OTP Email Prospect")
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("method", "POST")
+AddProperty("url", "/api/v1/auth/validate-email-otp-prospect")
+Component(validateEmailOTP, "Validate OTP Email Prospect API", "microservices | NodeJS", "Validate OTP Email Prospect")
+
+
+SHOW_LEGEND()
+
+@enduml

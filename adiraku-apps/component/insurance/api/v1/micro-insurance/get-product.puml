@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Post New Payment Insurance\n (api/v1/micro-insurance/get-products/:search)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(api, "Post New Payment Insurance API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+
+    Component(getProducts, "getProducts", "Function | NodeJs", "Function for Get Micro Insurance Product data")
+    
+    Component(findAll, "AdrMicroProduct.findAll", "Function | NodeJs", "Function for Find AdrMicroProduct data")
+    
+}
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrMicroProduct")
+
+
+Rel(adiraku, controller, "1. Request Get Micro Insurance Product data")
+Rel(controller, getProducts, "2. Request Get Micro Insurance Product data")
+Rel(getProducts, findAll, "3. Request Find AdrMicroProduct data")
+Rel(findAll, database, "4. Find AdrMicroProduct data")
+
+@enduml

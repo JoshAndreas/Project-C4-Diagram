@@ -1,0 +1,49 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Login API (/api/v1/auth/login-v2)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+AddProperty("repository", "MS-Support")
+AddProperty("url", "/api/v1/syspref/maintenance")
+Component(maintenance, "Maintenance API", "microservices | NodeJS", "Check Maintenance")
+
+System_Boundary(registrationAPI, "Registrasi API") {
+    Component(middleware, "Middleware", "Function", "Middleware Check Maintenance Mode")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(checkVersionAPK, "Update APK", "Function", "Check version apk")
+
+    AddProperty("repository", "MS-Authentication")
+    AddProperty("url", "/api/v1/auth/remote-config-firestore")
+    Component(remoteConfig, "Remote Config API", "microservices | NodeJS", "Get List Remote Config")
+
+    Boundary(dataMobileNumberExists, "Data exists") {
+        Component(enkripsi, "Enkripsi Key", "Function")
+        Component(jwt, "Sign JWT", "Function")
+    }
+}
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/find-mobile-number-v2")
+Component(findMobileNumber, "Find Mobile Number", "microservices | NodeJS", "Find data mobile number")
+
+AddProperty("repository", "MS-Support")
+AddProperty("url", "/api/v1/tnc/tnc-apps")
+Component(tncApps, "TNC Apps", "microservices | NodeJS", "Get TNC Apps")
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+Rel(adirakuAPP, middleware, "1. API call [JSON/HTTPS]")
+Rel(middleware, maintenance, "2. Call to get status maintenance")
+Rel(maintenance, controller, "3. Send data")
+Rel(controller, checkVersionAPK, "4. Check APK version")
+Rel(checkVersionAPK, remoteConfig, "5. Get config from firebase")
+Rel(remoteConfig, tncApps, "6. Get TNC data")
+Rel(tncApps, findMobileNumber, "7. Check mobile number")
+Rel(findMobileNumber, enkripsi, "8. Enkrip data")
+Rel(enkripsi, jwt, "9. Create JWT")
+Rel(jwt, database, "10. Read / Update data OTP")
+
+SHOW_LEGEND()
+@enduml

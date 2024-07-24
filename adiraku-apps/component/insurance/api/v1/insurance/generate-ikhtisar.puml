@@ -1,0 +1,30 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Generate Ikhtisar\n (api/v1/insurance/generate-ikhtisar)
+
+AddProperty("Path", "ms-kaspro\business\usecases\payment\index.js")
+AddProperty("Repository", "ms-kaspro")
+Component(processGapuraPending, "processGapuraPending", "Function | NodeJs", "Function for Find all kaspro transaction pending")
+Boundary(api, "Generate Ikhtisar API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Insurance Related Function")
+    Component(generateIkhtisar, "generateIkhtisar", "Function | NodeJs", "Function for Generate Ikhtisar")
+    Component(downloadIkhtisarV3, "downloadIkhtisarV3", "Function | NodeJs", "Function for Download Manual V3")
+    Component(generatePDF, "utils.generatePDF", "Function | NodeJs", "Function for Generate PDF File")
+    Component(create, "DocIkhtisar.create", "Function | NodeJs", "Function for Create DocIkhtisar data")
+
+}
+ContainerDb(database, "Adiraku Storage", "Redis Database", "Redis data")
+Lay_R(generateIkhtisar, downloadIkhtisarV3)
+Rel(processGapuraPending, controller, "1. Request Generate Ikhtisar")
+Rel(controller, generateIkhtisar, "2. Request Generate Ikhtisar")
+Rel(generateIkhtisar, downloadIkhtisarV3, "3. Request Download Ikhtisar")
+Rel(downloadIkhtisarV3, database, "4. Retrieve Redis data")
+Rel(downloadIkhtisarV3, generatePDF, "5. Generate PDF File")
+Rel(generateIkhtisar, create, "6. Request Create DocIkhtisar data")
+Rel(create, database, "7. Create DocIkhtisar data")
+
+
+@enduml

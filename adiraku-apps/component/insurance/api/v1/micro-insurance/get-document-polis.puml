@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get Document Polis data\n (api/v1/micro-insurance/get-document-polis)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(getPolisInsurance)")
+Boundary(api, "Get Document Polis API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+
+
+    Component(getDocumentPolis, "getDocumentPolis", "Function | NodeJs", "Function for Get Document Polis data")
+}    
+    AddProperty("URL", "${process.env.URL_AUTOCILIN}/valencia/v1/authenticate/authtoken")
+    AddProperty("Service", "autocilin")
+    Component_Ext(requestToken, "autocilin.requestToken", "Function | NodeJs", "Function for Request Token Autocilin")
+
+    AddProperty("URL", "process.env.URL_AUTOCILIN + '/ValenciaDocument/api/APIDocument/DownloadDocument'")
+    AddProperty("Service", "autocilin")
+    Component_Ext(getDocument, "autocilin.getDocument", "Function | NodeJs", "Function for Download Document Autocilin")
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrDetailPembelian")
+
+Rel(adiraku, verifyTokenV2, "1. Verify Token Admin Panel")
+Rel(verifyTokenV2, controller, "2. Verify Token Admin Panel")
+Rel(controller, getDocumentPolis, "3. Request Admin Delete Product data")
+Rel(getDocumentPolis, database, "4. Find\n(AdrDetailPembelian)\ndata")
+Rel(getDocumentPolis, requestToken, "5. Request Token Autocilin")
+
+
+Rel(getDocumentPolis, getDocument, "6. Download Document Autocilin")

@@ -1,0 +1,27 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+AddProperty("URL", "/api/v1/harcilnas/convert")
+AddProperty("Repository", "ms-marketing")
+Component(convert, "convert", "Function | NodeJs", "Function for Convert Harcilnas")
+
+title Component Diagram for Convert Campaign\n (/api/v1/loyalto/campaign-convert)
+Boundary(api, "campaignConvert API\n[Component]"){
+    AddProperty("Path", "ms-order\api\v1\Loyalto\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Loyalto Related Function")
+    Component(campaignConvert, "campaignConvert", "Function | NodeJs", "Function for Convert Campaign")
+    Component(signatureLoyalto, "signatureLoyalto", "Function | NodeJs", "Function for Retrieve Signature Loyalto")
+}
+AddProperty("URL", "${process.env.BASE_API_LOYALTO}/api/FormulaEvents/LuckyDraw")
+AddProperty("Repository", "ms-loyalto")
+Component(loyalto, "loyalto", "Function | NodeJs", "Function for Lucky draw Loyalto")
+
+
+Rel(convert, controller, "1. API CALL")
+
+Rel(controller, campaignConvert, "2. Request Convert Campaign")
+Rel(campaignConvert, signatureLoyalto, "3. Inquiry Loyalto Signature")
+Rel_R(campaignConvert, loyalto, "4. Get Point Lucky draw Loyalto data")
+
+@enduml

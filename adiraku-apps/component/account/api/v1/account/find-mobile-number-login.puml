@@ -1,0 +1,43 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Find mobile number login API (/api/v1/account/find-mobile-number-login)
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/new-login")
+Container(loginAPI, "Login API", "Microservices | NodeJS", "Login Adiraku")
+
+
+System_Boundary(findMobileNumberLogin, "Find Mobile Number Login API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+SystemDb_Ext(firestore, "Adiraku Firestore", "Data Session")
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/update-otp-same-device")
+Component(updateOTPsameDevice, "Update OTP API", "Microservices | NodeJS", "Update OTP Validate")
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_historical_tnc, adr_account")
+
+
+AddProperty("repository", "MS-Loyalty")
+AddProperty("url", "/api/v1/find-mobile-number-prospect")
+Component(findMobileNumberProspect, "Find Mobile Number Prospect API", "Microservices | NodeJS", "Check Mobile Number")
+
+Rel(loginAPI, controller, 1. API Call [JSON/HTTPS])
+Rel(controller, database, 2. Read data history tnc)
+Rel(controller, database, 3. Read data account)
+
+'If data from account available
+Rel(controller, firestore, 4. Read data session and last active device id, if data account available)
+Rel(controller, updateOTPsameDevice, 5. Update data OTP, if data account available)
+
+'If data from account not available
+Rel(controller, findMobileNumberProspect, 4. Check mobile number prospect, if data account not available)
+
+'If data from API prospect available
+Rel(controller, updateOTPsameDevice, 5. Update data OTP, if data prospect available)
+
+
+@enduml

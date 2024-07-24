@@ -1,0 +1,219 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Request Push Notification\n (api/v1/notification-insider/request-notification)
+
+Boundary(ABEAP, "akses-be-adminpanel"){
+AddProperty("URL", "akses-be-adminpanel\apidocs.yaml")
+AddProperty("Repository", "akses-be-adminpanel")
+Component(aksesBE, "akses-be-adminpanel", "Repository | NodeJs", "Repository for Admin Panel Back End")
+}
+
+Boundary(account, "ms-account"){
+AddProperty("URL", "/api/v1/account/upd-bank-account")
+AddProperty("Repository", "ms-account")
+Component(UpdUserBankAccountInfo, "UpdUserBankAccountInfo", "Function | NodeJs", "Function for Update User Bank Account Info")
+
+AddProperty("URL", "/api/v1/account/bank-account")
+AddProperty("Repository", "ms-account")
+Component(createUserBankAccountInfo, "createUserBankAccountInfo", "Function | NodeJs", "Function for Create User Bank Account Info")
+}
+
+Boundary(activity, "ms-activity"){
+AddProperty("URL", "/api/v1/activity/info-reward")
+AddProperty("Repository", "ms-activity")
+Component(infoReward, "infoReward", "Function | NodeJs", "Function for Retrieve Info Reward data")
+
+AddProperty("URL", "/api/v1/creditapplication-il/")
+AddProperty("Repository", "ms-activity")
+Component(credit_application_indicative_limit, "credit_application_indicative_limit", "Function | NodeJs", "Function for Credit Application Indicative Limit")
+
+AddProperty("URL", "-")
+AddProperty("Repository", "ms-activity")
+Component(sendRedeemNotification, "sendRedeemNotification", "Function | NodeJs", "Function for Send Redeem Notification")
+}
+
+Boundary(auth, "ms-auth"){
+AddProperty("URL", "/api/v1/auth/pin-v3")
+AddProperty("Repository", "ms-auth")
+Component(createValidatePinV3, "createValidatePinV3", "Function | NodeJs", "Function for Create Validate Pin V3")
+
+AddProperty("URL", "/api/v1/auth/pin-v3-gr")
+AddProperty("Repository", "ms-auth")
+Component(createValidatePinV3GR, "createValidatePinV3GR", "Function | NodeJs", "Function for Create Validate Pin V3 GR")
+
+AddProperty("URL", "/api/v1/auth/pin-v4")
+AddProperty("Repository", "ms-auth")
+Component(createValidatePinV4, "createValidatePinV4", "Function | NodeJs", "Function for Create Validate Pin V4")
+}
+
+Boundary(batch, "ms-batch"){
+AddProperty("URL", "api/v1/ad1checking/")
+AddProperty("Repository", "ms-batch")
+Component(calcIndicativeLimit, "calcIndicativeLimit", "Function | NodeJs", "Function for Calculate Indicative Limit")
+
+AddProperty("URL", "api/v1/birthday")
+AddProperty("Repository", "ms-batch")
+Component(birthday, "birthday", "Function | NodeJs", "Function for Send Birthday Notification data")
+
+AddProperty("URL", "ms-batch\utils\consumer.js")
+AddProperty("Repository", "ms-batch")
+Component(consumePayReminder, "consumePayReminder", "Function | NodeJs", "Function for Consume Pay Reminder")
+
+AddProperty("URL", "ms-batch\utils\utils.js")
+AddProperty("Repository", "ms-batch")
+Component(disburce_cashback, "disburce_cashback", "Function | NodeJs", "Function for Disburse Cashback")
+}
+
+Boundary(insurance, "ms-insurance"){
+AddProperty("URL", "ms-insurance\utils\utils.js")
+AddProperty("Repository", "ms-insurance")
+Component(senPushNotificationV2, "senPushNotificationV2", "Function | NodeJs", "Function for Send Push Notification V2")
+}
+
+Boundary(kaspro, "ms-kaspro"){
+AddProperty("URL", "ms-kaspro\infrastructures\externals\notification.js")
+AddProperty("Repository", "ms-kaspro")
+Component(sendNotifInsider, "sendNotifInsider", "Function | NodeJs", "Function for Send Push Notification Insider")
+}
+
+Boundary(loyalty, "ms-loyalty"){
+AddProperty("URL", "ms-loyalty\src\utils\utils.js")
+AddProperty("Repository", "ms-loyalty")
+Component(sendNotifSpeedwork, "sendNotifSpeedwork", "Function | NodeJs", "Function for Send Push Notification Speed Work")
+}
+
+Boundary(marketing, "ms-marketing"){
+AddProperty("URL", "/api/v1/campaign-jdid/archive-voucher")
+AddProperty("Repository", "ms-marketing")
+Component(archiveVoucher, "archiveVoucher", "Function | NodeJs", "Function for Archive Voucher data")
+
+AddProperty("URL", "/api/v1/campaign-jdid/regist-claim")
+AddProperty("Repository", "ms-marketing")
+Component(registClaim, "registClaim", "Function | NodeJs", "Function for Claim Registration")
+}
+
+Boundary(notification, "ms-notification"){
+AddProperty("URL", "/api/v1/notification/paymentNotification")
+AddProperty("Repository", "ms-notification")
+Component(paymentNotification, "paymentNotification", "Function | NodeJs", "Function for Push Payment Notification")
+
+AddProperty("URL", "/api/v1/notification/channel-push-notification")
+AddProperty("Repository", "ms-notification")
+Component(channelNotification, "channelNotification", "Function | NodeJs", "Function for Push Channel Notification")
+
+AddProperty("URL", "/api/v1/notification/channel-push-notification")
+AddProperty("Repository", "ms-notification")
+Component(notificationByPhoneNumber, "notificationByPhoneNumber", "Function | NodeJs", "Function for Push Notification by Phone Number")
+}
+
+Boundary(payment, "ms-payment"){
+AddProperty("URL", "ms-payment\api\v1\danamon\controller.js")
+AddProperty("Repository", "ms-payment")
+Component(postPayment, "postPayment", "Function | NodeJs", "Function for Post payment process")
+
+AddProperty("URL", "ms-payment\api\v1\danamon\controller.js")
+AddProperty("Repository", "ms-payment")
+Component(postWithdrawV2, "postWithdrawV2", "Function | NodeJs", "Function for Push withdraw process")
+
+AddProperty("URL", "api/v1/payment/submit-payment")
+AddProperty("Repository", "ms-payment")
+Component(submitPayment, "submitPayment", "Function | NodeJs", "Function for Submit Payment Process")
+
+AddProperty("URL", "api/v1/payment/submit-payment-point")
+AddProperty("Repository", "ms-payment")
+Component(submitPaymentPoint, "submitPaymentPoint", "Function | NodeJs", "Function for Submit Payment with Point Process")
+
+AddProperty("URL", "/api/v1/reminder/controller.js")
+AddProperty("Repository", "ms-payment")
+Component(paymentReminder, "paymentReminder", "Function | NodeJs", "Function for Payment Reminder Process")
+}
+
+Boundary(paymentGateway, "ms-payment-gateway"){
+AddProperty("URL", "ms-payment-gateway\utils\utils.js")
+AddProperty("Repository", "ms-payment-gateway")
+Component(pushNotifInsider, "pushNotifInsider", "Function | NodeJs", "Function for Push Notif Insider")
+}
+
+Boundary(support, "ms-support"){
+AddProperty("URL", "/api/v1/danamon/casa-callback")
+AddProperty("Repository", "ms-support")
+Component(casaCallback, "casaCallback", "Function | NodeJs", "Function for Casa Call Back")
+
+AddProperty("URL", "/api/v1/gamification/getReward")
+AddProperty("Repository", "ms-support")
+Component(getReward, "getReward", "Function | NodeJs", "Function for Get Reward Gamification")
+
+AddProperty("URL", "ms-support\api\v1\gamification\controller.js")
+AddProperty("Repository", "ms-support")
+Component(voucherPromo, "voucherPromo", "Function | NodeJs", "Function for Use voucher Promo")
+}
+
+Boundary(api, "requestPushNotification API\n[Component]"){
+    AddProperty("Path", "ms-notification\api\v1\Notification\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Notification Related Function")
+
+    Component(requestPushNotification, "requestPushNotification", "Function | NodeJs", "Function for Request Push Notification")
+    
+    Component(createMqConnection, "mq.createMqConnection", "Function | NodeJs", "Function for Create Message Queue Connection")
+    Component(connect, "amqp.connect", "Function | NodeJs", "Function for Connect Object")
+    Component(createChannel, "connection.createChannel", "Function | NodeJs", "Function for Create Channel")
+    Component(getQueueName, "mq.getQueueName", "Function | NodeJs", "Function for Get Queue Name")
+    Component(assertQueue, "channel.assertQueue", "Function | NodeJs", "Function for Assert Queue")   
+    Component(sendToQueue, "channel.sendToQueue", "Function | NodeJs", "Function for Send to queue")   
+
+}
+ComponentDb(database, "Adiraku Storage", "mySql Storage", "CampaignInsider")
+Rel(aksesBE, controller, "1. API CALL")
+Rel(UpdUserBankAccountInfo, controller, "1. API CALL")
+Rel(createUserBankAccountInfo, controller, "1. API CALL")
+Rel(infoReward, controller, "1. API CALL")
+
+Rel(credit_application_indicative_limit, controller, "1. API CALL")
+Rel(sendRedeemNotification, controller, "1. API CALL")
+Rel(createValidatePinV3, controller, "1. API CALL")
+Rel(createValidatePinV3GR, controller, "1. API CALL")
+
+Rel(createValidatePinV4, controller, "1. API CALL")
+Rel(calcIndicativeLimit, controller, "1. API CALL")
+Rel(birthday, controller, "1. API CALL")
+Rel(consumePayReminder, controller, "1. API CALL")
+
+Rel(disburce_cashback, controller, "1. API CALL")
+Rel(senPushNotificationV2, controller, "1. API CALL")
+Rel(sendNotifInsider, controller, "1. API CALL")
+Rel(sendNotifSpeedwork, controller, "1. API CALL")
+
+Rel(archiveVoucher, controller, "1. API CALL")
+Rel(registClaim, controller, "1. API CALL")
+Rel(paymentNotification, controller, "1. API CALL")
+Rel(channelNotification, controller, "1. API CALL")
+
+Rel(notificationByPhoneNumber, controller, "1. API CALL")
+Rel(postPayment, controller, "1. API CALL")
+Rel(postWithdrawV2, controller, "1. API CALL")
+Rel(submitPayment, controller, "1. API CALL")
+
+Rel(submitPaymentPoint, controller, "1. API CALL")
+Rel(postPayment, controller, "1. API CALL")
+Rel(postWithdrawV2, controller, "1. API CALL")
+Rel(submitPayment, controller, "1. API CALL")
+
+Rel(paymentReminder, controller, "1. API CALL")
+Rel(pushNotifInsider, controller, "1. API CALL")
+Rel(casaCallback, controller, "1. API CALL")
+Rel(getReward, controller, "1. API CALL")
+Rel(voucherPromo, controller, "1. API CALL")
+
+Rel(controller, requestPushNotification, "2. Request Push Notification")
+Rel(requestPushNotification, database, "3. Find campaign data (CampaignInsider)")
+Rel(requestPushNotification, database, "3. Else if (!campaign), Create campaign data (CampaignInsider)")
+Rel(requestPushNotification, database, "4. Retrieve campaign data (CampaignInsider)")
+Rel(requestPushNotification, createMqConnection, "5. Request Create Message Queue Connection")
+Rel(createMqConnection, connect, "6. Connect Object")
+Rel(createMqConnection, createChannel, "7. Create Channel")
+Rel(requestPushNotification, getQueueName, "8. Get Queue Name (notification_insider)")
+Rel(requestPushNotification, assertQueue, "9. Assert Queue")
+Rel(requestPushNotification, sendToQueue, "10. Send to queue")
+@enduml

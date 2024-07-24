@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for save tnc history (/api/v1/account/tnc-save-historical)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(getAccountBy, "Check Account API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_historical_tnc")
+
+Rel(adirakuAPP, controller, 1. API Call [JSON/HTTPS])
+Rel(controller, database, 2. Get data adr_account)
+
+AddProperty("repository", "ms-support")
+AddProperty("url", "/tnc/tnc-apps")
+Component(getTnC, "Get TNC API", "microservices | Node.Js", "Get TNC")
+
+Rel(controller, getTnC, 3. Get data TNC, if versionTNC is null / undefined)
+Rel(controller, database, 4.Insert adr_historical_tnc, if versionTNC is null / undefined)
+
+Rel(controller, database, 3.Insert adr_historical_tnc, if versionTNC is not null / not undefined)
+
+SHOW_LEGEND()
+
+@enduml

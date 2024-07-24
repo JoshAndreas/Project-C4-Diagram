@@ -1,0 +1,47 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+Boundary(marketing, "ms-marketing"){
+AddProperty("URL", "/api/v1/harcilnas/")
+AddProperty("Repository", "ms-marketing")
+Component(getData, "getData", "Function | NodeJs", "Function for Get data Harcilnas")
+
+AddProperty("URL", "/api/v1/harcilnas/convert")
+AddProperty("Repository", "ms-marketing")
+Component(convert, "convert", "Function | NodeJs", "Function for Convert Harcilnas")
+
+AddProperty("URL", "/api/v1/harcilnas/channel/convert")
+AddProperty("Repository", "ms-marketing")
+Component(convertChannel, "convertChannel", "Function | NodeJs", "Function for Convert Harcilnas Channel")
+
+AddProperty("URL", "-")
+AddProperty("Repository", "ms-marketing")
+Component(getDatas, "getDatas", "Function | NodeJs", "Function for Get data Harcilnas")
+
+AddProperty("URL", "-")
+AddProperty("Repository", "ms-marketing")
+Component(convertBulkHarcilnas, "convertBulkHarcilnas", "Function | NodeJs", "Function for Convert Bulk Harcilnas")
+}
+title Component Diagram for Inquiry Harcilnas Data\n (/api/v1/loyalto/harcilnas-inquiry)
+Boundary(api, "Inquiry Harcilnas API\n[Component]"){
+    AddProperty("Path", "ms-order\api\v1\Loyalto\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Loyalto Related Function")
+    Component(harcilnasINQ, "harcilnasINQ", "Function | NodeJs", "Function for Inquiry Harcilnas data")
+    Component(signatureLoyalto, "signatureLoyalto", "Function | NodeJs", "Function for Retrieve Signature Loyalto")
+}
+AddProperty("URL", "${process.env.BASE_API_LOYALTO}/api/ConvertPoint/Inquiry")
+AddProperty("Repository", "ms-loyalto")
+Component(loyalto, "loyalto", "Function | NodeJs", "Function for Convert Point Inquiry")
+
+
+Rel(getData, controller, "1. API CALL")
+Rel(convert, controller, "1. API CALL")
+Rel(convertChannel, controller, "1. API CALL")
+Rel(getDatas, controller, "1. API CALL")
+Rel(convertBulkHarcilnas, controller, "1. API CALL")
+Rel(controller, harcilnasINQ, "2. Request Inquiry Harcilnas data")
+Rel(harcilnasINQ, signatureLoyalto, "3. Inquiry Loyalto Signature")
+Rel_R(harcilnasINQ, loyalto, "4. Inquiry Convert Point data")
+
+@enduml

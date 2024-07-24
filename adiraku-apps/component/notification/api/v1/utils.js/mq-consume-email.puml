@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Consume Email Message from MQ\n (utils/utils.js)
+Boundary(api, "mqConsumeEmail API\n[Component]"){
+    AddProperty("Path", "ms-notification\utils\utils.js")
+    Component(mqConsumeEmail, "mqConsumeEmail", "Function | NodeJs", "Function for Consume Email Message from MQ")
+    Component(createMqConnection, "mq.createMqConnection", "Function | NodeJs", "Function for Create MQ Connection")
+    Component(connect, "amqp.connect", "Function | NodeJs", "Function for Connect Object")
+    Component(createChannel, "connection.createChannel", "Function | NodeJs", "Function for Create Channel")
+    Component(getQueueName, "mq.getQueueName", "Function | NodeJs", "Function for Get Queue Name")
+    Component(assertQueue, "channel.assertQueue", "Function | NodeJs", "Function for Assert Queue")
+    Component(consume, "channel.consume", "Function | NodeJs", "Function for Consume Queue")
+}
+
+Rel(mqConsumeEmail, createMqConnection, "1. Request Consume Email Message from MQ")
+Rel(createMqConnection, connect, "2. Connect Object")
+Rel(createMqConnection, createChannel, "3. Create Channel")
+Rel(mqConsumeEmail, getQueueName, "4. Get Queue Name ('emailriplay')")
+Rel(mqConsumeEmail, assertQueue, "5. Assert Queue")
+Rel(mqConsumeEmail, consume, "6. Consume Queue")
+
+@enduml

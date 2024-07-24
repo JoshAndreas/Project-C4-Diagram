@@ -1,0 +1,27 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Update Mobile Number From Admin Panel API (/api/v1/account/mobile-number) (PATCH)
+
+'Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(updateMobileNumberAPI, "Update Mobile Number API") {
+    Component(middleware, "Middleware", "Function", "Middleware for Verify Token")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/clear-session")
+Component(clearSessionAPI, "Clear Session API", "microservices | NodeJS", "Clear Session User")
+
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account")
+
+Rel(AdminPanelAPI, middleware, "1. API call [JSON/HTTPS]")
+Rel(middleware, controller, "2. Send request data")
+Rel(controller, database, "3. If action rejected, update is_mobile_number_change = 0")
+Rel(controller, clearSessionAPI, "4. Clear session API")
+Rel(controller, database, "5. Update is_mobile_number_change = 0, update new mobile number")
+
+SHOW_LEGEND()
+@enduml

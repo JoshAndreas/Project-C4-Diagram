@@ -1,0 +1,20 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Get Detail Account API (/api/v1/account/user-details)
+
+'Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(userDetailsAPI, "User Details API") {
+    Component(middleware, "Middleware", "Function", "Middleware for Verify Token")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account")
+
+Rel(AdminPanelAPI, middleware, "1. API call [JSON/HTTPS]")
+Rel(middleware, controller, "2. Send request data")
+Rel(controller, database, "3. Read Data Account")
+
+SHOW_LEGEND()
+@enduml

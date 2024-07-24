@@ -1,0 +1,41 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Insert Notification Bulk\n (consumer/index.js)
+
+Boundary(api, "insertNotificationBulk API\n[Component]"){
+    AddProperty("Path", "ms-notification\consumer\index.js")
+    Component(handleConsumerKafka, "handleConsumerKafka", "Function | NodeJs", "Function for Handle Consumer Kafka")
+
+    AddProperty("Resources", "`notification-bulk-${dataNotificationBulk.name}`")
+    Component(insertNotificationBulk, "insertNotificationBulk", "Function | NodeJs", "Function for Insert Notification Bulk")
+}
+    Component(redisLock, "clientRedis.redisLock", "Function | NodeJs", "Function for Bulk Create Notification")
+    Component(get, "clientRedis.get", "Function | NodeJs", "Function for Insert Notification Bulk")
+    Component(findOrCreateCampaign, "domSqlCampaignInsider.findOrCreateCampaign", "Function | NodeJs", "Function for Find or Create Campaign")
+    Component(bulkCreateNotifications, "domSqlNotifications.bulkCreateNotifications", "Function | NodeJs", "Function for Bulk Create Notification")
+    Component(createDataNotification, "createDataNotification", "Function | NodeJs", "Function for Create Notification data")
+
+    Component(unlockRedis, "clientRedis.unlockRedis", "Function | NodeJs", "Function for Unlock Redis")
+ComponentDb(redis, "Adiraku Redis Storage", "Redis", "clientRedis")
+ComponentDb(sql, "Adiraku mySql Storage", "mySql Storage", "Notifications")
+
+Rel(handleConsumerKafka, insertNotificationBulk, "1. Request Insert Notification Bulk")
+
+Rel(insertNotificationBulk, redisLock, "2. Request Lock Redis")
+Rel(redisLock, redis, "3. Lock Redis")
+Rel(insertNotificationBulk, get, "4. Request Get Redis Client")
+Rel(get, redis, "5. Get Redis Client")
+Rel(insertNotificationBulk, findOrCreateCampaign, "6. Request Find or Create Campaign data")
+Rel(findOrCreateCampaign, sql, "7. Request Find or Create Campaign data")
+
+Rel(insertNotificationBulk, createDataNotification, "8. Request Create Notification data")
+Rel(insertNotificationBulk, bulkCreateNotifications, "10. Request Bulk Create Notification")
+Rel(createDataNotification, sql, "9. Create Notification data")
+Rel(bulkCreateNotifications, sql, "11. Bulk Create Notification")
+
+Rel(insertNotificationBulk, unlockRedis, "12. Request Unlock Redis")
+Rel(unlockRedis, redis, "13. Unlock Redis")
+
+@endumls

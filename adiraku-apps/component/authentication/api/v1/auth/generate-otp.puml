@@ -1,0 +1,43 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Generate OTP API (/api/v1/auth/generate-otp)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(generateOTPAPI, "Generate OTP API") {
+    Component(verifyToken, "Verify Token", "Function", "Verify Token Mobile Number")
+    Boundary(verifyTokenMobile, "verify token") {
+        Component(verify, "Verify Token", "Function", "Verify JWT Token")
+        Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+        Component(encrypt, "Encrypt Data", "Function", "Encrypt Data")
+        Component(jwt, "Sign JWT", "Function", "Sign JWT")
+    }
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+System_Ext(generateOTP, "Generate OTP", "Library")
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+AddProperty("Vendor", "Infobip")
+AddProperty("url", "/sms/2/text/single")
+Container_Ext(infobipSMS, "INFOBIP SMS API", "API system", "External API for send SMS.")
+
+AddProperty("Vendor", "Infobip")
+AddProperty("url", "/whatsapp/1/message/template")
+Container_Ext(infobipWA, "INFOBIP WA API", "API system", "External API for send WA.")
+
+Rel(adirakuAPP, verifyToken, "1. API Call [JSON/HTTPS]")
+Rel(verifyToken, verify, "2. Send Token")
+Rel(verify, decrypt, "2a. Verify Token")
+Rel(decrypt, encrypt, "2b. Decrypt decoded data")
+Rel(encrypt, jwt, "2c. Encrypt new data")
+Rel(verifyToken, controller, "3. Send request data")
+Rel(controller, generateOTP, "4. Generate OTP")
+Rel(generateOTP, database, "5. Create / Update data OTP")
+Rel(generateOTP, infobipSMS, "6a. If channel SMS, send SMS")
+Rel(generateOTP, infobipWA, "6b. If channel WA, send WA")
+
+SHOW_LEGEND()
+@enduml

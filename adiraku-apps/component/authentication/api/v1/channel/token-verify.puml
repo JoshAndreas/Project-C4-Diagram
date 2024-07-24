@@ -1,0 +1,17 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Verify Token Channel API (/api/v1/channel/token/verify)
+
+'Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(referralStatusAPI, "Referral Status API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(verify, "Verify Token", "Function", "Verify JWT Token")
+}
+
+Rel(controller, verify, "2. Verify Token")
+
+SHOW_LEGEND()
+
+@enduml

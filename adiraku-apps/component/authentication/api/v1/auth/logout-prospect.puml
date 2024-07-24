@@ -1,0 +1,37 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Logout Prospect API (/api/v1/auth/logout-prospect)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(logoutAPI, "Logout API") {
+    Component(verifyToken, "Verify Token", "Function", "Verify Token Auth")
+    Boundary(verifyTokenAuth, "verify token auth") {
+        Component(verify, "Verify Token", "Function", "Verify JWT Token")
+        Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+        Component(encrypt, "Encrypt Data", "Function", "Encrypt Data")
+        Component(jwt, "Sign JWT", "Function", "Sign JWT")
+    }
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+AddProperty("repository", "MS-Loyalty")
+AddProperty("url", "/api/v1/process-logout-prospect")
+Component(logoutProspectAPI, "Process Logout Prospect API", "microservices | NodeJS", "Logout Prospect")
+
+SystemDb_Ext(firestore, "firestore", "data session")
+
+Rel(adirakuAPP, verifyToken, "1. API Call [JSON/HTTPS]")
+Rel(verifyToken, verify, "2. Send Token, Verify Token")
+Rel(verify, decrypt, "2a. Decrypt data token")
+Rel(decrypt, encrypt, "2b. Encrypt new data")
+Rel(encrypt, jwt, "2c. Create new JWT")
+Rel(verifyToken, controller, "3. Send request data")
+Rel(controller, database, "4. Update Session")
+Rel(controller, logoutProspectAPI, "5. Update device ID")
+Rel(logoutProspectAPI, firestore, "6. Update session")
+
+@enduml

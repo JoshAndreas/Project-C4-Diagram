@@ -1,0 +1,19 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Verify OTP After API (/api/v1/auth/verify-otp-after)
+
+'Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(referralStatusAPI, "Referral Status API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+Rel(anonymous, controller, "1. API Call [JSON/HTTPS]")
+Rel(controller, database, "2. Get data")
+
+SHOW_LEGEND()
+
+@enduml

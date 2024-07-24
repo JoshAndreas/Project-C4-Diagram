@@ -1,0 +1,38 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+Boundary(marketing, "ms-marketing"){
+AddProperty("URL", "/api/v1/harcilnas/convert")
+AddProperty("Repository", "ms-marketing")
+Component(convert, "convert", "Function | NodeJs", "Function for Convert Harcilnas")
+
+AddProperty("URL", "/api/v1/harcilnas/channel/convert")
+AddProperty("Repository", "ms-marketing")
+Component(convertChannel, "convertChannel", "Function | NodeJs", "Function for Convert Harcilnas Channel")
+
+AddProperty("URL", "-")
+AddProperty("Repository", "ms-marketing")
+Component(convertBulkHarcilnas, "convertBulkHarcilnas", "Function | NodeJs", "Function for Convert Bulk Harcilnas")
+}
+
+title Component Diagram for Convert Harcilnas\n (/api/v1/loyalto/harcilnas-convert)
+Boundary(api, "Convert Harcilnas API\n[Component]"){
+    AddProperty("Path", "ms-order\api\v1\Loyalto\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Loyalto Related Function")
+    Component(harcilnasConvert, "harcilnasConvert", "Function | NodeJs", "Function for Convert Harcilnas")
+    Component(signatureLoyalto, "signatureLoyalto", "Function | NodeJs", "Function for Retrieve Signature Loyalto")
+}
+AddProperty("URL", "${process.env.BASE_API_LOYALTO}/api/ConvertPoint")
+AddProperty("Repository", "ms-loyalto")
+Component(loyalto, "loyalto", "Function | NodeJs", "Function for Convert Point Loyalto")
+
+
+Rel(convert, controller, "1. API CALL")
+Rel(convertChannel, controller, "1. API CALL")
+Rel(convertBulkHarcilnas, controller, "1. API CALL")
+Rel(controller, harcilnasConvert, "2. Request Inquiry Harcilnas data")
+Rel(harcilnasConvert, signatureLoyalto, "3. Inquiry Loyalto Signature")
+Rel_R(harcilnasConvert, loyalto, "4. Convert Point")
+
+@enduml

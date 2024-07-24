@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get Promo Code Credit Apps\n (api/v1/creditapplication/get-promo-code-creditapps)
+AddProperty("URL", "ms-batch\api\v1\creditapplication\controller.js")
+AddProperty("Repository", "ms-batch")
+Component(retryKafkaCreditApplication, "retryKafkaCreditApplication", "Function | NodeJs", "Function for sends messages to a Kafka")
+
+Boundary(api, "getPromoCodeCApp API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\creditapplication\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Credit Application Related Function")
+
+    Component(retryKafkaLeadEngine, "retryKafkaLeadEngine", "Function | NodeJs", "Function for Retrieve AdrTeleIntegration then send Message to a Kafka")
+    Component(kafkaProducer, "utils.kafkaProducer", "Function | NodeJs", "Function for Send Message to Kafka Producer")
+
+}
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrTeleIntegration")
+
+
+
+Rel(retryKafkaCreditApplication, controller, "1. API CALL")
+Rel(controller, retryKafkaLeadEngine, "2. Request Retrieve AdrTeleIntegration then send Message to a Kafka")
+Rel(retryKafkaLeadEngine, database, "3. getDataRetry AdrTeleIntegration data")
+Rel_R(retryKafkaLeadEngine, kafkaProducer, "4. Send Message to Kafka Producer")

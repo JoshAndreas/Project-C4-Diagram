@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get Disburse Cashback data\n (api/v1/micro-insurance/get-disburse-cashback)
+AddProperty("URL", "api/v1/referral/controller.js")
+AddProperty("Repository", "ms-batch")
+Component(referral, "referral", "Function | NodeJs", "Batch of Function for Processing Referral data")
+
+Boundary(api, "Get Disburse Cashback API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+
+    Component(getDisburseCashback, "getDisburseCashback", "Function | NodeJs", "Function for Get Disburse Cashback data")
+
+}    
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrKeepCashback")
+
+
+Rel(referral, controller, "1. API CALL")
+Rel(controller, getDisburseCashback, "2. Request Get Disburse Cashback data")
+Rel(getDisburseCashback, database, "3. Get Disburse Cashback data")
+
+@enduml

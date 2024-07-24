@@ -1,0 +1,30 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Cancellation data\n (api/v1/micro-insurance/cancellation)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(cancelPaymentVAMicroInsurance)")
+Boundary(api, "Cancellation API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+    Component(cancellation, "cancellation", "Function | NodeJs", "Function for Cancellation Micro Insurance")
+    Component(update, "AdrPembelianMicroInsurance.update", "Function | NodeJs", "Function for Update AdrPembelianMicroInsurance data")
+}
+AddProperty("URL", "/referalnumber/cashback-delete/${findCancellationCashback.id_adr_ref_num}")
+AddProperty("Repository", "ms-activity")
+Component(deleteCashback, "deleteCashback", "Function | NodeJs", "Function for Delete Cashback")
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrDetailPembelian,\nAdrPembelianMicroInsurance,\nAdrKeepCashback,")
+
+Rel(adiraku, verifyTokenV2, "1. Verify Token Admin Panel")
+Rel(verifyTokenV2, controller, "2. Request Cancellation Micro Insurance")
+Rel(controller, cancellation, "3. Request Cancellation Micro Insurance")
+Rel(cancellation, database, "4. findPolis (AdrDetailPembelian) data")
+Rel(cancellation, database, "5. findCancellation (AdrPembelianMicroInsurance) data")
+Rel(cancellation, database, "6. findCancellationCashback (AdrKeepCashback) data")
+Rel_L(cancellation, deleteCashback, "7. If there is Cashback, Delete Cashback")
+
+Rel(cancellation, update, "8. Request Update (AdrPembelianMicroInsurance) data")
+Rel(update, database, "9. Update (AdrPembelianMicroInsurance) data")
+@enduml

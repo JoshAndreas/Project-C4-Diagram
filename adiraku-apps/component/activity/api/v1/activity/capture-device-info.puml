@@ -1,0 +1,20 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+AddProperty("URL", "api/v1/syspref/modules")
+AddProperty("Repository", "ms-support")
+Component(getSysPref, "getSysPref", "Function | NodeJs", "Function for Fetching system preferences")
+title Component Diagram for Capture Device Info\n(/api/v1/activity/capture-device-info)
+
+Boundary(api, "captureDevInfo API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(captureDevInfo, "captureDevInfo", "Function | NodeJs", "Function for Capture Device Information")
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrDeviceInfo")
+
+Rel(getSysPref, controller, "1. API CALL")
+Rel(controller, captureDevInfo, "2. Request Capture Device Information")
+Rel(captureDevInfo, database, "3. Create AdrDeviceInfo data")

@@ -1,0 +1,19 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram for Get Activity\n(/api/v1/activity/:page/:limit)
+
+Boundary(api, "getActivity API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(getActivity, "getActivity", "Function | NodeJs", "Function for Get Activity")
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrDeviceInfo")
+
+Rel(getSysPref, controller, "1. API CALL")
+Rel(controller, getActivity, "2. Request Capture Device Information")
+Rel(getActivity, database, "3. Count AdrActivity data")
+Rel(getActivity, database, "4. findAll AdrActivity data")

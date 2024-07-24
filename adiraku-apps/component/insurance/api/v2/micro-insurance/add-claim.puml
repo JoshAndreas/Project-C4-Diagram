@@ -1,0 +1,53 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Add Claim Micro Insurance\n (api/v2/micro-insurance/add-claim)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(cancelPaymentVAMicroInsurance)")
+Boundary(api, "Add Claim API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v2\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+    Component(addClaim, "addClaimV2", "Function | NodeJs", "Function for Add Claim Micro Insurance")
+    Component(update, "AdrPembelianMicroInsurance.update", "Function | NodeJs", "Function for Update AdrPembelianMicroInsurance data")
+}
+    Component(mainPathFirestore, "mainPathFirestore", "Function | NodeJs", "Function for Get Firebase Collection")
+
+    AddProperty("URL", "process.env.URL_AUTOCILIN_V2 + `api/v1/claim/add`")
+    AddProperty("Service", "autocilin")
+    Component_Ext(addClaims, "autocilin.addClaim", "Function | NodeJs", "Function for Add Claim Autocilin")
+    
+Boundary(activity, "ms-activity"){    
+    AddProperty("URL", "/api/v1/activity")
+    AddProperty("Repository", "ms-activity")
+    Component(logActivity, "logActivity", "Function | NodeJs", "Function for Create Activity")
+
+    AddProperty("URL", "/api/v1/activity/prospect")
+    AddProperty("Repository", "ms-activity")
+    Component(logActivitys, "logActivityProspect", "Function | NodeJs", "Function for Create Activity Prospect")
+}
+    AddProperty("URL", "/api/v1/notification-insider/request-notification")
+    AddProperty("Repository", "ms-notification")
+    Component(senPushNotificationV2, "senPushNotificationV2", "Function | NodeJs", "Function for Send Push Notification")
+    
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrDetailPembelian,\nAdrPembelianMicroInsurance,\nAdrKeepCashback,")
+
+Rel(adiraku, verifyTokenV2, "1. Verify Token Admin Panel")
+Rel(verifyTokenV2, controller, "2. Request Add Claim Micro Insurance")
+Rel(controller, addClaim, "3. Request Add Claim Micro Insurance")
+Rel(addClaim, mainPathFirestore, "4. Get Firebase Collection")
+Rel_L(addClaim, database, "5. Retrieve mainData (AdrPembelianMicroInsurance) data")
+Rel_L(addClaim, database, "6. Retrive product (AdrMicroProduct) data")
+Rel_L(addClaim, database, "7. Retrive productDetails (AdrMicroProduct) data")
+
+Rel(addClaim, addClaims, "8. Add Claim Autocilin")
+
+Rel(addClaim, update, "9. Request Update (AdrPembelianMicroInsurance) data")
+Rel(update, database, "10. Update (AdrPembelianMicroInsurance) data")
+
+Rel(addClaim, logActivity, "11. If (type_account == 'contract'),\n Create Activity")
+Rel(addClaim, logActivitys, "12. If (type_account == 'prospect'),\n Create Activity Prospect")
+Rel(addClaim, senPushNotificationV2, "13. Send Push Notification")
+
+
+@enduml

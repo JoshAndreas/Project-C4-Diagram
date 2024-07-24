@@ -1,0 +1,21 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram for Retrieve Campaign Product data\n (/api/v1/loyalto/campaign-product)
+Boundary(api, "campaignProduct API\n[Component]"){
+    AddProperty("Path", "ms-order\api\v1\Loyalto\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Loyalto Related Function")
+    Component(campaignProduct, "campaignProduct", "Function | NodeJs", "Function for Retrieve Campaign Product data")
+    Component(signatureLoyalto, "signatureLoyalto", "Function | NodeJs", "Function for Retrieve Signature Loyalto")
+}
+AddProperty("URL", "${process.env.BASE_API_LOYALTO}/api/FormulaEvents/LuckyDraw/product")
+AddProperty("Repository", "ms-loyalto")
+Component(loyalto, "loyalto", "Function | NodeJs", "Function for Retrieve Lucky draw Product data Loyalto")
+
+Rel(controller, campaignProduct, "2. Request Retrieve Campaign Product data")
+Rel(campaignProduct, signatureLoyalto, "3. Inquiry Loyalto Signature")
+Rel_R(campaignProduct, loyalto, "4. Retrieve Lucky draw Product data Loyalto")
+
+@enduml

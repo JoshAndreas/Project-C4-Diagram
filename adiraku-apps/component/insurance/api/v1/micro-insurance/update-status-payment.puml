@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Update Status Payment Insurance\n (api/v1/micro-insurance/update-status-payment)
+AddProperty("URL", "api/v1/micro-insurance/controller.js")
+AddProperty("Repository", "ms-batch")
+Component(EOMReconMIProcess, "EOMReconMIProcess", "Function | NodeJs", "Function for EOM Micro insurance Reconing Process")
+
+Boundary(api, "Update Status Payment Insurance API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+
+    Component(updatestatusPayment, "updatestatusPayment", "Function | NodeJs", "Function for Update Insurance status payment data")
+
+    Component(AdrPembelianMicroInsurance, "AdrPembelianMicroInsurance.update", "Function | NodeJs", "Function for Update AdrPembelianMicroInsurance data")
+
+    Component(update, "AdrKeepCashback.update", "Function | NodeJs", "Function for Update AdrKeepCashback data")
+
+}    
+
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrDetailPembelian,\n AdrPembelianMicroInsurance,\n AdrKeepCashback, \nAdrPembelianMicroInsurance")
+
+
+Rel(EOMReconMIProcess, controller, "1. Request Get Insurance status payment data")
+Rel(controller, updatestatusPayment, "2. Request Get Micro Insurance Product data")
+Rel(updatestatusPayment, database, "3. Find AdrDetailPembelian data")
+Rel(updatestatusPayment, database, "4. Find AdrPembelianMicroInsurance data")
+Rel(updatestatusPayment, database, "5. Find AdrKeepCashback data")
+
+Rel(updatestatusPayment, AdrPembelianMicroInsurance, "6. Request Update AdrPembelianMicroInsurance data")
+Rel(updatestatusPayment, update, "8. If there is Cashback, Update AdrKeepCashback data")
+Rel(AdrPembelianMicroInsurance, database, "7. Update AdrPembelianMicroInsurance data")
+Rel(update, database, "9. Update AdrKeepCashback data")
+
+@enduml

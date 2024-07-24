@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title System Context Diagram for Adiraku Apps
+
+System_Boundary(Adiraku, "Adiraku Apps") {
+    Person(userBusiness, "Adiraku User", "[Business] A Customer of the Adiraku Admin Panel with personal accounts.")
+    Person(user, "Adiraku Customer", "[Member : Nasabah & Prospect] A Customer of the Adira, with personal Adiraku accounts.")
+    Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+    Rel(user, adiraku, "Uses")
+}
+
+Container_Ext(esb, "ESB", "software system", "Core system Adira")
+Container_Ext(danamon, "Danamon", "software system", "API service for support Top Up & Withdraw balance")
+Container_Ext(external, "External System", "software system", "External API for send email notification, SMS, WA, etc.")
+
+Rel(userBusiness, adiraku, "Set banner, article, maintenance & campaign Adiraku")
+Rel(adiraku, esb, "get detail customer")
+Rel(adiraku, danamon, "withdraw balance")
+Rel(danamon, adiraku, "topup balance")
+Rel(adiraku, external, "send notification")
+Rel(external, user, "send notification")
+
+SHOW_LEGEND()
+@enduml

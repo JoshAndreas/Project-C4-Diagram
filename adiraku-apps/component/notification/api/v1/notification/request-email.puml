@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Request Send Email\n (api/v1/notification/request-email)
+
+AddProperty("URL", "ms-support/api/v1/notification/helper.js")
+AddProperty("Repository", "ms-support")
+Component(newSendMail, "newSendMail", "Function | NodeJs", "Function for New Send Mail")
+
+Boundary(api, "requestSendEmail API\n[Component]"){
+    AddProperty("Path", "ms-notification\api\v1\Notification\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Notification Related Function")
+
+    Component(requestSendEmail, "requestSendEmail", "Function | NodeJs", "Function for Request Send Email")
+    
+    Component(createMqConnection, "mq.createMqConnection", "Function | NodeJs", "Function for Create Message Queue Connection")
+    Component(connect, "amqp.connect", "Function | NodeJs", "Function for Connect Object")
+    Component(createChannel, "connection.createChannel", "Function | NodeJs", "Function for Create Channel")
+    Component(getQueueName, "mq.getQueueName", "Function | NodeJs", "Function for Get Queue Name")
+    Component(assertQueue, "channel.assertQueue", "Function | NodeJs", "Function for Assert Queue")   
+    Component(sendToQueue, "channel.sendToQueue", "Function | NodeJs", "Function for Send to queue")   
+
+}
+Rel(newSendMail, controller, "1. Request send Email")
+
+Rel(controller, requestSendEmail, "2. Request send Email")
+Rel(requestSendEmail, createMqConnection, "3. Request Create Message Queue Connection")
+Rel(createMqConnection, connect, "4. Connect Object")
+Rel(createMqConnection, createChannel, "5. Create Channel")
+Rel(requestSendEmail, getQueueName, "6. Get Queue Name (emailriplay)")
+Rel(requestSendEmail, assertQueue, "7. Assert Queue")
+Rel(requestSendEmail, sendToQueue, "8. Send to queue")
+@enduml

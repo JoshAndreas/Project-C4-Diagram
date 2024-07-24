@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(getLeaderBoardAPI)")
+
+title Component Diagram for Retrieve Harcilnas Leaderboard data\n (/api/v1/loyalto/harcilnas-leaderboard)
+Boundary(api, "harcinasLeadBoard API\n[Component]"){
+    AddProperty("Path", "ms-order\api\v1\Loyalto\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Loyalto Related Function")
+    Component(harcinasLeadBoard, "harcinasLeadBoard", "Function | NodeJs", "Function for Retrieve Harcilnas Leaderboard data")
+}
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AKsAdmLeadBoardHarcilnas")
+
+
+Rel(adiraku, controller, "1. Request Retrieve Harcilnas Leaderboard data")
+
+Rel(controller, harcinasLeadBoard, "2. Request Retrieve Harcilnas Leaderboard data")
+Rel(harcinasLeadBoard, database, "3. Retrieve data\n(AKsAdmLeadBoardHarcilnas)")
+Rel(harcinasLeadBoard, database, "4. Retrieve myData\n(AKsAdmLeadBoardHarcilnas)")
+
+@enduml

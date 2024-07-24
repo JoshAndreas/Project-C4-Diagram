@@ -1,0 +1,44 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get Status Payment Insurance\n (api/v1/micro-insurance/get-status-payment)
+Component(batchCheckPayment, "batchCheckPayment", "Function | NodeJs", "Batch of Function for Check Payment")
+
+Boundary(api, "Get Status Payment Insurance API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+
+    Component(getstatusPayment, "getstatusPayment", "Function | NodeJs", "Function for Get Insurance status payment data")
+
+    Component(AdrPembelianMicroInsurance, "AdrPembelianMicroInsurance.update", "Function | NodeJs", "Function for Update AdrPembelianMicroInsurance data")
+
+    Component(update, "AdrKeepCashback.update", "Function | NodeJs", "Function for Update AdrKeepCashback data")
+
+}
+Boundary(autocilin, "autocilin"){    
+    AddProperty("URL", "${process.env.URL_AUTOCILIN}/valencia/v1/authenticate/authtoken")
+    AddProperty("Service", "Autocilin")
+    Component_Ext(requestToken, "autocilin.requestToken", "Function | NodeJs", "Function for Request Token Autocilin")
+
+    AddProperty("URL", "${process.env.URL_AUTOCILIN}/valencia/v1/datamaster/retrieve")
+    AddProperty("Service", "Autocilin")
+    Component_Ext(statusPayment, "autocilin.statusPayment", "Function | NodeJs", "Function for Retrieve Payment Status")
+}
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrDetailPembelian,\n AdrPembelianMicroInsurance,\n AdrKeepCashback, \nAdrPembelianMicroInsurance")
+
+
+Rel(batchCheckPayment, controller, "1. Request Get Insurance status payment data")
+Rel(controller, getstatusPayment, "2. Request Get Micro Insurance Product data")
+Rel(getstatusPayment, database, "3. Find AdrDetailPembelian data")
+Rel(getstatusPayment, database, "4. Find AdrPembelianMicroInsurance data")
+Rel(getstatusPayment, database, "5. Find AdrKeepCashback data")
+Rel_L(getstatusPayment, requestToken, "6. Request Token")
+Rel_R(getstatusPayment, statusPayment, "7. Get Payment Status")
+
+Rel(getstatusPayment, AdrPembelianMicroInsurance, "8. Request Update AdrPembelianMicroInsurance data")
+Rel(getstatusPayment, update, "10. If there is Cashback, Update AdrKeepCashback data")
+Rel(AdrPembelianMicroInsurance, database, "9. Update AdrPembelianMicroInsurance data")
+Rel(update, database, "11. Update AdrKeepCashback data")
+
+@enduml

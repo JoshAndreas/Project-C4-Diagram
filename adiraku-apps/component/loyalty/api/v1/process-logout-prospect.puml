@@ -1,0 +1,10 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Process Logout Prospect
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/logout-prospect")
+Container(logoutProspectAPI, "Logout Prospect API", "Microservices | NodeJS", "Logout Adiraku for Prospect")
+
+@enduml

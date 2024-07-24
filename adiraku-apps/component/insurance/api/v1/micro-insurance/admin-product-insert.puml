@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Admin Insert Product data\n (api/v1/micro-insurance/admin/product-insert)
+Container(adiraku, "Akses Admin Panel BE", "Repository | NodeJs", "Admin Panel Backend Repository for Adiraku Function (addnewtolist)")
+
+Boundary(api, "Admin Product Insert API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenAdmPanel, "utils.verifyTokenAdmPanel", "Function | NodeJs", "Function for Verify Token from Admin Panel")
+
+    Component(adminProductInsert, "adminProductInsert", "Function | NodeJs", "Function for Admin Insert Product data")
+    
+}    
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrMicroProduct")
+
+Rel(adiraku, verifyTokenAdmPanel, "1. Verify Token Admin Panel")
+Rel(verifyTokenAdmPanel, controller, "2. Request Admin Insert Product data")
+Rel(controller, adminProductInsert, "3. Request Admin Insert Product data")
+Rel(adminProductInsert, database, "4. Check Product Code (AdrMicroProduct)\ndata")
+Rel(adminProductInsert, database, "5. Create (AdrMicroProduct)\ndata")
+@enduml

@@ -1,0 +1,245 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+Boundary(AKSES, "akses-be-adminpanel"){ 
+    AddProperty("URL", "akses-be-adminpanel\api\v1\notification-personalized\controller.js")
+    AddProperty("Repository", "akses-be-adminpanel")
+    Component(createNotificationPM, "createNotificationPM", "Function | NodeJs", "Function for Create Notification")
+}
+
+Boundary(account, "ms-account"){ 
+    AddProperty("URL", "api/v1/account/change-phone-number")
+    AddProperty("Repository", "ms-account")
+    Component(changePhoneNumber, "changePhoneNumber", "Function | NodeJs", "Function for Change Phone Number")
+
+    AddProperty("URL", "api/v1/account/change-email-address")
+    AddProperty("Repository", "ms-account")
+    Component(changeEmailAddress, "changeEmailAddress", "Function | NodeJs", "Function for Change email address")
+
+    AddProperty("URL", "api/v1/account/verify-email-address")
+    AddProperty("Repository", "ms-account")
+    Component(verifyEmailAddress, "verifyEmailAddress", "Function | NodeJs", "Function for Verify email address")
+
+    AddProperty("URL", "api/v1/account/send-email")
+    AddProperty("Repository", "ms-account")
+    Component(sendMail, "sendMail", "Function | NodeJs", "Function for Send mail")
+
+    AddProperty("URL", "api/v1/account/upd-bank-account")
+    AddProperty("Repository", "ms-account")
+    Component(UpdUserBankAccountInfo, "UpdUserBankAccountInfo", "Function | NodeJs", "Function for Update user bank account information")
+
+    AddProperty("URL", "api/v1/account/bank-account")
+    AddProperty("Repository", "ms-account")
+    Component(createUserBankAccountInfo, "createUserBankAccountInfo", "Function | NodeJs", "Function for Create user bank account information")
+
+    AddProperty("URL", "api/v1/account/bank-account")
+    AddProperty("Repository", "ms-account")
+    Component(deleteUserBankAccountInfo, "deleteUserBankAccountInfo", "Function | NodeJs", "Function for Delete user bank account information")
+
+    AddProperty("URL", "/api/v1/channel/info-update-aol")
+    AddProperty("Repository", "ms-account")
+    Component(infoUpdateAOL, "infoUpdateAOL", "Function | NodeJs", "Function for Info update AOL")
+
+    AddProperty("URL", "/api/v1/contract/submit-promise-topay")
+    AddProperty("Repository", "ms-account")
+    Component(submitPromiseTopay, "submitPromiseTopay", "Function | NodeJs", "Function for Submit Promise to pay")
+
+    AddProperty("URL", "/api/v1/transaction/validation-direct-debit-regist")
+    AddProperty("Repository", "ms-account")
+    Component(validationDebitregist, "validationDebitregist", "Function | NodeJs", "Function for Validation Debit Regist")
+}
+
+Boundary(auth, "ms-authentication"){ 
+    AddProperty("URL", "/api/v1/auth/pin-v3")
+    AddProperty("Repository", "ms-authentication")
+    Component(createValidatePinV3, "createValidatePinV3", "Function | NodeJs", "Function for Create Validate Pin V3")
+
+    AddProperty("URL", "/api/v1/auth/pin-v3-gr")
+    AddProperty("Repository", "ms-authentication")
+    Component(createValidatePinV3GR, "createValidatePinV3GR", "Function | NodeJs", "Function for Create Validate Pin V3 GR")
+
+    AddProperty("URL", "/api/v1/auth/pin-v4")
+    AddProperty("Repository", "ms-authentication")
+    Component(createValidatePinV4, "createValidatePinV4", "Function | NodeJs", "Function for Create Validate Pin V4")
+}
+
+Boundary(batch, "ms-batch"){ 
+    AddProperty("URL", "ms-batch\utils\consumer.js")
+    AddProperty("Repository", "ms-batch")
+    Component(consumePayReminder, "consumePayReminder", "Function | NodeJs", "Function for Consume Pay Reminder")
+}
+
+Boundary(insurance, "ms-insurance"){ 
+    AddProperty("URL", "ms-insurance\utils\utils.js")
+    AddProperty("Repository", "ms-insurance")
+    Component(logActivity, "logActivity", "Function | NodeJs", "Function for Create Log Activity")
+}
+
+Boundary(kaspro, "ms-kaspro"){ 
+    AddProperty("URL", "ms-kaspro\infrastructures\externals\activity.js")
+    AddProperty("Repository", "ms-kaspro")
+    Component(sendActivity, "sendActivity", "Function | NodeJs", "Function for Send Activity")
+}
+
+Boundary(marketing, "ms-marketing"){ 
+    AddProperty("URL", "/api/v1/campaign-jdid/archive-voucher")
+    AddProperty("Repository", "ms-marketing")
+    Component(archiveVoucher, "archiveVoucher", "Function | NodeJs", "Function for Archieve Voucher data")
+
+    AddProperty("URL", "/api/v1/campaign-jdid/regist-claim")
+    AddProperty("Repository", "ms-marketing")
+    Component(registClaim, "registClaim", "Function | NodeJs", "Function for Regist Claim")
+}
+
+Boundary(notification, "ms-notification"){ 
+    AddProperty("URL", "/api/v1/notification/payment")
+    AddProperty("Repository", "ms-notification")
+    Component(paymentNotification, "paymentNotification", "Function | NodeJs", "Function for Create Payment Notification")
+
+    AddProperty("URL", "/api/v1/notification/channel-push-notification")
+    AddProperty("Repository", "ms-notification")
+    Component(channelNotification, "channelNotification", "Function | NodeJs", "Function for Create Channel Push Notification")
+
+    AddProperty("URL", "/api/v1/notification/notification-by-phone-number")
+    AddProperty("Repository", "ms-notification")
+    Component(notificationByPhoneNumber, "notificationByPhoneNumber", "Function | NodeJs", "Function for Notification by Phone Number")
+}
+
+Boundary(order, "ms-order"){ 
+    AddProperty("URL", "/api/v1/dop/submit")
+    AddProperty("Repository", "ms-order")
+    Component(submitApplication, "submitApplication", "Function | NodeJs", "Function for Submit Application")
+}
+
+Boundary(payment, "ms-payment"){ 
+    AddProperty("URL", "ms-payment\consumer.js")
+    AddProperty("Repository", "ms-payment")
+    Component(consumeCashbackReferral, "consumeCashbackReferral", "Function | NodeJs", "Function for Consume Cashback Referral")
+
+    AddProperty("URL", "/api/v1/channel/notification/payment")
+    AddProperty("Repository", "ms-payment")
+    Component(paymentNotifications, "paymentNotification", "Function | NodeJs", "Function for Create Payment Notification")
+
+    AddProperty("URL", "/api/v1/danamon/topup/va-payment")
+    AddProperty("Repository", "ms-payment")
+    Component(postPayment, "postPayment", "Function | NodeJs", "Function for Post Payment")
+
+    AddProperty("URL", "/api/v1/danamon/withdrawal")
+    AddProperty("Repository", "ms-payment")
+    Component(postWithdrawV2, "postWithdrawV2", "Function | NodeJs", "Function for Post Withdraw V2")
+
+    AddProperty("URL", "/api/v1/danamon/manual-cashout")
+    AddProperty("Repository", "ms-payment")
+    Component(manualCashback, "manualCashback", "Function | NodeJs", "Function for Manual Cashback")
+
+    AddProperty("URL", "/api/v1/reminder/controller.js")
+    AddProperty("Repository", "ms-payment")
+    Component(paymentReminder, "paymentReminder", "Function | NodeJs", "Function for Payment Reminder Process")
+
+    AddProperty("URL", "ms-payment\infrastructures\externals\activity.js")
+    AddProperty("Repository", "ms-payment")
+    Component(sendActivitys, "sendActivity", "Function | NodeJs", "Function for Send Activity")
+
+    AddProperty("URL", "ms-payment\utils\utils.js")
+    AddProperty("Repository", "ms-payment")
+    Component(logActivitys, "logActivity", "Function | NodeJs", "Function for Create Log Activity")
+}
+
+Boundary(paymentGateway, "ms-payment-gateway"){ 
+    AddProperty("URL", "ms-payment-gateway\utils\utils.js")
+    AddProperty("Repository", "ms-payment")
+    Component(logActivityy, "logActivity", "Function | NodeJs", "Function for Create Log Activity")
+}
+
+Boundary(support, "ms-support"){ 
+    AddProperty("URL", "api/v1/channel/voucher/status")
+    AddProperty("Repository", "ms-support")
+    Component(voucherStatus, "voucherStatus", "Function | NodeJs", "Function for Get Voucher Status")
+
+    AddProperty("URL", "api/v1/danamon/casa-callback")
+    AddProperty("Repository", "ms-support")
+    Component(casaCallback, "casaCallback", "Function | NodeJs", "Function for Casa Call back")
+
+    AddProperty("URL", "api/v1/indicative-limit/post-data-peminjam")
+    AddProperty("Repository", "ms-support")
+    Component(postDataPeminjam, "postDataPeminjam", "Function | NodeJs", "Function for Post data Peminjam")
+
+    AddProperty("URL", "api/v1/mpl/choose-type")
+    AddProperty("Repository", "ms-support")
+    Component(chooseType, "chooseType", "Function | NodeJs", "Function for Choose Type")
+
+    AddProperty("URL", "api/v1/mpl/upload-foto")
+    AddProperty("Repository", "ms-support")
+    Component(uploadFoto, "uploadFoto", "Function | NodeJs", "Function for Upload Foto")
+
+    AddProperty("URL", "ms-support\api\v1\notification\helper.js")
+    AddProperty("Repository", "ms-support")
+    Component(sendNotif, "sendNotif", "Function | NodeJs", "Function for Send Notif")
+
+    AddProperty("URL", "ms-support\utils\utils.js")
+    AddProperty("Repository", "ms-support")
+    Component(logActivitya, "logActivity", "Function | NodeJs", "Function for Create Log Activity")
+}
+
+title Component Diagram for Create Activity\n (/api/v1/activity/)
+
+Boundary(api, "postActivity API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(postActivity, "postActivity", "Function | NodeJs", "Function for Post Activity")
+    Component(mainPathFirestore, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity/data-activity`")
+    Component(sendActivitya, "sendActivity", "Function | NodeJs", "Function for Send Activity")  
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrActivity,\nPaymentReminderLog")
+
+Rel(createNotificationPM, controller, "1. API CALL")
+Rel(changePhoneNumber, controller, "1. API CALL")
+Rel(changeEmailAddress, controller, "1. API CALL")
+Rel(verifyEmailAddress, controller, "1. API CALL")
+Rel(sendMail, controller, "1. API CALL")
+Rel(UpdUserBankAccountInfo, controller, "1. API CALL")
+Rel(createUserBankAccountInfo, controller, "1. API CALL")
+Rel(deleteUserBankAccountInfo, controller, "1. API CALL")
+Rel(infoUpdateAOL, controller, "1. API CALL")
+Rel(submitPromiseTopay, controller, "1. API CALL")
+
+Rel(validationDebitregist, controller, "1. API CALL")
+Rel(createValidatePinV3, controller, "1. API CALL")
+Rel(createValidatePinV3GR, controller, "1. API CALL")
+Rel(createValidatePinV4, controller, "1. API CALL")
+Rel(logActivity, controller, "1. API CALL")
+Rel(sendActivity, controller, "1. API CALL")
+Rel(archiveVoucher, controller, "1. API CALL")
+Rel(registClaim, controller, "1. API CALL")
+Rel(paymentNotification, controller, "1. API CALL")
+Rel(channelNotification, controller, "1. API CALL")
+
+Rel(notificationByPhoneNumber, controller, "1. API CALL")
+Rel(submitApplication, controller, "1. API CALL")
+Rel(consumeCashbackReferral, controller, "1. API CALL")
+Rel(paymentNotifications, controller, "1. API CALL")
+Rel(postPayment, controller, "1. API CALL")
+Rel(postWithdrawV2, controller, "1. API CALL")
+Rel(manualCashback, controller, "1. API CALL")
+Rel(sendActivitys, controller, "1. API CALL")
+Rel(logActivitys, controller, "1. API CALL")
+Rel(logActivityy, controller, "1. API CALL")
+
+Rel(voucherStatus, controller, "1. API CALL")
+Rel(casaCallback, controller, "1. API CALL")
+Rel(postDataPeminjam, controller, "1. API CALL")
+Rel(chooseType, controller, "1. API CALL")
+Rel(uploadFoto, controller, "1. API CALL")
+Rel(sendNotif, controller, "1. API CALL")
+Rel(logActivitya, controller, "1. API CALL")
+
+Rel(controller, postActivity, "2. Request Post Activity")
+Rel(postActivity, mainPathFirestore, "3. Define Main Path Firestore")
+Rel(postActivity, sendActivitya, "4. Send Activity")
+Rel(postActivity, database, "5. Create AdrActivity data")
+Rel(postActivity, database, "6. Create PaymentReminderLog data")
+
+@enduml

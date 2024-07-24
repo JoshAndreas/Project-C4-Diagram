@@ -1,0 +1,45 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Boundary(notification, "ms-notification"){ 
+    AddProperty("URL", "/api/v1/notification/bulk-targeted")
+    AddProperty("Repository", "ms-notification")
+    Component(requestTargetedPushNotification, "requestTargetedPushNotification", "Function | NodeJs", "Function for Request Targeted Push Notification")
+
+    AddProperty("URL", "/api/v1/notification/request-notification-bulk-v2")
+    AddProperty("Repository", "ms-notification")
+    Component(reqNotifBulkV2, "reqNotifBulkV2", "Function | NodeJs", "Function for Request Notif Bulk V2")
+
+    AddProperty("URL", "/api/v1/notification-insider/request-notification-bulk")
+    AddProperty("Repository", "ms-notification")
+    Component(requestPushNotificationBulk, "requestPushNotificationBulk", "Function | NodeJs", "Function for Request Push Notification Bulk")
+
+    AddProperty("URL", "ms-notification\utils\utils.js")
+    AddProperty("Repository", "ms-notification")
+    Component(mqConsumeBulkActivity, "mqConsumeBulkActivity", "Function | NodeJs", "Function for MQ Consume Bulk Activity")
+}
+
+title Component Diagram for Create Bulk Activity\n (/api/v1/activity/bulk)
+
+Boundary(api, "postActivityBulk API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(postActivityBulk, "postActivityBulk", "Function | NodeJs", "Function for Post Activity Bulk")
+    Component(mainPathFirestore, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity/data-activity`")
+    Component(sendActivitya, "sendActivity", "Function | NodeJs", "Function for Send Activity")  
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrActivity,\nPaymentReminderLog")
+
+Rel(requestTargetedPushNotification, controller, "1. API CALL")
+Rel(reqNotifBulkV2, controller, "1. API CALL")
+Rel(requestPushNotificationBulk, controller, "1. API CALL")
+Rel(mqConsumeBulkActivity, controller, "1. API CALL")
+
+Rel(controller, postActivityBulk, "2. Request Post Activity Bulk")
+Rel(postActivityBulk, mainPathFirestore, "3. Define Main Path Firestore")
+Rel(postActivityBulk, sendActivitya, "4. Send Activity")
+Rel(postActivityBulk, database, "5. bulkCreate AdrActivity data")

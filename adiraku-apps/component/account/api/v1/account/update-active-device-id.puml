@@ -1,0 +1,32 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Update Active Device ID API (/api/v1/account/update-active-device-id)
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/pin-v4")
+Container(createOrValidatePINAPI, "Create or Validate PIN API", "Microservices | NodeJS", "Create or Validate PIN Adiraku")
+
+System_Boundary(updateActiveDeviceId, "Update Active Device ID API") {
+    Component(verifyToken, "Verify Token", "Function", "Verify Token Auth")
+    Boundary(verifyTokenAuth, "verify token auth") {
+        Component(verify, "Verify Token", "Function", "Verify JWT Token")
+        Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+        Component(encrypt, "Encrypt Data", "Function", "Encrypt Data")
+        Component(jwt, "Sign JWT", "Function", "Sign JWT")
+    }
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account")
+
+Rel(createOrValidatePINAPI, verifyToken, "1. API Call [JSON/HTTPS]")
+Rel(verifyToken, verify, "2. Send Token, Verify Token")
+Rel(verify, decrypt, "3. Decrypt data token")
+Rel(decrypt, encrypt, "4. Encrypt new data")
+Rel(encrypt, jwt, "5. Create new JWT")
+Rel(verifyToken, controller, "6. Request Data")
+Rel(controller, database, "7. Update Data")
+
+SHOW_LEGEND()
+
+@enduml

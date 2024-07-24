@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Purchase validation Micro Insurance\n (api/v1/micro-insurance/purchase-validation)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+Boundary(api, "Purchase validation API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+    Component(purchaseValidation, "purchaseValidation", "Function | NodeJs", "Function for Purchase validation Micro Insurance")
+    Component(purchaseValidations, "purchaseValidation", "Function | NodeJs", "Function for Purchase validation Micro Insurance")
+
+}
+
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrDetailPembelian,\nAdrPembelianMicroInsurance,\nAdrKeepCashback,")
+
+Rel(adiraku, verifyTokenV2, "1. Verify Token Admin Panel")
+Rel(verifyTokenV2, controller, "2. Request Purchase validation Micro Insurance")
+Rel(controller, purchaseValidation, "3. Request Purchase validation Micro Insurance")
+Rel(purchaseValidation, database, "4. Retrieve productDetails\n (AdrMicroProduct)\n data")
+Rel(purchaseValidation, purchaseValidations, "5. Purchase validation Micro Insurance Responses")
+
+@enduml

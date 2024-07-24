@@ -1,0 +1,45 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get Insurance\n (api/v1/insurance/)
+
+AddProperty("Path", "ms-kaspro\business\usecases\payment\index.js")
+AddProperty("Repository", "ms-kaspro")
+Component(processGapuraPending, "processGapuraPending", "Function | NodeJs", "Function for Find all kaspro transaction pending")
+
+AddProperty("URL", "/paymentInsurance")
+AddProperty("Repository", "ms-insurance")
+Component(postPaymentInsurance, "postPaymentInsurance", "Function | NodeJs", "Function for Post Payment Insurance")
+
+Boundary(api, "Get Insurance API\n[Component]"){
+    Component(middleware, "verifyTokenV2", "Middleware | Function", "Middleware for Verify Token")
+
+    AddProperty("Path", "ms-insurance\api\v1\insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Insurance Related Function")
+    note right
+    There is Mocking Logic in this Function
+    end note
+    Component(getInsurance, "getInsurance", "Function | NodeJs", "Function for Get Insurance")
+    Component(checkDataInsurance, "utils.checkDataInsurance", "Function | NodeJs", "Function for Check Data Insurance")
+}    
+    AddProperty("URL", "/api/v1/account/find-account-by-id")
+    AddProperty("Repository", "ms-account")
+    Component(findAccountByid, "findAccountByid", "Function | NodeJs", "Function for Get user data information")
+    
+    AddProperty("URL", "/api/v1/account/contract-list")
+    AddProperty("Repository", "ms-account")
+    Component(getContractList, "getContractList", "Function | NodeJs", "Function for Get data Contract List")
+ContainerDb(database, "Adiraku Storage", "Redis Database", "Redis data")
+Rel(postPaymentInsurance, middleware, "1. API CALL & Verify Token")
+
+Rel(processGapuraPending, middleware, "1. API CALL & Verify Token")
+Rel(middleware, controller, "2. Request Get Insurance data")
+Rel(controller, getInsurance, "3. Request Get Insurance data")
+Rel(getInsurance, findAccountByid, "4. Find Account By ID")
+Rel(getInsurance, getContractList, "5. Retrieve Contract List data")
+Rel(getInsurance, checkDataInsurance, "6. Request Check Data Insurance")
+Rel(checkDataInsurance, database, "7. Check Data Insurance")
+
+
+@enduml

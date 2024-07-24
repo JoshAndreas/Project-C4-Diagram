@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get Promo Code Credit Apps\n (api/v1/creditapplication/get-promo-code-creditapps)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(api, "getPromoCodeCApp API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\creditapplication\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Credit Application Related Function")
+
+    Component(getPromoCodeCApp, "getPromoCodeCApp", "Function | NodeJs", "Function for Get Promo Code App")
+    Component(sqlinject, "sqlinject.hasSql(promo_code)", "Function | NodeJs", "Function for Prevent SQL injection by checking the promo_code variable.")
+
+}
+
+AddProperty("URL", "process.env.MS_SUPPORT_URL + `/gamification/promo-code-creditapp`")
+AddProperty("Repository", "ms-support")
+Component(promoCodeCApp, "promoCodeCApp", "Function | NodeJs", "Function for Check Promo data")
+
+Rel(adirakuAPP, controller, "1. Request Get Promo Code App")
+Rel(controller, getPromoCodeCApp, "2. Request Get Promo Code App")
+Rel(getPromoCodeCApp, sqlinject, "3. Prevent SQL injection by checking the promo_code variable")
+Rel_R(getPromoCodeCApp, promoCodeCApp, "4. Check Promo data")

@@ -1,0 +1,42 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Recall BP (/api/v1/account/recallBP)
+
+'AddProperty("repository", "MS-Authentication")
+'AddProperty("url", "/api/v1/auth/logout")
+'Container(anonymous, "Logout API", "Microservices | NodeJS", "Logout Adiraku for Nasabah")
+
+System_Boundary(getAccountBy, "Check Account API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(outboundSAPRecall, "Outbound SAP Recall", "Function", "Function to submit inbound sap")
+    Component(findAccountByOid, "Inquiry OID", "Function", "Function to get detail OID from AOL")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account, adr_account_sap")
+ContainerDb(redis, "Adiraku Storage", "redis", "Detail oid")
+
+Rel(anonymous, controller, 1. API Call [JSON/HTTPS])
+Rel(controller, database, 2. Get data adr_account)
+Rel(controller, database, 3. Get data adr_account_sap)
+Rel(controller, outboundSAPRecall, 4. Submit SAP)
+Rel(outboundSAPRecall, findAccountByOid, 5. Call function to get detail OID)
+Rel(findAccountByOid, redis, 6. Check data oid)
+
+AddProperty("url", "/api/aol/v1/inquiryOid")
+System_Ext(inquiryOid, "ESB API", "Inquiry OID")
+
+Rel(findAccountByOid, inquiryOid, 7. Get data detail oid, if detail oid in redis is not exists)
+
+AddProperty("url", "/api/aol/v1/submitInboundSap")
+System_Ext(sapAPI, "ESB API", "Submit Inbound SAP")
+Rel(outboundSAPRecall, sapAPI, 8. Submit SAP)
+
+Rel(controller, database, 9. Update adr_account_sap & adr_account, if submit SAP success)
+
+
+
+
+SHOW_LEGEND()
+
+@enduml

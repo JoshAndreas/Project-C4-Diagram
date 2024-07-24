@@ -1,0 +1,18 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Maintenance API
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/new-login")
+Container(loginAPI, "Login API", "microservices | NodeJS", "API for Login")
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/login-v2")
+Container(registrationAPI, "Register API", "microservices | NodeJS", "API for Register Adiraku")
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/pin-v4")
+Container(createValidatePIN, "Create or Validate PIN API", "microservices | NodeJS", "Create or Validate PIN")
+
+@enduml

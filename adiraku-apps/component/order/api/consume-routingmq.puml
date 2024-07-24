@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Consume Routing MQ\n (consumer.js)
+Boundary(api, "consumeRoutingMQ API\n[Component]"){
+    AddProperty("Path", "ms-order\consumer.js")
+    Component(consumeRoutingMQ, "consumeRoutingMQ", "Function | NodeJs", "Function for Consume Routing MQ")
+    Component(createMqConnection, "mq.createMqConnection", "Function | NodeJs", "Function for Create MQ Connection")
+    Component(connect, "amqp.connect", "Function | NodeJs", "Function for Connect Object")
+    Component(createChannel, "connection.createChannel", "Function | NodeJs", "Function for Create Channel")
+    Component(getQueueName, "mq.getQueueName", "Function | NodeJs", "Function for Get Queue Name")
+    Component(prefetch, "channel.prefetch", "Function | NodeJs", "Function for Prefetch Queue")
+    Component(assertQueue, "channel.assertQueue", "Function | NodeJs", "Function for Assert Queue")
+    Component(consume, "channel.consume", "Function | NodeJs", "Function for Consume Queue")
+    Component(toMqLogActivity, "utils.toMqLogActivity", "Function | NodeJs", "Function for Send a log activity message to a message queue (MQ)")
+
+}
+
+Rel(consumeRoutingMQ, createMqConnection, "1. Request Create MQ Connection")
+Rel(createMqConnection, connect, "2. Connect Object")
+Rel(createMqConnection, createChannel, "3. Create Channel")
+Rel(consumeRoutingMQ, getQueueName, "4. Get Queue Name ('routing_mq')")
+Rel(consumeRoutingMQ, prefetch, "5. Prefetch Queue")
+Rel(consumeRoutingMQ, assertQueue, "6. Assert Queue")
+Rel(consumeRoutingMQ, consume, "7. Consume Queue")
+Rel(consumeRoutingMQ, toMqLogActivity, "8. Send a log activity message to a message queue (MQ)")
+
+@enduml

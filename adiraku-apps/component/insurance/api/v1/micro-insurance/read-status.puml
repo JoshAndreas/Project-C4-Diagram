@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Read status data\n (api/v1/micro-insurance/read-status/:tab)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku\n Function(setReadMicroInsuranceHistory)")
+Boundary(api, "Read status API\n[Component]"){
+    AddProperty("Path", "ms-insurance\api\v1\micro-insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Micro Insurance Related Function")
+    Component(verifyTokenV2, "verifyTokenV2", "Middleware | NodeJs", "Middleware for Verify Token")
+    Component(ReadStatus, "ReadStatus", "Function | NodeJs", "Function for Read Status Micro Insurance data")
+    Component(update, "AdrPembelianMicroInsurance.update", "Function | NodeJs", "Function for Update AdrPembelianMicroInsurance data")
+}    
+ContainerDb(database, "Adiraku Storage", "mySql Database", "AdrPembelianMicroInsurance")
+
+Rel(adiraku, verifyTokenV2, "1. Verify Token Admin Panel")
+Rel(verifyTokenV2, controller, "2. Request Read Status Micro Insurance data")
+Rel(controller, ReadStatus, "3. Request Read Status Micro Insurance data")
+Rel(ReadStatus, database, "4. Find (AdrPembelianMicroInsurance) data")
+Rel(ReadStatus, update, "5. Request Update (AdrPembelianMicroInsurance) data")
+Rel(update, database, "6. Update (AdrPembelianMicroInsurance) data")
+@enduml

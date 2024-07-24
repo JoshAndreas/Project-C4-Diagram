@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Adiraku APP API (ms-insurance)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+Component(insurance, "ms-insurance", "Repository | NodeJs", "Repository for Function Related to Insurance")
+
+System_Boundary(APIsystem, "API System V2"){
+    Boundary(micros, "v2/micro-insurance"){
+    AddProperty("URL", "api/v2/micro-insurance/add-claim")
+    Component(addClaims, "addClaimV2", "Function | NodeJs", "Function for Add Claim Micro Insurance")
+
+    AddProperty("URL", "api/v2/micro-insurance/check-documents")
+    Component(checkDocumentsV2, "checkDocumentsV2", "Function | NodeJs", "Function for Check Document Micro Insurance")
+
+    AddProperty("URL", "api/v2/micro-insurance/get-products")
+    Component(getProductsv2, "getProducts", "Function | NodeJs", "Function for Get Micro Insurance Product data")
+}
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database, redis", "All store for save data and content")
+
+Rel(adirakuAPP, insurance, "Request use Function Related to Insurance")
+
+Rel(insurance, addClaims, "Request Add Claim Micro Insurance")
+Rel(insurance, checkDocumentsV2, "Request Check Document Micro Insurance")
+Rel(insurance, getProductsv2, "Request Get Micro Insurance Product data")
+
+Rel(addClaims, database, "Add Claim Micro Insurance")
+Rel(checkDocumentsV2, database, "Check Document Micro Insurance")
+Rel(getProductsv2, database, "Get Micro Insurance Product data")
+SHOW_LEGEND()
+
+@enduml

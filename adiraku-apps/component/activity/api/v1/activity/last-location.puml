@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+    AddProperty("URL", "ms-account\utils\utils.js")
+    AddProperty("Repository", "ms-account")
+    Component(lastLocation, "lastLocation", "Function | NodeJs", "Function for Retrieve Last Location data")
+
+title Component Diagram for Retrieve Last Location data\n (/api/v1/activity/last-location)
+
+Boundary(api, "lastLocation API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(lastLocations, "lastLocation", "Function | NodeJs", "Function for Retrieve Last Location data")
+}
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrLastLocation")
+
+Rel(lastLocation, controller, "1. API CALL")
+
+Rel(controller, lastLocations, "2. Request Retrieve Last Location data")
+Rel(lastLocations, database, "3. findData AdrLastLocation data")
+Rel(lastLocations, database, "4. if (findData), update AdrLastLocation data")
+Rel(lastLocations, database, "4. Else, create AdrLastLocation data")

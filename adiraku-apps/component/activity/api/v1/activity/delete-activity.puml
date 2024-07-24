@@ -1,0 +1,44 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+Boundary(support, "ms-support"){
+AddProperty("URL", "api/v1/mpl/choose-type")
+AddProperty("Repository", "ms-support")
+Component(chooseType, "chooseType", "Function | NodeJs", "Function for Choose Type")
+
+AddProperty("URL", "api/v1/mpl/upload-foto")
+AddProperty("Repository", "ms-support")
+Component(uploadFoto, "uploadFoto", "Function | NodeJs", "Function for Upload Foto")
+
+AddProperty("URL", "api/v1/mpl/upload-video")
+AddProperty("Repository", "ms-support")
+Component(uploadVideo, "uploadVideo", "Function | NodeJs", "Function for Upload Video")
+
+AddProperty("URL", "api/v1/mpl/finishing-schedule")
+AddProperty("Repository", "ms-support")
+Component(finishingSch, "finishingSch", "Function | NodeJs", "Function for Finishing Schedule")
+}
+
+title Component Diagram for Delete Activity\n(/api/v1/activity/delete-activity)
+
+Boundary(api, "deleteActivity API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(deleteActivity, "deleteActivity", "Function | NodeJs", "Function for Delete Activity data")
+    Component(mainPathFirestore, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity/data-activity`")
+    Component(sendActivity, "sendActivity", "Function | NodeJs", "Function for Send Activity")  
+}
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrActivity")
+
+Rel(chooseType, controller, "1. API CALL")
+Rel(uploadFoto, controller, "1. API CALL")
+Rel(uploadVideo, controller, "1. API CALL")
+Rel(finishingSch, controller, "1. API CALL")
+
+Rel(controller, deleteActivity, "2. Request Retrieve Info Reward data")
+Rel(deleteActivity, database, "3. Find AdrActivity data")
+Rel(deleteActivity, database, "4. Update AdrActivity data")
+Rel(deleteActivity, mainPathFirestore, "5. Define Main Path Firestore")
+Rel(deleteActivity, sendActivity, "6. Send AdrActivity data")

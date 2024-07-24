@@ -1,0 +1,57 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Find mobile number register API (/api/v1/account/find-mobile-number-v2)
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/login-v2")
+Component(registrationAPI, "Registration API", "Microservices | NodeJS", "Registration Adiraku")
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/pin-v4")
+Component(createOrValidatePINAPI, "Create or Validate PIN API", "Microservices | NodeJS", "Create or Validate PIN Adiraku")
+
+System_Boundary(findMobileNumberRegister, "Find Mobile Number Register API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_historical_tnc, adr_account")
+
+AddProperty("repository", "MS-Loyalty")
+AddProperty("url", "/api/v1/find-mobile-number-prospect")
+Component(findMobileNumberProspect, "Find Mobile Number Prospect API", "Microservices | NodeJS", "Check Mobile Number")
+
+Rel(registrationAPI, controller, 1. API Call [JSON/HTTPS])
+Rel(createOrValidatePINAPI, controller, 1. API Call [JSON/HTTPS])
+Rel(controller, database, 2. read data adr_historical_tnc)
+Rel(controller, findMobileNumberProspect, 3. check prospect account)
+
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/update-otp-same-device")
+Component(updateOTPSameDevice, "Update OTP Same Device API", "Microservices | NodeJS", "Update OTP Validate")
+
+'If prospect account available
+Rel(controller, updateOTPSameDevice, 4. Update OTP Validate, if prospect account available & isSameDevice true)
+
+
+'If prospect account not available
+Rel(controller, database, 4. read data adr_account, if prospect account not available)
+
+'If account available
+Rel(controller, updateOTPSameDevice, 5. Update OTP Validate, if account available & isSameDevice true)
+
+
+AddProperty("url", "/api/i5/aol/v1/inquiryMobileKtp")
+System_Ext(inquiryMobileKTPNewAPI, "ESB API", "Inquiry Mobile KTP API")
+
+'If account not available
+Rel(controller, inquiryMobileKTPNewAPI, 5. Update OTP Validate, if account not available)
+Rel(controller, database, 6. count data by oid, if account not available & inquiryMobileKTPNewAPI success)
+Rel(controller, database, 7. read data by oid, if account not available & inquiryMobileKTPNewAPI success)
+
+
+
+
+
+@enduml

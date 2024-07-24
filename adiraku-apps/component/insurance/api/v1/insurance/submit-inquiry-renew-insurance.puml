@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Submit Inquiry Renew Insurance\n (api/v1/insurance/submit-inquiry-renew-insurance)
+
+
+Boundary(api, "Submit Inquiry Renew Insurance API\n[Component]"){
+    Component(middleware, "verifyTokenV2", "Middleware | Function", "Middleware for Verify Token")
+
+    AddProperty("Path", "ms-insurance\api\v1\insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Insurance Related Function")
+    Component(submitInquiryRenewInsurance, "submitInquiryRenewInsurance", "Function | NodeJs", "Function for Submit Inquiry Renew Insurance data")
+    Component(submitInquiryRenewInsurances, "utils.submitInquiryRenewInsurance", "Function | NodeJs", "Function for Submit Inquiry Renew Insurance data")
+
+}
+    AddProperty("URL", "/api/v1/account/find-account-by-id")
+    AddProperty("Repository", "ms-account")
+    Component(findAccountByid, "findAccountByid", "Function | NodeJs", "Function for Get user data information")
+
+Rel(Adiraku, middleware, "1. API CALL & Verify Token")
+Rel(middleware, controller, "2. Submit Inquiry Renew Insurance")
+Rel(controller, submitInquiryRenewInsurance, "3. Request Submit Inquiry Renew Insurance")
+Rel(submitInquiryRenewInsurance, findAccountByid, "4. Find Account By ID")
+Rel(submitInquiryRenewInsurance, submitInquiryRenewInsurances, "5. Submit Inquiry Renew Insurance data")
+
+
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Notification Insider Omni\n (api/v1/notification-insider/notification-insider-omni)
+
+Boundary(api, "requestPushNotificationBulkProspect API\n[Component]"){
+    AddProperty("Path", "ms-notification\api\v1\Notification\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Notification Related Function")
+
+    Component(insiderAsOmnichannel, "insiderAsOmnichannel", "Function | NodeJs", "Function for Insider As Omni Channel") 
+
+}
+AddProperty("URL", "process.env.MS_KASPRO_URL + '/user/insider/id?id=' + mobile_number")
+AddProperty("Repository", "ms-kaspro")
+Component(getUserKaspro, "utils.getUserKaspro", "Function | NodeJs", "Function for Get User Kaspro") 
+
+AddProperty("URL", "process.env.MS_LOYALTY_URL + '/profile/insider/' + oid + '/0/10'")
+AddProperty("Repository", "ms-loyalty")
+Component(cekPointLoyalty, "utils.cekPointLoyalty", "Function | NodeJs", "Function for Check Point Loyalty")
+
+AddProperty("URL", "process.env.LME_API_BASE_URL + '/InqService/checkLimit'")
+AddProperty("Service", "LME")
+Component_Ext(inqlmedata, "utils.inqlmedata", "Function | NodeJs", "Function for Check credit limit")
+
+AddProperty("URL", "process.env.URL_WA_INFOBIP + '/communication/1/flows/' + campaign_id + '/participants?phone=' + phoneNumber")
+AddProperty("Service", "INFOBIP")
+Component_Ext(sendCampaign, "utils.sendCampaign", "Function | NodeJs", "Function for Send Campaign")
+
+ComponentDb(database, "Adiraku Storage", "mySql Storage", "AdrAccount,\nProfile,\nAdrVa")
+
+
+Rel(controller, insiderAsOmnichannel, "2. Request Notification Bulk Insider Prospect")
+Rel(insiderAsOmnichannel, database, "3. Check Phone data (AdrAccount)")
+Rel(insiderAsOmnichannel, database, "3. If Null, Check Prospect data (Profile)")
+Rel(insiderAsOmnichannel, database, "4. If Null, Check VA (AdrVa)")
+Rel(insiderAsOmnichannel, getUserKaspro, "4. Check Kaspro")
+Rel(insiderAsOmnichannel, cekPointLoyalty, "5. Check Point Loyalty")
+Rel(insiderAsOmnichannel, inqlmedata, "6. Check credit limit")
+Rel(insiderAsOmnichannel, sendCampaign, "7. Send Campaign")

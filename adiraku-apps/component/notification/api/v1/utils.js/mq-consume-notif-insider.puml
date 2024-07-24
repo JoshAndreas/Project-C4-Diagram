@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Consume Notif Insider Message from MQ\n (utils/utils.js)
+Boundary(api, "mqConsumeNotifInsider API\n[Component]"){
+    AddProperty("Path", "ms-notification\utils\utils.js")
+    Component(mqConsumeNotifInsider, "mqConsumeNotifInsider", "Function | NodeJs", "Function for Consume Notif Insider Message from MQ")
+    Component(createMqConnection, "mq.createMqConnection", "Function | NodeJs", "Function for Create MQ Connection")
+    Component(connect, "amqp.connect", "Function | NodeJs", "Function for Connect Object")
+    Component(createChannel, "connection.createChannel", "Function | NodeJs", "Function for Create Channel")
+    Component(getQueueName, "mq.getQueueName", "Function | NodeJs", "Function for Get Queue Name")
+    Component(assertQueue, "channel.assertQueue", "Function | NodeJs", "Function for Assert Queue")
+    Component(consume, "channel.consume", "Function | NodeJs", "Function for Consume Queue")
+}
+AddProperty("URL", "process.env.INSIDER_NOTIF_URL")
+AddProperty("Services", "Insider")
+Component_Ext(Insider, "insiderResponse", "Function | NodeJs", "Function for Retrieve Insider Responses")
+
+Rel(mqConsumeNotifInsider, createMqConnection, "1. Request Consume Notif Insider Message from MQ")
+Rel(createMqConnection, connect, "2. Connect Object")
+Rel(createMqConnection, createChannel, "3. Create Channel")
+Rel(mqConsumeNotifInsider, getQueueName, "4. Get Queue Name ('notification_insider')")
+Rel(mqConsumeNotifInsider, assertQueue, "5. Assert Queue")
+Rel(mqConsumeNotifInsider, consume, "6. Consume Queue")
+Rel_L(consume, Insider, "7. Retrieve Insider Responses")
+
+@enduml

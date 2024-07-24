@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Get User Property\n (api/v1/insurance/get-user-property)
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+
+Boundary(api, "Get User Property API\n[Component]"){
+    Component(middleware, "verifyTokenV2", "Middleware | Function", "Middleware for Verify Token")
+
+    AddProperty("Path", "ms-insurance\api\v1\insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Insurance Related Function")
+    Component(getUserProperty, "getUserProperty", "Function | NodeJs", "Function for Get user Property data")
+
+    Component(findOne, "ObjectCsSo.findOne", "Function | NodeJs", "Function for Find ObjectCsSo data")
+
+    Component(getUserPropertys, "utils.getUserProperty", "Function | NodeJs", "Function for Get user Property data")
+}
+    AddProperty("Path", "/Commonswebapi/api/Ad1Access/GetUserProperty")
+    Component(Ad1Access, "Ad1Access", "API")
+    
+ContainerDb(database, "Adiraku Storage", "mySql Database", "ObjectCsSo")
+
+Rel(adiraku, middleware, "1. API CALL & Verify Token")
+Rel(middleware, controller, "2. Request Get user Property data")
+Rel(controller, getUserProperty, "3. Request Get user Property data")
+Rel(getUserProperty, findOne, "6. Request Find ObjectCsSo Data")
+Rel_L(findOne, database, "7. Find ObjectCsSo Data")
+
+Rel(getUserProperty, getUserPropertys, "4. Get user Property data")
+Rel(getUserPropertys, Ad1Access, "5. API POST")
+
+
+
+@enduml

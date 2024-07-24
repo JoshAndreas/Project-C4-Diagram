@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram for Convert Harcilnas\n (/api/v1/loyalto/harcilnas-get-point-lucky-draw/:oid/:limit/:offset)
+Boundary(api, "hclPointLuckyDr API\n[Component]"){
+    AddProperty("Path", "ms-order\api\v1\Loyalto\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Loyalto Related Function")
+    Component(hclPointLuckyDr, "hclPointLuckyDr", "Function | NodeJs", "Function for Retrieve Lucky Draw Point Harcilnas data")
+    Component(signatureLoyalto, "signatureLoyalto", "Function | NodeJs", "Function for Retrieve Signature Loyalto")
+}
+AddProperty("URL", "${process.env.BASE_API_LOYALTO}/api/LuckyDraw/${oid}/${limit}/${offset}")
+AddProperty("Repository", "ms-loyalto")
+Component(loyalto, "loyalto", "Function | NodeJs", "Function for Get Point Lucky draw Loyalto")
+
+
+
+Rel(controller, hclPointLuckyDr, "1. Request Retrieve Lucky Draw Point Harcilnas data")
+Rel(hclPointLuckyDr, signatureLoyalto, "2. Inquiry Loyalto Signature")
+Rel_R(hclPointLuckyDr, loyalto, "3. Get Point Lucky draw Loyalto")
+
+@enduml

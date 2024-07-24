@@ -1,0 +1,179 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Adiraku APP API (ms-insurance)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+Component(insurance, "ms-insurance", "Repository | NodeJs", "Repository for Function Related to Insurance")
+
+System_Boundary(APIsystem, "API System V1"){
+Boundary(ikhtisar, "v1/ikhtisar"){
+    AddProperty("URL", "/api/v1/ikhtisar/download-ikhtisar-byContractNo")
+    Component(downloadFileIkhtisarDetailContract, "downloadFileIkhtisarDetailContract", "Function | NodeJs", "Function for Download File Ikhtisar Detail by Contract Number")
+    
+    AddProperty("URL", "api/v1/ikhtisar/downloadIkhtisar")
+    Component(downloadManual, "downloadManual", "Function | NodeJs", "Function for Download Manual")
+    
+    AddProperty("URL", "api/v1/ikhtisar/send-email-ikhtisar-file")
+	Component(sendAndDownloadIkhtisarByMail, "sendAndDownloadIkhtisarByMail", "Function | NodeJs", "Function for Send and Download Ikhtisar By Mail")
+}
+Boundary(insurances, "v1/insurance"){
+    AddProperty("URL", "api/v1/insurance/generate-ikhtisar")
+    Component(generateIkhtisar, "generateIkhtisar", "Function | NodeJs", "Function for Generate Ikhtisar")
+    
+    AddProperty("URL", "api/v1/insurance/")
+    Component(getInsurance, "getInsurance", "Function | NodeJs", "Function for Get Insurance")
+    
+    AddProperty("URL", "api/v1/insurance/new-inquiry")
+    Component(getNewInsurance, "getNewInsurance", "Function | NodeJs", "Function for Get New Insurance data")
+
+    AddProperty("URL", "api/v1/insurance/get-user-property")
+    Component(getUserProperty, "getUserProperty", "Function | NodeJs", "Function for Get user Property data")
+
+    AddProperty("URL", "api/v1/insurance/new-payment")
+    Component(postNewPaymentInsurance, "postNewPaymentInsurance", "Function | NodeJs", "Function for Post New Payment Insurance data")
+
+    AddProperty("URL", "api/v1/insurance/paymentInsurance")
+    Component(postPaymentInsurance, "postPaymentInsurance", "Function | NodeJs", "Function for Post Payment Insurance")
+}
+Boundary(micro, "v1/micro-insurance"){    
+    AddProperty("URL", "api/v1/micro-insurance/add-claim")
+    Component(addClaim, "addClaim", "Function | NodeJs", "Function for Add Claim Micro Insurance")
+
+    AddProperty("URL", "api/v1/micro-insurance/admin/product-insert")
+    Component(adminProductInsert, "adminProductInsert", "Function | NodeJs", "Function for Admin Insert Product data")
+
+    AddProperty("URL", "api/v1/micro-insurance/admin/product-delete")
+    Component(adminProductDelete, "adminProductDelete", "Function | NodeJs", "Function for Admin Delete Product data")
+
+    AddProperty("URL", "api/v1/micro-insurance/admin/product-list")
+    Component(adminProductList, "adminProductList", "Function | NodeJs", "Function for Retrieve all Admin list Product data")
+
+    AddProperty("URL", "api/v1/micro-insurance/admin/product-update")
+    Component(adminProductUpdate, "adminProductUpdate", "Function | NodeJs", "Function for Admin Update Product data")
+
+    AddProperty("URL", "api/v1/micro-insurance/batch-checking-payment")
+    Component(batchCheckPayments, "batchCheckPayment", "Function | NodeJs", "Function for Batching Check Payment Micro Insurance")
+
+    AddProperty("URL", "api/v1/micro-insurance/batch-checking-status")
+    Component(batchCheckStatuss, "batchCheckStatus", "Function | NodeJs", "Function for Batching status Micro Insurance")
+
+    AddProperty("URL", "api/v1/micro-insurance/cancellation")
+    Component(cancellation, "cancellation", "Function | NodeJs", "Function for Cancellation Micro Insurance")
+
+    AddProperty("URL", "api/v1/micro-insurance/check-documents")
+    Component(checkDocuments, "checkDocuments", "Function | NodeJs", "Function for Check Document Micro Insurance")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-city")
+    Component(getCity, "getCity", "Function | NodeJs", "Function for Get City data")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-disburse-cashback")
+    Component(getDisburseCashback, "getDisburseCashback", "Function | NodeJs", "Function for Get Disburse Cashback data")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-monthdata-polis")
+    Component(getMonthDataPolis, "getMonthDataPolis", "Function | NodeJs", "Function for Get Monthly data Polis")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-products/:search")
+    Component(getProducts, "getProducts", "Function | NodeJs", "Function for Get Micro Insurance Product data")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-province")
+    Component(getProvince, "getProvince", "Function | NodeJs", "Function for Get Province data")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-status-payment")
+    Component(getstatusPayment, "getstatusPayment", "Function | NodeJs", "Function for Get Insurance status payment data")
+
+    AddProperty("URL", "api/v1/micro-insurance/read-status/:tab")
+    Component(ReadStatus, "ReadStatus", "Function | NodeJs", "Function for Read Status Micro Insurance data")
+
+    AddProperty("URL", "api/v1/micro-insurance/payment-notif")
+    Component(paymentNotif, "paymentNotif", "Function | NodeJs", "Function for Batching Check Payment Micro Insurance")
+
+    AddProperty("URL", "api/v1/micro-insurance/purchase-validation")
+    Component(purchaseValidation, "purchaseValidation", "Function | NodeJs", "Function for Purchase validation Micro Insurance")
+
+    AddProperty("URL", "api/v1/micro-insurance/submit-purchase")
+    Component(submitPurchase, "submitPurchase", "Function | NodeJs", "Function for Submit Purchase data")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-details")
+    Component(getDetails, "getDetails", "Function | NodeJs", "Function for Get Detail Micro Insurance data")
+
+    AddProperty("URL", "api/v1/micro-insurance/get-document-polis")
+    Component(getDocumentPolis, "getDocumentPolis", "Function | NodeJs", "Function for Get Document Polis data")
+
+    AddProperty("URL", "api/v1/micro-insurance/update-status-payment")
+    Component(updatestatusPayment, "updatestatusPayment", "Function | NodeJs", "Function for Update Insurance status payment data")
+}
+}
+ComponentDb(database, "Adiraku Storage", "mysql database, redis", "All store for save data and content")
+
+Rel(adirakuAPP, insurance, "Request use Function Related to Insurance")
+
+Rel(insurance, downloadFileIkhtisarDetailContract, "Request Download File Ikhtisar Detail by Contract Number")
+Rel(insurance, downloadManual, "Request Download Manual")
+Rel(insurance, generateIkhtisar, "Request Generate Ikhtisar")
+Rel(insurance, getInsurance, "Request Get Insurance")
+Rel(insurance, getNewInsurance, "Request Get New Insurance data")
+Rel(insurance, getUserProperty, "Request Get user Property data")
+Rel(insurance, postNewPaymentInsurance, "Request Post New Payment Insurance data")
+Rel(insurance, postPaymentInsurance, "Request Post Payment Insurance data")
+Rel(insurance, sendAndDownloadIkhtisarByMail, "Request Send and Download Ikhtisar By Mail")
+
+Rel(insurance, addClaim, "Request Add Claim Micro Insurance")
+Rel(insurance, adminProductInsert, "Request Admin Insert Product data")
+Rel(insurance, adminProductDelete, "Request Admin Delete Product data")
+Rel(insurance, adminProductList, "Request Admin List Product data")
+Rel(insurance, adminProductUpdate, "Request Admin Update Product data")
+Rel(insurance, batchCheckPayments, "Request Check Payment Micro Insurance")
+Rel(insurance, batchCheckStatuss, "Request Check Status Micro Insurance")
+Rel(insurance, cancellation, "Request Cancellation")
+Rel(insurance, checkDocuments, "Request Check Document Micro Insurance")
+
+Rel(insurance, getCity, "Request Get City data")
+Rel(insurance, getDisburseCashback, "Request Get Disburse Cashback data")
+Rel(insurance, getMonthDataPolis, "Request Get Monthly data Polis")
+Rel(insurance, getProducts, "Request Get Product data") 
+Rel(insurance, getProvince, "Request Get Province data")
+Rel(insurance, getstatusPayment, "Request Get Status Payment")
+Rel(insurance, ReadStatus, "Request Read Micro Insurance status")
+Rel(insurance, paymentNotif, "Request Payment Notification")
+Rel(insurance, purchaseValidation, "Request Purchase Validation")
+
+Rel(insurance, submitPurchase, "Request Submit Purchase")
+Rel(insurance, updatestatusPayment, "Request Update Status Payment")
+Rel(insurance, getDetails, "Request Get Detail Micro Insurance data")
+Rel(insurance, getDocumentPolis, "Request Get Document Polis data")
+
+Rel(downloadFileIkhtisarDetailContract, database, "Download File Ikhtisar Detail by Contract Number")
+Rel(downloadManual, database, "Download Manual")
+Rel(generateIkhtisar, database, "Generate Ikhtisar")
+Rel(getInsurance, database, "Get Insurance")
+Rel(getNewInsurance, database, "Get New Insurance data")
+Rel(getUserProperty, database, "Get user Property data")
+Rel(postNewPaymentInsurance, database, "Post New Payment Insurance data")
+Rel(postPaymentInsurance, database, "Post Payment Insurance data")
+Rel(sendAndDownloadIkhtisarByMail, database, "Send and Download Ikhtisar By Mail")
+Rel(addClaim, database, "Add Claim Micro Insurance")
+Rel(adminProductInsert, database, "Admin Insert Product data")
+Rel(adminProductDelete, database, "Admin Delete Product data")
+Rel(adminProductList, database, "Admin List Product data")
+Rel(adminProductUpdate, database, "Admin Update Product data")
+Rel(batchCheckPayments, database, "Check Payment Micro Insurance")
+Rel(batchCheckStatuss, database, "Check Status Micro Insurance")
+Rel(cancellation, database, "Cancellation")
+Rel(checkDocuments, database, "Check Document Micro Insurance")
+Rel(getCity, database, "Get City data")
+Rel(getDisburseCashback, database, "Get Disburse Cashback data")
+Rel(getMonthDataPolis, database, "Get Monthly data Polis")
+Rel(getProducts, database, "Get Product data")
+Rel(getProvince, database, "Get Province data")
+Rel(getstatusPayment, database, "Get Status Payment")
+Rel(ReadStatus, database, "Read Micro Insurance status")
+Rel(paymentNotif, database, "Payment Notification")
+Rel(purchaseValidation, database, "Purchase Validation")
+Rel(submitPurchase, database, "Submit Purchase")
+Rel(updatestatusPayment, database, "Update Status Payment")
+Rel(getDetails, database, "Get Detail Micro Insurance data")
+Rel(getDocumentPolis, database, "Get Document Polis data")
+SHOW_LEGEND()
+
+@enduml

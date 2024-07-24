@@ -1,0 +1,31 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Update Referral Status API (/api/v1/auth/referral/status)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(referralStatusAPI, "Referral Status API") {
+    Component(verifyToken, "Verify Token", "Function", "Verify Token Mobile Number")
+    Boundary(verifyTokenMobile, "verify token") {
+        Component(verify, "Verify Token", "Function", "Verify JWT Token")
+        Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+        Component(encrypt, "Encrypt Data", "Function", "Encrypt Data")
+        Component(jwt, "Sign JWT", "Function", "Sign JWT")
+    }
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_eligible_referral")
+
+Rel(adirakuAPP, verifyToken, "1. API Call [JSON/HTTPS]")
+Rel(verifyToken, verify, "2a. Send Token, Verify Token")
+Rel(verify, decrypt, "2b. Decrypt Data")
+Rel(decrypt, encrypt, "2c. Encrypt new Data")
+Rel(encrypt, jwt, "2d. Create new JWT")
+Rel(verifyToken, controller, "3. Send request data")
+Rel(controller, database, "4. Update data")
+
+SHOW_LEGEND()
+
+@enduml

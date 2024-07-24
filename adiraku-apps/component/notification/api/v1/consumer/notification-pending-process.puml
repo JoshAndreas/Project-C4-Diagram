@@ -1,0 +1,41 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Handle Notification Pending Process\n (consumer/index.js)
+
+Boundary(api, "insertNotificationBulk API\n[Component]"){
+    AddProperty("Path", "ms-notification\consumer\index.js")
+    Component(handleConsumerKafka, "handleConsumerKafka", "Function | NodeJs", "Function for Handle Consumer Kafka")
+    Component(notificationPendingProcess, "notificationPendingProcess", "Function | NodeJs", "Function for Handle Notification Pending Process")
+}
+    Component(redisLock, "clientRedis.redisLock", "Function | NodeJs", "Function for Bulk Create Notification")
+    Component(getDataPending, "domSqlNotifications.getDataPending", "Function | NodeJs", "Function for Get Pending Notification data")
+    Component(updateProgressData, "domSqlNotifications.updateProgressData", "Function | NodeJs", "Function for Update Pending Notification Progress data")
+    Component(sendNotification, "domHttpInsider.sendNotification", "Function | NodeJs", "Function for Send Notification")
+    Component(updateSuccessData, "domSqlNotifications.updateSuccessData", "Function | NodeJs", "Function for Update Success data")
+    Component(updateFailData, "domSqlNotifications.updateFailData", "Function | NodeJs", "Function for Update Fail data")
+
+    Component(unlockRedis, "clientRedis.unlockRedis", "Function | NodeJs", "Function for Unlock Redis")
+ComponentDb(redis, "Adiraku Redis Storage", "Redis", "clientRedis")
+ComponentDb(sql, "Adiraku mySql Storage", "mySql Storage", "Notifications")
+
+Rel(handleConsumerKafka, notificationPendingProcess, "1. Request Handle Notification Pending Process")
+
+Rel(notificationPendingProcess, redisLock, "2. Request Lock Redis")
+Rel(redisLock, redis, "3. Lock Redis")
+Rel(notificationPendingProcess, getDataPending, "4. Request Get Pending Notification data")
+Rel(getDataPending, sql, "5. Get Pending Notification data")
+Rel(notificationPendingProcess, updateProgressData, "6. Request Update Pending Notification Progress data")
+Rel(updateProgressData, sql, "7. Update Pending Notification Progress data")
+
+Rel(notificationPendingProcess, sendNotification, "8. Send Notification")
+Rel(notificationPendingProcess, updateSuccessData, "9. If notification Success to send, Request Update Success Notification data")
+Rel(updateSuccessData, sql, "10. Update Success Notification data data")
+Rel(notificationPendingProcess, updateFailData, "9. If notification Failed to send, Request Update Failed Notification data")
+Rel(updateFailData, sql, "10. Update Fail Notification data")
+
+Rel(notificationPendingProcess, unlockRedis, "11. Request Unlock Redis")
+Rel(unlockRedis, redis, "12. Unlock Redis")
+
+@endumls

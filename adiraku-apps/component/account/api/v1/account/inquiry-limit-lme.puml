@@ -1,0 +1,24 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Inquiry LME (/api/v1/account/inquiry-limit-lme)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(getAccountBy, "Check Account API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(inqLmeData, "Inquiry LME Data", "Function", "Function to get data LME")
+}
+
+
+Rel(adirakuAPP, controller, 1. API Call [JSON/HTTPS])
+Rel(controller, inqLmeData, 2. Call function)
+
+AddProperty("url", "/InqService/checkLimit")
+System_Ext(inquiryLMEOid, "LME API", "Inquiry LME by OID")
+
+Rel(inqLmeData, inquiryLMEOid, 3. Inquiry limit LME)
+
+SHOW_LEGEND()
+
+@enduml

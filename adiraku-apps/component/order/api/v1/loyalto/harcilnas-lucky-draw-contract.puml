@@ -1,0 +1,33 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+Boundary(marketing, "ms-marketing"){
+AddProperty("URL", "/api/v1/harcilnas/channel/check")
+AddProperty("Repository", "ms-marketing")
+Component(channelCheck, "channelCheck", "Function | NodeJs", "Function for Check Channel Harcilnas")
+
+AddProperty("URL", "/api/v1/harcilnas/channel/convert")
+AddProperty("Repository", "ms-marketing")
+Component(convertChannel, "convertChannel", "Function | NodeJs", "Function for Convert Harcilnas Channel")
+}
+title Component Diagram for Convert Harcilnas\n (/harcilnas-get-point-lucky-draw-contract/:oid/:contract/:limit/:offset)
+Boundary(api, "hclPointLuckyDrCR API\n[Component]"){
+    AddProperty("Path", "ms-order\api\v1\Loyalto\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Loyalto Related Function")
+    Component(hclPointLuckyDrCR, "hclPointLuckyDrCR", "Function | NodeJs", "Function for Retrieve Lucky Draw Harcilnas data (Contract)")
+    Component(signatureLoyalto, "signatureLoyalto", "Function | NodeJs", "Function for Retrieve Signature Loyalto")
+}
+AddProperty("URL", "${process.env.BASE_API_LOYALTO}/api/LuckyDraw/${oid}/${contract}/${limit}/${offset}")
+AddProperty("Repository", "ms-loyalto")
+Component(loyalto, "loyalto", "Function | NodeJs", "Function for Get Point Lucky draw Loyalto (Contract)")
+
+
+Rel(channelCheck, controller, "1. API CALL")
+Rel(convertChannel, controller, "1. API CALL")
+
+Rel(controller, hclPointLuckyDrCR, "2. Request Retrieve Lucky Draw Point Harcilnas data (Contract)")
+Rel(hclPointLuckyDrCR, signatureLoyalto, "3. Inquiry Loyalto Signature")
+Rel_R(hclPointLuckyDrCR, loyalto, "4. Get Point Lucky draw Loyalto (Contract)")
+
+@enduml

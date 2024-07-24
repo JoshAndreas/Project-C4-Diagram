@@ -1,0 +1,45 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Create or Validate PIN API (/api/v1/auth/pin-v4)
+
+'LAYOUT_LANDSCAPE()
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(createValidatePIN, "Create or Validate PIN API") {
+    Component(verifyToken, "Verify Token", "Function", "Verify Token Mobile Number")
+    Boundary(verifyTokenMobile, "verify token") {
+        Component(verify, "Verify Token", "Function", "Verify JWT Token")
+        Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+        Component(encrypt, "Encrypt Data", "Function", "Encrypt Data")
+        Component(jwt, "Sign JWT", "Function", "Sign JWT")
+    }
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(contract, "Flow Contract")
+    Component(prospect, "Flow Prospect")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_eligible_referral, adr_auth_otp")
+
+SystemDb_Ext(firestore, "Adiraku Firestore", "Data Session")
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/find-mobile-number-v2")
+Component(findMobileNumber, "Find Mobile Number API", "microservices | NodeJS", "Find data mobile number")
+
+Rel(adirakuAPP, verifyToken, "1. API Call [JSON/HTTPS]")
+Rel(verifyToken, verify, "2a. Send Token, Verify Token")
+Rel(verify, decrypt, "2b. Decrypt Data")
+Rel(decrypt, encrypt, "2c. Encrypt new Data")
+Rel(encrypt, jwt, "2d. Create new JWT")
+Rel(verifyToken, controller, "3. Send request data")
+Rel(controller, findMobileNumber, "4. Check mobile number")
+Rel(findMobileNumber, database, "5. Read eligible referral & validate otp")
+Rel(findMobileNumber, firestore, "6. Check data session")
+Rel(findMobileNumber, contract, "7. if account contract")
+Rel(findMobileNumber, prospect, "8. if account prospect")
+
+SHOW_LEGEND()
+
+@enduml

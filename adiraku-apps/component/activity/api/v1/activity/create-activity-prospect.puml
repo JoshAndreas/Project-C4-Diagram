@@ -1,0 +1,61 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Boundary(insurance, "ms-insurance"){ 
+    AddProperty("URL", "ms-insurance\utils\utils.js")
+    AddProperty("Repository", "ms-insurance")
+    Component(logActivityProspect, "logActivityProspect", "Function | NodeJs", "Function for Create Log Activity Prospect")
+}
+
+Boundary(marketing, "ms-marketing"){ 
+    AddProperty("URL", "/api/v1/campaign-jdid/archive-voucher")
+    AddProperty("Repository", "ms-marketing")
+    Component(archiveVoucher, "archiveVoucher", "Function | NodeJs", "Function for Archieve Voucher data")
+
+    AddProperty("URL", "/api/v1/campaign-jdid/regist-claim")
+    AddProperty("Repository", "ms-marketing")
+    Component(registClaim, "registClaim", "Function | NodeJs", "Function for Regist Claim")
+}
+
+Boundary(notification, "ms-notification"){ 
+    AddProperty("URL", "/api/v1/notification/notification-by-phone-number")
+    AddProperty("Repository", "ms-notification")
+    Component(notificationByPhoneNumber, "notificationByPhoneNumber", "Function | NodeJs", "Function for Notification by Phone Number")
+}
+
+Boundary(support, "ms-support"){ 
+    AddProperty("URL", "/api/v1/gamification/controller.js")
+    AddProperty("Repository", "ms-support")
+    Component(voucherPromo, "voucherPromo", "Function | NodeJs", "Function for Voucher Promo")
+
+    AddProperty("URL", "api/v1/indicative-limit/post-data-peminjam")
+    AddProperty("Repository", "ms-support")
+    Component(postDataPeminjam, "postDataPeminjam", "Function | NodeJs", "Function for Post data Peminjam")
+}
+
+title Component Diagram for Create Activity Prospect\n (/api/v1/activity/prospect)
+
+Boundary(api, "postActivityProspect API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(postActivityProspect, "postActivityProspect", "Function | NodeJs", "Function for Post Activity Prospect")
+    Component(mainPathFirestore, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity-prospect/data-activity-prospect`")
+    Component(sendActivitya, "sendActivity", "Function | NodeJs", "Function for Send Activity")  
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrActivityProspect")
+
+Rel(logActivityProspect, controller, "1. API CALL")
+Rel(archiveVoucher, controller, "1. API CALL")
+Rel(registClaim, controller, "1. API CALL")
+Rel(notificationByPhoneNumber, controller, "1. API CALL")
+Rel(voucherPromo, controller, "1. API CALL")
+Rel(postDataPeminjam, controller, "1. API CALL")
+
+Rel(controller, postActivityProspect, "2. Request Post Activity Prospect")
+Rel(postActivityProspect, mainPathFirestore, "3. Define Main Path Firestore")
+Rel(postActivityProspect, sendActivitya, "4. Send Activity Prospect")
+Rel(postActivityProspect, database, "5. Create AdrActivityProspect data")

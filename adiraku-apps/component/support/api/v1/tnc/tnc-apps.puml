@@ -1,0 +1,14 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/login-v2")
+Container(registrationAPI, "Registration API", "microservices | NodeJS", "Registration API")
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/new-login")
+Container(loginAPI, "Login API", "microservices | NodeJS", "Login API")
+
+@enduml

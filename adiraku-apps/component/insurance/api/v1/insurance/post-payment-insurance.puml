@@ -1,0 +1,76 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Post Payment Insurance\n (api/v1/insurance/paymentInsurance)
+
+Container(adiraku, "Adiraku", "Application | Angular & React Native", "The main interface that the customer interacts with Adiraku")
+Boundary(api, "Post Payment Insurance API\n[Component]"){
+    Component(middleware, "verifyTokenV2", "Middleware | Function", "Middleware for Verify Token")
+
+    AddProperty("Path", "ms-insurance\api\v1\insurance\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Insurance Related Function")
+    note right
+    There is Mocking Logic in this Function
+    end note
+    Component(postPaymentInsurance, "postPaymentInsurance", "Function | NodeJs", "Function for Post Payment Insurance")
+
+    Component(checkDataInsurance, "utils.checkDataInsurance", "Function | NodeJs", "Function for Check Data Insurance")
+    
+
+    Component(downloadIkhtisarV2, "ikhtisar.downloadIkhtisarV2", "Function | NodeJs", "Function for Download Ikhtisar data.")
+    Component(create, "DocIkhtisar.create", "Function | NodeJs", "Function for Create DocIkhtisar data")
+
+    Component(removeRedis, "utils.removeRedis", "Function | NodeJs", "Function for Remove Redis")
+
+}
+    AddProperty("URL", "/api/v1/account/find-account-by-id")
+    AddProperty("Repository", "ms-account")
+    Component(findAccountByid, "findAccountByid", "Function | NodeJs", "Function for Get user data information")
+
+    AddProperty("URL", "/api/v1/insurance/")
+    AddProperty("Repository", "ms-insurance")
+    Component(getInsurance, "getInsurance", "Function | NodeJs", "Function for Get Insurance")
+Boundary(payment, "ms-payment"){
+    AddProperty("URL", "/api/v1/insurance/insurance/submit-renewal-ins")
+    AddProperty("Repository", "ms-payment")
+    Component(submitRenewIns, "submitRenewIns", "Function | NodeJs", "Function for Submit Request Payment renewal process")
+
+    AddProperty("URL", "/api/v1/insurance/insurance/submit-renewal-ins-point")
+    AddProperty("Repository", "ms-payment")
+    Component(submitRenewInsPoint, "submitRenewInsPoint", "Function | NodeJs", "Function for Submit Request Payment renewal process with insurance points redemption")
+}
+Boundary(activity, "ms-activity"){
+    AddProperty("URL", "/api/v1/activity/")
+    AddProperty("Repository", "ms-activity")
+    Component(logActivity, "utils.logActivity", "Function | NodeJs", "Function for Create Activity")
+
+    AddProperty("URL", "/api/v1/notification-insider/request-notification")
+    AddProperty("Repository", "ms-activity")
+    Component(senPushNotificationV2, "utils.senPushNotificationV2", "Function | NodeJs", "Function for Send Push Notification")
+}
+ContainerDb(database, "Adiraku Storage", "Redis Database", "Redis data")
+
+
+Rel(adiraku, middleware, "1. Verify Token")
+Rel(middleware, controller, "2. Request Post Payment Insurance")
+Rel(controller, postPaymentInsurance, "3. Request Post Payment Insurance")
+Rel(postPaymentInsurance, findAccountByid, "4. Find Account By ID")
+Rel(postPaymentInsurance, getInsurance, "5. Get Insurance data")
+Rel(postPaymentInsurance, checkDataInsurance, "6. Request Check Data Insurance")
+Rel(checkDataInsurance, database, "7. Check Data Insurance")
+Rel(postPaymentInsurance, submitRenewIns, "8. Else, Submit Request Payment renewal process without insurance points redemption")
+
+Rel(postPaymentInsurance, submitRenewInsPoint, "8. If there is Point, Submit Request Payment renewal process with insurance points redemption")
+Rel(postPaymentInsurance, downloadIkhtisarV2, "9. Request Download Ikhtisar data")
+Rel(downloadIkhtisarV2, database, "10. Download Ikhtisar data")
+
+Rel(postPaymentInsurance, create, "11. Request Create DocIkhtisar data")
+Rel(create, database, "12. Create DocIkhtisar data")
+Rel(postPaymentInsurance, logActivity, "13. Create Activity")
+
+Rel(postPaymentInsurance, findAccountByid, "14. Get Account By ID")
+Rel(postPaymentInsurance, senPushNotificationV2, "15. Send Push Notification")
+Rel(postPaymentInsurance, removeRedis, "16. Remove Redis data")
+
+@enduml

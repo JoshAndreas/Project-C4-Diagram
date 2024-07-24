@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title Component Diagram for Consume WA Message from MQ\n (utils/utils.js)
+Boundary(api, "mqConsumeWA API\n[Component]"){
+    AddProperty("Path", "ms-notification\utils\utils.js")
+    Component(mqConsumeWA, "mqConsumeWA", "Function | NodeJs", "Function for Consume WA Message from MQ")
+    Component(createMqConnection, "mq.createMqConnection", "Function | NodeJs", "Function for Create MQ Connection")
+    Component(connect, "amqp.connect", "Function | NodeJs", "Function for Connect Object")
+    Component(createChannel, "connection.createChannel", "Function | NodeJs", "Function for Create Channel")
+
+    Component(getQueueName, "mq.getQueueName", "Function | NodeJs", "Function for Get Queue Name")
+    Component(assertQueue, "channel.assertQueue", "Function | NodeJs", "Function for Assert Queue")
+    Component(prefetch, "channel.prefetch", "Function | NodeJs", "Function for Prefetch Queue")
+    Component(consume, "channel.consume", "Function | NodeJs", "Function for Consume Queue")
+}
+
+Rel(mqConsumeWA, createMqConnection, "1. Request Consume WA Message from MQ")
+Rel(createMqConnection, connect, "2. Connect Object")
+Rel(createMqConnection, createChannel, "3. Create Channel")
+Rel(mqConsumeWA, getQueueName, "4. Get Queue Name ('wariplay')")
+Rel(mqConsumeWA, assertQueue, "5. Assert Queue")
+Rel(mqConsumeWA, prefetch, "6. Prefetch Channel Queue")
+
+Rel(mqConsumeWA, consume, "7. Consume Queue")
+
+@enduml

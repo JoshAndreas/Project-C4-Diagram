@@ -1,0 +1,19 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Get Detail Nasabah using KTP API (/api/v1/account/ktp)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(getDetailKTP, "Get Detail Nasabah Using KTP API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+AddProperty("url", "/api/i5/aol/v1/inquiryMobileKtp")
+System_Ext(esbAPI, "ESB API", "Inquiry By Mobile Number or KTP")
+
+Rel(adirakuAPP, controller, "1. API call [JSON/HTTPS]")
+Rel(controller, esbAPI, "2. Inquiry data")
+
+SHOW_LEGEND()
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Update Account (api/v1/account/post-account-by)
+
+AddProperty("repository", "MS-Authentication")
+AddProperty("url", "/api/v1/auth/logout")
+Container(logoutAPI, "Logout API", "Microservices | NodeJS", "Logout Adiraku for Nasabah")
+
+System_Boundary(getAccountBy, "Check Account API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_account")
+
+Rel(logoutAPI, controller, 1. API Call [JSON/HTTPS])
+Rel(controller, database, 2. update data adr_account)
+
+SHOW_LEGEND()
+
+@enduml

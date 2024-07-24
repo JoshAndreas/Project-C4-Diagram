@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Boundary(notification, "ms-notification"){ 
+    AddProperty("URL", "/api/v1/notification/request-notification-bulk-prospect")
+    AddProperty("Repository", "ms-notification")
+    Component(reqNotifBulkProspect, "reqNotifBulkProspect", "Function | NodeJs", "Function for Request Notif Bulk Prospect")
+
+    AddProperty("URL", "/api/v1/notification/request-notification-bulk-v2")
+    AddProperty("Repository", "ms-notification")
+    Component(requestPushNotificationBulkProspect, "requestPushNotificationBulkProspect", "Function | NodeJs", "Function for Request Push Notif Bulk Prospect")
+}
+
+title Component Diagram for Create Bulk Activity Prospect\n (/api/v1/activity/bulk-prospect)
+
+Boundary(api, "postActivityBulkProspect API\n[Component]"){
+    AddProperty("Path", "ms-activity\api\v1\activity\controller.js")
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller for Activity Related Function")
+    Component(postActivityBulkProspect, "postActivityBulkProspect", "Function | NodeJs", "Function for Post Activity Bulk Prospect")
+    Component(mainPathFirestore, "utils.mainPathFirestore", "Function | NodeJs", "Function for Define Main Path Firestore")
+    AddProperty("db.Collection", "`${mainPath}/activity-prospect/data-activity-prospect`")
+    Component(sendActivitya, "sendActivity", "Function | NodeJs", "Function for Send Activity")  
+}
+
+ComponentDb(database, "Adiraku Storage", "mysql database", "AdrActivityProspect")
+
+Rel(reqNotifBulkProspect, controller, "1. API CALL")
+Rel(requestPushNotificationBulkProspect, controller, "1. API CALL")
+
+Rel(controller, postActivityBulkProspect, "2. Request Post Activity Bulk Prospect")
+Rel(postActivityBulkProspect, mainPathFirestore, "3. Define Main Path Firestore")
+Rel(postActivityBulkProspect, sendActivitya, "4. Send Activity")
+Rel(postActivityBulkProspect, database, "5. bulkCreate AdrActivityProspect data")

@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Verify Token Prospect API (/api/v1/auth/verify-token-prospect)
+
+'Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(verifyTokenAPI, "Verify Token API") {
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+    Component(verify, "Verify Token", "Function", "Verify JWT Token")
+    Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+    Component(encrypt, "Encrypt Data", "Function", "Encrypt Data")
+    Component(jwt, "Sign JWT", "Function", "Sign JWT")
+}
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+AddProperty("Repository", "MS-Loyalty")
+AddProperty("url", "/find-mobile-number-prospect")
+Component(findMobileNumberAPI, "Find Mobile Number Prospect API", "microservices | NodeJS", "API for check mobile number prospect")
+
+Rel(controller, verify, "2. Verify data")
+Rel(verify, decrypt, "3. Decrypt data")
+Rel(decrypt, database, "4. Read data")
+Rel(decrypt, findMobileNumberAPI, "5. Check data")
+Rel(findMobileNumberAPI, encrypt, "6. Encrypt new data")
+Rel(encrypt, jwt, "7. Sign new jwt")
+
+SHOW_LEGEND()
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for Validate Email OTP API (/api/v1/auth/validate-email-otp)
+
+Container(adirakuAPP, "Adiraku APP", "Mobile App | React Native", "The main interface that the customer interacts with Adiraku")
+
+System_Boundary(validateOTPEmail, "Validate OTP Email API") {
+    Component(verifyToken, "Verify Token", "Function", "Verify Token Auth")
+    Boundary(verifyTokenAuth, "verify token auth") {
+        Component(verify, "Verify Token", "Function", "Verify JWT Token")
+        Component(decrypt, "Decrypt Data", "Function", "Decrypt Data Decoded Token")
+        Component(encrypt, "Encrypt Data", "Function", "Encrypt Data")
+        Component(jwt, "Sign JWT", "Function", "Sign JWT")
+    }
+    Component(controller, "Controller", "NodeJS MVC Controller", "Main Controller")
+}
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/find-account-by-id")
+Component(getAccountAPI, "Get Account API", "microservices | NodeJS", "Check Account")
+
+AddProperty("repository", "MS-Account")
+AddProperty("url", "/api/v1/account/verify-email-address")
+Component(verifyEmailAddressAPI, "Verify Email Address API", "microservices | NodeJS", "Update Email Address")
+
+ContainerDb(database, "Adiraku Storage", "mysql", "adr_auth_otp")
+
+Rel(adirakuAPP, verifyToken, "1. API Call [JSON/HTTPS]")
+Rel(verifyToken, verify, "2. Send Token, Verify Token")
+Rel(verify, decrypt, "2a. Decrypt data token")
+Rel(decrypt, encrypt, "2b. Encrypt new data")
+Rel(encrypt, jwt, "2c. Create new JWT")
+Rel(verifyToken, controller, "3. Send request data")
+Rel(controller, getAccountAPI, "4. Check Account")
+Rel(getAccountAPI, database, "5. Read/Update Request OTP")
+Rel(getAccountAPI, verifyEmailAddressAPI, "6. Update Verify Email")
+
+SHOW_LEGEND()
+
+@enduml
