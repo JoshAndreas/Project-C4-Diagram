@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Get Profil User\n[getProfilUser]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services")
+    
+    Boundary(api, "getProfilUser API\n[Component]"){
+
+        Boundary(middleware, "middleware user API\n[Component]"){
+
+            Component(auth_middleware, "verifyUserCheckAuthId", "Middleware | NodeJS", "Middleware for check auth id\n{ms-auth}")
+
+        }
+
+        Component(getProfilUser, "getProfilUser", "Function | NodeJS", "API for get data profil user\n{ms-auth}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request get data profil user and check request body")
+Rel_D(auth_middleware, momo_x_storage, "2. Check data user with auth id")
+Rel_D(auth_middleware, getProfilUser, "3. Send request get data profil user")
+Rel_D(getProfilUser, momo_x_storage, "4. Get data profil user")
+
+SHOW_LEGEND()
+@enduml

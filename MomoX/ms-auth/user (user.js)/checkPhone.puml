@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Check User Phone\n[checkPhone]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "checkPhone API\n[Component]"){
+
+        Component(auth_middleware, "verifyUserCheckPhone", "Middleware | NodeJS", "Middleware for Verify User Check Phone\n{ms-auth}")
+    Boundary(account_creation, "account_creation\n[Component]"){
+        Component(checkPhoneExist, "checkPhoneExist", "Middleware | NodeJS", "Function for Check if Phone is Exist\n{ms-auth}")
+    }
+        Component(checkPhone, "checkPhone", "Function | NodeJS", "API for Check user Phone is registered or not\n{ms-auth}")
+        Component(sendOTP, "sendOTP", "Function | NodeJS", "Function for Send OTP\n{ms-auth}")
+    }
+    
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request Verify Check Phone user")
+Rel_D(auth_middleware, checkPhoneExist, "2. Request Check if Phone is Exist")
+Rel_D(checkPhoneExist, momo_x_storage, "3. Check if Phone is Exist")
+
+Rel_R(checkPhoneExist, checkPhone, "4. Check user phone is registered or not,\n If (isPhoneExists) do successHandler,\n Else Continue Step 5.")
+Rel_R(checkPhone, sendOTP, "5. Send OTP")
+Rel_D(checkPhone, momo_x_storage, "6. Create Log data")
+
+SHOW_LEGEND()
+@enduml

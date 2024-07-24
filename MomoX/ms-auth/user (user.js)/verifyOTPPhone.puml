@@ -1,0 +1,36 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Verify OTP Phone User\n[verifyOTPPhone]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "verifyOTPPhone API\n[Component]"){
+
+        
+        Boundary(middleware, "middleware user API\n[Component]"){
+
+            Component(check_limiter, "checkForgotPasswordCodeLimiter", "Middleware | NodeJS", "Middleware for check request limiter (max 3 attempts in 5 minutes)\n{ms-auth}")
+            Component(auth_middleware, "verifyOTPPhone", "Middleware | NodeJS", "Middleware for check request body\n{ms-auth}")
+
+        }
+
+        Component(verifyOTPPhone, "verifyOTPPhone", "Function | NodeJS", "API for Verify OTP with Phone\n{ms-auth}")
+
+    }
+
+    AddProperty("URL", "${process.env.OTP_URL}/pin/${pinId}/verify")
+    AddProperty("pin", "{code}")
+    AddProperty("headers", "'Authorization': `App ${process.env.OTP_AUTH}`, 'Content-Type': 'application/json'")
+    System_Ext(infobip, "InfoBip", "External System for send message otp")
+
+
+Rel_D(web_momo_x, check_limiter, "1. Check limiter request")
+Rel_D(check_limiter, auth_middleware, "2. Send request check body")
+Rel_D(auth_middleware, verifyOTPPhone, "3. Send request verify otp email")
+Rel_D(verifyOTPPhone, infobip, "4. Send request verify OTP")
+
+SHOW_LEGEND()
+@enduml

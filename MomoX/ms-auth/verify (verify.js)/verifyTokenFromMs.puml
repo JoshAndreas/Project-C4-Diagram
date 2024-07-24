@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title verifyTokenFromMs API 
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services")
+    
+    Boundary(api, "verifyTokenFromMs API\n[Component]"){
+        
+        Component(auth_middleware, "verifyTokenFromMs", "Middleware | NodeJS", "Middleware for Verify Token from Microservices\n{ms-auth}")
+        Component(token, "tokenFromMs", "Function | NodeJS", "API for Verify token from Microservices\n{ms-auth}")
+
+    
+    Boundary(apis, "token_handler\n[Component]"){       
+        Component(verifyJWT, "verifyJWT", "Function | NodeJS", "Function for Verify JWT Token\n{ms-auth}")
+    }
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request Verify Token from Microservices")
+Rel_D(auth_middleware, token, "2. Send request Verify Token from Microservices")
+Rel_R(token, verifyJWT, "3. Verify JWT")
+Rel_L(token, momo_x_storage, "4. Check Token")
+
+SHOW_LEGEND()
+@enduml

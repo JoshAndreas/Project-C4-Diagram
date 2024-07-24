@@ -1,0 +1,39 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Register User via Google\n[registerGoogle]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services")
+    
+    Boundary(api, "register user via google API\n[Component]"){
+
+        Boundary(middleware, "middleware user API\n[Component]"){
+
+            Component(auth_middleware, "verifyGoogleRegisterUser", "Middleware | NodeJS", "Middleware for check request body register user via google\n{ms-auth}")
+
+        }
+
+        Boundary(account_creation, "account_creation\n[Component]", "lib/account_creation.js"){
+
+            Component(checkEmailExist, "checkEmailExist", "Function | NodeJS", "function for check email exist \n{ms-auth}")
+
+        }
+
+        Component(registerGoogle, "registerGoogle", "Function | NodeJS", "API for register user via google\n{ms-auth}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request Check Google Email and check request body")
+Rel_D(auth_middleware, checkEmailExist, "2. Send request check email")
+Rel_D(checkEmailExist, momo_x_storage, "3. Check email")
+Rel_D(auth_middleware, registerGoogle, "4. Send request register user via google")
+Rel_D(registerGoogle, momo_x_storage, "5. Create new user")
+Rel_D(registerGoogle, momo_x_storage, "6. Insert log Create new user via google")
+
+SHOW_LEGEND()
+@enduml

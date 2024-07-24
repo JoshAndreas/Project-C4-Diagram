@@ -1,0 +1,30 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Check Google Email\n[checkGoogleEmail]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services")
+    
+    Boundary(api, "checkGoogleEmail API\n[Component]"){
+
+        Boundary(middleware, "middleware user API\n[Component]"){
+
+            Component(auth_middleware, "verifyUserCheckEmail", "Middleware | NodeJS", "Middleware for check request body and check Google Email\n{ms-auth}")
+
+        }
+
+        Component(checkGoogleEmail, "checkGoogleEmail", "Function | NodeJS", "API for Check Google Email\n{ms-auth}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request Check Google Email and check request body")
+Rel_D(auth_middleware, momo_x_storage, "2. Check Google Email")
+Rel_D(auth_middleware, checkGoogleEmail, "3. Send request Check Google Email")
+
+SHOW_LEGEND()
+@enduml

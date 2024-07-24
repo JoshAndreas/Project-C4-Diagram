@@ -1,0 +1,44 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Boundary(momo_x_system, 'Level 3 - Component API - Momo X system'){
+    System(web_momo_x, 'Web Momo X', 'Maintenance profil & view Catalog.\n{ms-momo-x}', $type='website | NextJS')
+    System(super_admin_momo_x, 'Super Admin Momo X', 'Maintenance All Momo catalog, seller and banner. Dashboard for view all leads submited & manage the status base on response customer.\n{superadmin-momo-x}', $type='Internal website | NextJS')
+    System_Boundary(api_system_momo_x, 'API System Momo X'){
+        System(ms_news_momo_x, 'News API', 'Main Proxy News API Momo X.\n{ms-news}', $type='Microservice | NodeJS')
+        System(ms_account_momo_x, 'Account API', 'Main Proxy Account API Momo X.\n{ms-account}', $type='Microservice | NodeJS')
+        System(ms_auth_momo_x, 'Auth API', 'Main Proxy Auth API Momo X.\n{ms-auth}', $type='Microservice | NodeJS')
+        System(ms_catalog_momo_x, 'Catalog API', 'Main Proxy Catalog API Momo X.\n{ms-catalog}', $type='Microservice | NodeJS')
+        System(ms_order_momo_x, 'Order API', 'Main Proxy Order API Momo X.\n{ms-order}', $type='Microservice | NodeJS')
+    }
+    ContainerDb(momo_x_storage, 'Momo X Storage', 'mysql database, Redis, Elastic Search, Cloudinary & ECM', 'All store for save data and content')
+    System_Ext(notif_system, 'Email & Notification System', 'External API for send email, SMS & Whatsapp', $type='Sotware System')
+    System_Ext(kafka, 'Kafka', Services for followup order to branch.', $type='Middleware]')
+    System_Ext(dispatcher, 'Dispatcher', 'Services for followup order to branch & telecenter.', $type='Sotware System')
+    System_Ext(installment, 'Installment System', 'Services system for managing all data installment.', $type='Sotware System')
+}
+
+Rel_D(web_momo_x, ms_news_momo_x,'get news content')
+Rel_D(web_momo_x, ms_account_momo_x,'view & update data account')
+Rel_D(web_momo_x, ms_auth_momo_x,'login')
+Rel_D(web_momo_x, ms_catalog_momo_x,'get data catalog')
+Rel_D(web_momo_x, ms_order_momo_x,'create order')
+Rel_D(super_admin_momo_x, ms_news_momo_x,'update news content')
+Rel_D(super_admin_momo_x, ms_account_momo_x,'view & update data account')
+Rel_D(super_admin_momo_x, ms_auth_momo_x,'login')
+Rel_D(super_admin_momo_x, ms_catalog_momo_x,'update data catalog')
+Rel_D(super_admin_momo_x, ms_order_momo_x,'update order')
+Rel_D(ms_news_momo_x, momo_x_storage,'CRUD Request')
+Rel_D(ms_account_momo_x, momo_x_storage,'CRUD Request')
+Rel_D(ms_auth_momo_x, momo_x_storage,'CRUD Request')
+Rel_D(ms_catalog_momo_x, momo_x_storage,'CRUD Request')
+Rel_D(ms_order_momo_x, momo_x_storage,'CRUD Request')
+Rel_D(ms_catalog_momo_x, installment, 'get data installment')
+Rel_D(ms_order_momo_x, installment, 'get data installment')
+Rel_D(ms_order_momo_x, notif_system, 'send request notification')
+Rel_L(ms_order_momo_x, kafka, 'produce data leads')
+Rel_D(kafka, dispatcher, 'submit data leads')
+
+
+SHOW_LEGEND()
+@enduml

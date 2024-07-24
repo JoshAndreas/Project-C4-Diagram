@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title getParent API 
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services")
+    
+    Boundary(api, "getParent API\n[Component]"){
+        
+        Component(getParent, "getParent", "Function | NodeJS", "API for Get Single New Parent data\n{ms-auth}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, getParent, "1. Send request Get New Motorcycle Single New Parent data")
+Rel_D(getParent, momo_x_storage, "2. Retrieve & Find New Motorcycle Single New Parent data")
+
+
+SHOW_LEGEND()
+@enduml

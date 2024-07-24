@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Boundary(momo_x_system, 'Level 3 - Catalog API - Momo X system'){
+
+    System(web_momo_x, 'Web Momo X', 'Maintenance profil & view Catalog.\n{ms-momo-x}', $type='website | NextJS')
+    System(ms_catalog_momo_x, 'Catalog API', 'Main Proxy Catalog API Momo X.\n{ms-catalog}', $type='Microservice | NodeJS')
+
+    Boundary(api_system_momo_x, 'ms-catalog' ,'Component'){
+
+        System(getListingItem, 'getListingItem', 'Function for get listing item', $type='Function | NodeJS')
+        System(getListingItemById, 'getListingItemById', 'Function for get listing item by id', $type='Function | NodeJS')
+        System(addListingItem, 'addListingItem', 'Function for add listing item', $type='Function | NodeJS')
+        System(updateListingItem, 'updateListingItem', 'Function for update listing item by id', $type='Function | NodeJS')
+        System(deleteListingItem, 'deleteListingItem', 'Function for delete listing item by id', $type='Function | NodeJS')
+
+    }
+
+    ContainerDb(momo_x_storage, 'Momo X Storage', 'mysql database, Redis, Elastic Search, Cloudinary & ECM', 'All store for save data and content')
+
+}
+
+Rel(web_momo_x, ms_catalog_momo_x, 'Request using function related to data catalog')
+Rel(ms_catalog_momo_x, getListingItem, 'Request search listing item')
+Rel(ms_catalog_momo_x, getListingItemById, 'Request search listing item by id')
+Rel(ms_catalog_momo_x, addListingItem, 'Request insert data listing item')
+Rel(ms_catalog_momo_x, updateListingItem, 'Request change data listing item')
+Rel(ms_catalog_momo_x, deleteListingItem, 'Request delete data listing item')
+Rel(getListingItem, momo_x_storage,'get listing item')
+Rel(getListingItemById, momo_x_storage,'get listing item by id')
+Rel(addListingItem, momo_x_storage,'insert data listing item')
+Rel(updateListingItem, momo_x_storage,'change data listing item')
+Rel(deleteListingItem, momo_x_storage,'delete data listing item')
+
+
+SHOW_LEGEND()
+@enduml

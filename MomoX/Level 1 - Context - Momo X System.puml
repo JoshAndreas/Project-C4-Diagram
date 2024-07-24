@@ -1,0 +1,18 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Boundary(momo_x_system, 'Level 1 - Context - Momo X System'){
+    ' Person(momotor_cust, 'Momotor Customer', 'A Customer of the momotor.id, with personal id momotor as Member or Seller', $type='Member : customer or seller')
+    Person(momobil_cust, 'Momobil Customer', 'A Customer of the momobil.id, with personal id momobil as Member or Seller', $type='Member : customer or seller')
+    System(momo_x, 'Momo X Web', 'view all motorcycle & car catalog, maintenance profile, create leads', $type='Website')
+}
+    System_Ext(lead_engine_system, 'Lead Engine System', 'Dashboard data leads for contact and followup customer order', $type='Application')
+
+Rel(momobil_cust, momo_x, 'Register, Submit order & maintanance Catalog')
+' Rel(momotor_cust, momo_x, 'Register, Submit order & maintanance Catalog')
+Rel(momo_x, lead_engine_system, 'Send Leads')
+Rel(lead_engine_system, momobil_cust, 'Call the customer for confirmation order')
+' Rel(lead_engine_system, momotor_cust, 'Call the customer for confirmation order')
+
+SHOW_LEGEND()
+@enduml

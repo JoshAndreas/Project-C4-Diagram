@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Logout Admin\n[logout]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Admin")
+    
+    Boundary(api, "logout API\n[Component]"){
+
+        Component(auth_middleware, "verifyLogoutAdmin", "Middleware | NodeJS", "Middleware for check request body and token API logout admin\n{ms-auth}")
+        Component(logout, "logout", "Function | NodeJS", "API logout Admin n{ms-auth}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request logout admin and check request body")
+Rel_D(auth_middleware, logout, "2. Send request logout admin ")
+Rel_D(logout, momo_x_storage, "3. Update session Admin to expired")
+Rel_D(logout, momo_x_storage, "4. Insert log logout Admin")
+
+SHOW_LEGEND()
+@enduml

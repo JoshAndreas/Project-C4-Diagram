@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title register Customer\n[Register]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "Register API\n[Component]"){
+
+        Component(auth_middleware, "verifyRegister", "Middleware | NodeJS", "Middleware for check request body API Register\n{ms-auth}")
+        Component(Register, "Register", "Function | NodeJS", "API register customer \n{ms-auth}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request Register customer and check request body")
+Rel_R(auth_middleware, Register, "2. Request Register and send request body")
+Rel_D(Register, momo_x_storage, "3. Check email & phone number customer")
+Rel_D(Register, momo_x_storage, "4. Insert new customer & log register customer")
+
+SHOW_LEGEND()
+@enduml

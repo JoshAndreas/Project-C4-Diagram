@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Boundary(momo_x_system, 'System Landscape - Momo X System'){
+    Person(momobil_cust, 'Momobil Customer', 'A Customer of the momobil.id, with personal id momobil as Member or Seller', $type='Member : customer or seller')
+    ' Person(momotor_cust, 'Momotor Customer', 'A Customer of the momotor.id, with personal id momotor as Member or Seller', $type='Member : customer or seller')
+    System(momo_x, 'Momo X', 'view all motorcycle & car catalog, maintenance profile, create leads', $type='Software System')
+    System(super_admin_momo_x, 'Super Admin Momo X', 'Maintenance All Momo catalog, seller and banner. Dashboard for view all leads submited & manage the status base on response customer.', $type='internal website | NextJS')
+    Person(tele_center, 'Tele Center', 'A Customer of the momobil.id, with personal id momobil as Admin', $type='Admin')
+    Person(bussines_user, 'Bussines User', 'A Customer of the Momo X , with personal id Momo X as Bussiness', $type='Bussines')
+}
+    System_Ext(lead_engine, 'Lead Engine', 'Dashboard for view all leads submited & manage the status base on response customer.', $type='Leads Admin System')
+
+Rel(momobil_cust, momo_x, 'Manage personal data, submit order, shop profile & add car catalog')
+' Rel(momotor_cust, momo_x, 'Manage personal data, submit order, shop profile & add motorcycle catalog')
+Rel(momo_x, lead_engine, 'Send data leads(order data)')
+Rel(tele_center, lead_engine, 'view  and update status leads')
+' Rel(tele_center, momotor_cust, 'Call the customer')
+Rel(tele_center, momobil_cust, 'Call the customer')
+BiRel(super_admin_momo_x, momo_x, 'Request Approval Catalog, send data leads')
+Rel(super_admin_momo_x, momo_x, 'Activated car catalog')
+Rel(bussines_user, super_admin_momo_x, 'Activate & Approval Catalog, Manage Seller dan content Banner')
+
+SHOW_LEGEND()
+@enduml

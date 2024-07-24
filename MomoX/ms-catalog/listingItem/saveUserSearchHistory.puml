@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Save User Search History API\n[listingItem]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "saveUserSearchHistory API\n[Component]"){
+
+        Component(saveUserSearchHistory, "saveUserSearchHistory", "Function | NodeJS", "API for post data search history user\n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
+
+
+Rel_D(web_momo_x, saveUserSearchHistory, "1. Request post data search history user")
+Rel_D(saveUserSearchHistory, momo_x_storage, "2. Post data search history user")
+
+
+SHOW_LEGEND()
+@enduml

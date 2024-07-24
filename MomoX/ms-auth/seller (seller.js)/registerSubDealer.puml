@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title register Sub Seller\n[Register]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for sub sub seller")
+    
+    Boundary(api, "register API\n[Component]"){
+
+        ' Component(auth_middleware, "validateHeader", "Middleware | NodeJS", "Middleware for check request body and token API register sub seller\n{ms-auth}")
+        Component(register, "register", "Function | NodeJS", "API register sub seller \n{ms-auth}")
+
+        Boundary(account_creation, "account_creation\n[Component]", "lib/account_creation.js"){
+
+            Component(validatePassword, "validatePassword", "Function | NodeJS", "function for validate password \n{ms-auth}")
+            Component(checkEmailExist, "checkEmailExist", "Function | NodeJS", "function for check email exist \n{ms-auth}")
+            Component(checkPhoneExist, "checkPhoneExist", "Function | NodeJS", "function for check phone exist \n{ms-auth}")
+
+        }
+    }
+
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, register, "1. Send request register sub seller and check request body")
+Rel_U(register, validatePassword, "2. Validate password")
+Rel_U(register, checkEmailExist, "3. Check email exist")
+Rel_U(register, checkPhoneExist, "4. Check phone exist")
+Rel_D(register, momo_x_storage, "5. Insert new data auth")
+Rel_D(register, momo_x_storage, "6. Insert new data sub seller")
+Rel_D(register, momo_x_storage, "7. Insert log register sub seller")
+
+SHOW_LEGEND()
+@enduml

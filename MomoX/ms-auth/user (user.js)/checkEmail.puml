@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Check User Email\n[checkEmail]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "checkEmail API\n[Component]"){
+
+        Component(auth_middleware, "verifyUserCheckEmail", "Middleware | NodeJS", "Middleware for Verify User Check Email\n{ms-auth}")
+    Boundary(account_creation, "account_creation\n[Component]"){
+        Component(checkEmailExist, "checkEmailExist", "Middleware | NodeJS", "Function for Check if Email is Exist\n{ms-auth}")
+    }
+        Component(checkEmail, "checkEmail", "Function | NodeJS", "API for Check user email is Registered or not\n{ms-auth}")
+    Boundary(sendEmail, "send_email\n[Component]"){
+        Component(sendEmailOTP, "sendEmailOTP", "Function | NodeJS", "Function for Send Email OTP\n{ms-auth}")
+    }
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Send request Verify Check Email user")
+Rel_D(auth_middleware, checkEmailExist, "2. Request Check if Email is Exist")
+Rel_D(checkEmailExist, momo_x_storage, "3. Check if Email is Exist")
+
+Rel_R(checkEmailExist, checkEmail, "4. Check user Email is registered or not,\n If (isEmailExist) do successHandler,\n Else Continue Step 5.")
+Rel_R(checkEmail, sendEmailOTP, "5. Send Email OTP")
+Rel_D(checkEmail, momo_x_storage, "6. Create OTP data")
+Rel_D(checkEmail, momo_x_storage, "7. Create Log data")
+
+SHOW_LEGEND()
+@enduml

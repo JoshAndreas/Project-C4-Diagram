@@ -1,0 +1,51 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Resend Check Email\n[resendCheckEmail]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "resendCheckEmail API\n[Component]"){
+
+        Boundary(middleware, "middleware user API\n[Component]"){
+
+            Component(check_limiter, "refreshForgotPasswordCodeLimiter", "Middleware | NodeJS", "Middleware for check request limiter (max 3 attempts in 5 minutes)\n{ms-auth}")
+            Component(auth_middleware, "verifyUserCheckEmail", "Middleware | NodeJS", "Middleware for Verify User Check Email\n{ms-auth}")
+
+        }
+        
+        Boundary(account_creation, "account_creation\n[Component]"){
+
+            Component(checkEmailExist, "checkEmailExist", "Middleware | NodeJS", "Function for Check if Email is Exist\n{ms-auth}")
+
+        }
+
+        Component(resendCheckEmail, "resendCheckEmail", "Function | NodeJS", "API for Resend Verify User Check Email\n{ms-auth}")
+
+        Boundary(sendEmail, "send_email\n[Component]"){
+
+            Component(sendEmailOTP, "sendEmailOTP", "Function | NodeJS", "Function for Send Email OTP\n{ms-auth}")
+            
+        }
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+Lay_U(checkEmailExist, auth_middleware)
+Lay_U(resendCheckEmail, checkEmailExist)
+Lay_U(resendCheckEmail, checkEmailExist)
+Rel_D(web_momo_x, check_limiter, "1. Check limiter request")
+Rel_D(check_limiter, auth_middleware, "2. Send request Verify Check Email user")
+Rel_D(auth_middleware, checkEmailExist, "3. Request Check if Email is Exist")
+Rel_D(checkEmailExist, momo_x_storage, "4. Check if Email is Exist")
+
+Rel_D(checkEmailExist, resendCheckEmail, "5. Request Resend Verify User Check Email")
+Rel_D(resendCheckEmail, momo_x_storage, "6. Retrieve OTP data")
+
+Rel_R(resendCheckEmail, sendEmailOTP, "7. Send Email OTP")
+Rel_D(resendCheckEmail, momo_x_storage, "8. Upsert OTP data")
+Rel_D(resendCheckEmail, momo_x_storage, "9. Create Log data")
+
+SHOW_LEGEND()
+@enduml

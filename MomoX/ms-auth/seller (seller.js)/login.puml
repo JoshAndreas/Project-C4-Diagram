@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Login Seller\n[login]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Seller")
+    
+    Boundary(api, "login API\n[Component]"){
+
+        Component(login, "login", "Function | NodeJS", "API for login Seller\n{ms-auth}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, login, "1. Send request login Seller")
+Rel_D(login, momo_x_storage, "2. Check email & password Seller")
+Rel_D(login, momo_x_storage, "3. Insert session login Seller")
+Rel_D(login, momo_x_storage, "4. Insert log login Seller")
+
+SHOW_LEGEND()
+@enduml

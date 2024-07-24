@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Increment Statistic Count API\n[listingItem]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "incrementStatisticCount API\n[Component]"){
+
+        Component(incrementStatisticCount, "incrementStatisticCount", "Function | NodeJS", "API for increase data counting statistic listing item\n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
+
+
+Rel_D(web_momo_x, incrementStatisticCount, "1. Request increment data statistics listing item")
+Rel_D(incrementStatisticCount, momo_x_storage, "2. Post data statistics listing item")
+
+
+SHOW_LEGEND()
+@enduml

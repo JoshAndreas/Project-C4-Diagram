@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Get Similar Listing Item API\n[listingItem]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "getSimilarListingItem API\n[Component]"){
+
+        Component(getSimilarListingItem, "getSimilarListingItem", "Function | NodeJS", "API for find & search similar listing item Catalog \n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_elasticsearch, "Momo X Elastic Search", "Elastic Search", "Storage elastic search for catalog momo x")
+
+
+Rel_D(web_momo_x, getSimilarListingItem, "1. Request search similar listing item by param category_id, brand_desc, model_desc, and type_desc")
+Rel_D(getSimilarListingItem, momo_x_elasticsearch, "2. Get data similar listing item")
+
+
+SHOW_LEGEND()
+@enduml

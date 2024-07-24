@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title getVariant API 
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services")
+    
+    Boundary(api, "getVariant API\n[Component]"){
+        
+        Component(getVariant, "getVariant", "Function | NodeJS", "API for Get New Motorcycle Single Variant data\n{ms-auth}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, getVariant, "1. Send request Get New Motorcycle Single Variant data")
+Rel_D(getVariant, momo_x_storage, "2. Retrieve & Find New Motorcycle Single Variant data")
+
+
+SHOW_LEGEND()
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Verify OTP Email User\n[verifyOTPEmail]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "verifyOTPEmail API\n[Component]"){
+
+        
+        Boundary(middleware, "middleware user API\n[Component]"){
+
+            Component(check_limiter, "checkForgotPasswordCodeLimiter", "Middleware | NodeJS", "Middleware for check request limiter (max 3 attempts in 5 minutes)\n{ms-auth}")
+            Component(auth_middleware, "verifyOTPEmail", "Middleware | NodeJS", "Middleware for check request body\n{ms-auth}")
+
+        }
+
+        Component(verifyOTPEmail, "verifyOTPEmail", "Function | NodeJS", "API for Verify OTP with Email\n{ms-auth}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, check_limiter, "1. Check limiter request")
+Rel_D(check_limiter, auth_middleware, "2. Send request check body")
+Rel_D(auth_middleware, verifyOTPEmail, "3. Send request verify otp email")
+Rel_D(verifyOTPEmail, momo_x_storage, "4. Check otp with email & code")
+Rel_D(verifyOTPEmail, momo_x_storage, "5. Update OTP status to 0")
+
+SHOW_LEGEND()
+@enduml

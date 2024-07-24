@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Boundary(momo_x_system, 'Level 2 - Container 1 (Business) - Momo X system'){
+    Person(momo_x_user, 'Momo X User', 'A Customer of the Momo X, with personal id Momo X as Bussiness', $type='Bussines')
+    System_Boundary(system_momobil, 'System Landscape - momobil.id system'){
+        System(momo_x, 'Momo X', 'view all motorcycle & car catalog, maintenance profile, create leads.\n{ms-momo-x}', $type='website | NextJS')
+        System(super_admin_momo_x, 'Super Admin Momo X', 'Maintenance All Momo catalog, seller and banner. Dashboard for view all leads submited & manage the status base on response customer.\n{superadmin-momo-x}', $type='internal website | NextJS')
+        System(api_system_momo_x, 'Api System Momo X', 'All API used by Momo X.', $type='Services | NodeJS')
+        ContainerDb(momo_x_storage, 'Momo X Storage', 'mysql database, Redis, Elastic Search, Cloudinary & ECM', 'All store for save data and content')
+        
+    }
+    System_Ext(notif_system, 'Email & Notification System', 'External API for send email, SMS & Whatsapp', $type='Sotware System')
+}
+
+Rel(momo_x_user, momo_x, 'view catalog')
+Rel(momo_x_user, super_admin_momo_x, 'maintenance catalog, seller, and data leads')
+Rel(momo_x, api_system_momo_x, 'send CRUD request')
+Rel(super_admin_momo_x, api_system_momo_x, 'send CRUD request')
+Rel(api_system_momo_x, momo_x_storage, 'CRUD Request')
+Rel(api_system_momo_x, notif_system, 'send request notification')
+Rel(notif_system, momo_x_user, 'send notification')
+
+SHOW_LEGEND()
+@enduml

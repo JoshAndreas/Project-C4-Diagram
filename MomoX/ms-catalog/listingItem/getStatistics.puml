@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Get Statistic API\n[listingItem]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "getStatistics API\n[Component]"){
+
+        Component(getStatistics, "getStatistics", "Function | NodeJS", "API for get data statistic listing item\n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
+
+
+Rel_D(web_momo_x, getStatistics, "1. Request get data statistics listing item")
+Rel_D(getStatistics, momo_x_storage, "2. Get data statistics listing item")
+
+
+SHOW_LEGEND()
+@enduml

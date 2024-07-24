@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Add Listing Item API\n[listingItem]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+    
+    Boundary(api, "addListingItem API\n[Component]"){
+
+        Component(catalog_middleware, "verifyListingCreateUpdate", "Middleware | NodeJS", "Middleware for check add catalog param\n{ms-catalog}")
+        Component(addListingItem, "addListingItem", "Function | NodeJS", "API insert data catalog \n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_elasticsearch, "Momo X Elastic Search", "Elastic Search", "Storage elastic search for catalog momo x")
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
+
+
+Rel_D(web_momo_x, catalog_middleware, "1. Send request create add listing and check parameter")
+Rel_R(catalog_middleware, addListingItem, "2. Request add listing")
+Rel_D(addListingItem, momo_x_storage, "3. Get data location by param")
+Rel_D(addListingItem, momo_x_storage, "4. Get data brand, type, and model by param")
+Rel_D(addListingItem, momo_x_storage, "5. Insert data catalog")
+Rel_R(addListingItem, momo_x_elasticsearch, "6. Insert data catalog")
+
+SHOW_LEGEND()
+@enduml

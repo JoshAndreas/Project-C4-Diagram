@@ -1,0 +1,150 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+    System(web_momo_x, 'Web Momo X', 'Maintenance profil & view Catalog.\n{ms-momo-x}', $type='website | NextJS')
+    System_Boundary(momo_x_system, 'Level 3 - List Auth API - Momo X system', 'ms-auth'){
+        System(ms_auth_momo_x, 'Auth API', 'Main Proxy Auth API Momo X.\n{ms-auth}', $type='Microservice | NodeJS')
+        Container(route_auth_customer, 'Route Customer', 'Route | NodeJS',  'Route API for customer.\n{customer.js}')
+        Container(route_auth_admin, 'Route Admin', 'Route | NodeJS',  'Route API for admin.\n{admin.js}')
+        Container(route_auth_seller, 'Route Seller', 'Route | NodeJS',  'Route API for seller.\n{seller.js}')
+        Container(route_auth_user, 'Route User', 'Route | NodeJS',  'Route API for seller.\n{user.js}')
+        
+        Boundary(controller_customer, 'controller customer' ,'Component'){
+
+            Container(login, 'Login', 'Function | NodeJS', 'Function for login')
+            Container(register, 'Register', 'Function | NodeJS','Function for register')
+            Container(checkUserGmailAccount, 'checkUserGmailAccount', 'Function | NodeJS','Function for checking user Gmail account')
+            Container(loginUserViaGmail, 'loginUserViaGmail', 'Function | NodeJS','Function for login user via gmail')
+            Container(forgotPassword, 'forgotPassword', 'Function | NodeJS','Function for send link forgot password to user')
+            Container(checkForgotPasswordCode, 'checkForgotPasswordCode', 'Function | NodeJS','Function for validate code forgot password')
+            Container(refreshForgotPasswordCode, 'refreshForgotPasswordCode', 'Function | NodeJS','Function for re send link forgot password to user')
+            Container(resetPasswordUser, 'resetPasswordUser', 'Function | NodeJS','Function for change password user to new password from forgot password')
+            Container(changePassword, 'changePassword', 'Function | NodeJS','Function for change password user to new password')
+
+        }
+
+        ContainerDb(momo_x_storage, 'Momo X Storage', 'mysql database, Redis, Elastic Search, Cloudinary & ECM', 'All store for save data and content')
+        System_Ext(notif_system, 'Email & Notification System', 'External API for send email, SMS & Whatsapp', $type='Sotware System')
+
+        Boundary(controller_admin, 'controller admin' ,'Component'){
+
+            Container(admin_login, 'login', 'Function | NodeJS', 'Function for admin login')
+            Container(admin_register, 'register', 'Function | NodeJS', 'Function for admin register')
+            Container(admin_logout, 'logout', 'Function | NodeJS', 'Function for admin logout')
+            Container(admin_changePassword, 'changePassword', 'Function | NodeJS', 'Function for admin change pasword')
+
+        }
+        
+        Boundary(controller_seller, 'controller seller' ,'Component'){
+
+            Container(seller_login, 'login', 'Function | NodeJS', 'Function for seller login')
+            Container(seller_register, 'register', 'Function | NodeJS', 'Function for seller register')
+            Container(seller_register_sub_dealer, 'register sub dealer', 'Function | NodeJS', 'Function for seller register sub dealer')
+
+        }
+
+         Boundary(controller_user, 'controller user' ,'Component'){
+
+            Container(user_checkGoogleEmail, 'checkGoogleEmail', 'Function | NodeJS', 'Function for check user google email')
+            Container(user_checkEmail, 'checkEmail', 'Function | NodeJS', 'Function for check user google email')
+            Container(user_checkPhone, 'checkPhone' , 'Function | NodeJS', 'Function for check phone number user')
+            Container(user_resendCheckEmail, 'resendCheckEmail', 'Function | NodeJS', 'Function for re send check email user')
+            Container(user_resendCheckPhone, 'resendCheckPhone', 'Function | NodeJS', 'Function for re send check phone number user')
+            Container(user_verifyOTPEmail, 'verifyOTPEmail', 'Function | NodeJS', 'Function for check otp by email user')
+            Container(user_verifyOTPPhone, 'verifyOTPPhone', 'Function | NodeJS', 'Function for check otp by phone number user')
+            Container(user_register, 'register', 'Function | NodeJS', 'Function for resgister user')
+            Container(user_googleRegister, 'googleRegister', 'Function | NodeJS', 'Function for resgister user via google')
+            Container(user_login, 'login', 'Function | NodeJS', 'Function for login user')
+            Container(user_googleLogin, 'googleLogin', 'Function | NodeJS', 'Function for login user via google')
+            Container(user_logout, 'logout', 'Function | NodeJS', 'Function for user logout')
+            Container(user_updateDataUser, 'updateDataUser', 'Function | NodeJS', 'Function for update data user')
+            Container(user_forgotPassword, 'forgotPassword', 'Function | NodeJS', 'Function for forgot password user')
+            Container(user_resendForgotPasswordCode, 'resendForgotPasswordCode', 'Function | NodeJS', 'Function for check token forgot password user')
+            Container(user_resetPassword, 'resetPassword', 'Function | NodeJS', 'Function for change password user by forgotpassword')
+            Container(user_changePassword, 'changePassword', 'Function | NodeJS', 'Function for change password user')
+            Container(user_getProfilUser, 'getProfilUser', 'Function | NodeJS', 'Function for get profiluser')
+        }
+
+    }
+
+Rel_D(web_momo_x, ms_auth_momo_x, 'Request using function related to authentication')
+Rel_D(ms_auth_momo_x, route_auth_customer, 'Request authentication for customer')
+Rel_D(route_auth_customer, login, 'Request login user')
+Rel_D(route_auth_customer, register, 'Request register user')
+Rel_D(route_auth_customer, checkUserGmailAccount, 'Request check data gmail user')
+Rel_D(route_auth_customer, loginUserViaGmail, 'Request login user via gmail')
+Rel_D(route_auth_customer, forgotPassword, 'Request send link forgot password')
+Rel_D(route_auth_customer, checkForgotPasswordCode, 'Request check code from link forgot password')
+Rel_D(route_auth_customer, refreshForgotPasswordCode, 'Request re send link forgot password')
+Rel_D(route_auth_customer, resetPasswordUser, 'Request change password user from forgot password')
+Rel_D(route_auth_customer, changePassword, 'Request change password user')
+Rel_D(login, momo_x_storage, 'Validate username and password user')
+Rel_D(register, momo_x_storage, 'Create new user')
+Rel_D(checkUserGmailAccount, momo_x_storage, 'Check gmail user')
+Rel_D(loginUserViaGmail, momo_x_storage, 'Validate gmail user')
+Rel_D(checkForgotPasswordCode, momo_x_storage, 'Validate code from link forgot password')
+Rel_D(resetPasswordUser, momo_x_storage, 'Change password user')
+Rel_D(changePassword, momo_x_storage, 'Change password user')
+Rel_D(forgotPassword, notif_system, 'Send link forgot password to user')
+Rel_D(refreshForgotPasswordCode, notif_system, 'Re send link forgot password to user')
+
+Rel_D(ms_auth_momo_x, route_auth_admin, 'Request authentication for admin')
+Rel_D(route_auth_admin, admin_login, 'Request login admin')
+Rel_D(route_auth_admin, admin_register, 'Request register admin')
+Rel_D(route_auth_admin, admin_logout, 'Request logout admin')
+Rel_D(route_auth_admin, admin_changePassword, 'Request change password for admin')
+Rel_D(admin_login, momo_x_storage, 'Validate admin login')
+Rel_D(admin_register, momo_x_storage, 'Create new admin')
+Rel_D(admin_logout, momo_x_storage, 'Remove session admin')
+Rel_D(admin_changePassword, momo_x_storage, 'Update password admin')
+
+Rel_D(ms_auth_momo_x, route_auth_seller, 'Request authentication for seller')
+Rel_D(route_auth_seller, seller_login, 'Request login seller')
+Rel_D(route_auth_seller, seller_register, 'Request register seller')
+Rel_D(route_auth_seller, seller_register_sub_dealer, 'Request register for sub seller')
+Rel_D(seller_login, momo_x_storage, 'Validate login seller')
+Rel_D(seller_register, momo_x_storage, 'Create new seller')
+Rel_D(seller_register_sub_dealer, momo_x_storage, 'Create new sub seller')
+
+Rel_D(ms_auth_momo_x, route_auth_user, 'Request authentication for user')
+Rel_D(route_auth_user, user_checkGoogleEmail, 'Request check google email user')
+Rel_D(route_auth_user, user_checkEmail, 'Request check email user')
+Rel_D(route_auth_user, user_checkPhone, 'Request check phone user')
+Rel_D(route_auth_user, user_resendCheckEmail, 'Request resend check email user')
+Rel_D(route_auth_user, user_resendCheckPhone, 'Request resend check phone number user')
+Rel_D(route_auth_user, user_verifyOTPEmail, 'Request check otp email user')
+Rel_D(route_auth_user, user_verifyOTPPhone, 'Request check otp phone number user')
+Rel_D(route_auth_user, user_register, 'Request register user')
+Rel_D(route_auth_user, user_googleRegister, 'Request register user via google')
+Rel_D(route_auth_user, user_login, 'Request login user')
+Rel_D(route_auth_user, user_googleLogin, 'Request login user via google')
+Rel_D(route_auth_user, user_logout, 'Request logout user')
+Rel_D(route_auth_user, user_updateDataUser, 'Request update data user')
+Rel_D(route_auth_user, user_forgotPassword, 'Request forgot password user')
+Rel_D(route_auth_user, user_resendForgotPasswordCode, 'Request re send code forgot password user')
+Rel_D(route_auth_user, user_resetPassword, 'Request change password user via forgot password')
+Rel_D(route_auth_user, user_changePassword, 'Request change password user')
+Rel_D(route_auth_user, user_getProfilUser, 'Request get profil user')
+
+Rel_D(user_checkGoogleEmail, momo_x_storage, 'check google email user')
+Rel_D(user_checkEmail, momo_x_storage, 'check email user')
+Rel_D(user_checkPhone, momo_x_storage, 'check phone user')
+Rel_D(user_resendCheckEmail, momo_x_storage, 'resend check email user')
+Rel_D(user_resendCheckPhone, momo_x_storage, 'resend check phone number user')
+Rel_D(user_verifyOTPEmail, momo_x_storage, 'check otp email user')
+Rel_D(user_verifyOTPPhone, momo_x_storage, 'check otp phone number user')
+Rel_D(user_register, momo_x_storage, 'register user')
+Rel_D(user_googleRegister, momo_x_storage, 'register user via google')
+Rel_D(user_login, momo_x_storage, 'login user')
+Rel_D(user_googleLogin, momo_x_storage, 'login user via google')
+Rel_D(user_logout, momo_x_storage, 'logout user')
+Rel_D(user_updateDataUser, momo_x_storage, 'update data user')
+Rel_D(user_forgotPassword, momo_x_storage, 'forgot password user')
+Rel_D(user_resendForgotPasswordCode, momo_x_storage, 're send code forgot password user')
+Rel_D(user_resetPassword, momo_x_storage, 'change password user via forgot password')
+Rel_D(user_changePassword, momo_x_storage, 'change password user')
+Rel_D(user_getProfilUser, momo_x_storage, 'get profil user')
+
+SHOW_LEGEND()
+@enduml
