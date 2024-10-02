@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Get Directory Data from Data Location Google API\n[getDirectory]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware user API\n[Component]"){
+
+        Component(auth_middleware, "validateRequestBody", "Middleware | NodeJS", "Middleware for decrypt & check request body\n{ms-catalog}")
+
+    }
+    
+    Boundary(api, "getDirectory API\n[Component]"){
+
+        Component(getDirectory, "getDirectory", "Function | NodeJS", "API for get data directory from data location google\n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
+
+
+Rel_D(web_momo_x, auth_middleware, "1. Request check data request body")
+Rel_D(auth_middleware, getDirectory, "2. Request get directory")
+Rel_D(getDirectory, momo_x_storage, "3. Get data directory from data location google")
+
+SHOW_LEGEND()
+@enduml

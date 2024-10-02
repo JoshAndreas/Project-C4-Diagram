@@ -6,6 +6,12 @@ LAYOUT_WITH_LEGEND()
 title Get Search Suggestion API\n[listingItem]
 
     Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware catalog API\n[Component]"){
+
+        Component(validate_query, "validateRequestQuery", "Middleware | NodeJS", "Middleware for validate request query\n{ms-catalog}")
+
+    }
     
     Boundary(api, "getSearchSuggestion API\n[Component]"){
 
@@ -15,8 +21,9 @@ title Get Search Suggestion API\n[listingItem]
     ContainerDb(momo_x_elasticsearch, "Momo X Elastic Search", "Elastic Search", "Storage elastic search for catalog momo x")
 
 
-Rel_D(web_momo_x, getListingItem, "1. Request search suggestion listing item")
-Rel_D(getListingItem, momo_x_elasticsearch, "2. Get data suggestion listing item")
+Rel_D(web_momo_x, validate_query, "1. Validate request query")
+Rel_D(validate_query, getListingItem, "2. Request search suggestion listing item")
+Rel_D(getListingItem, momo_x_elasticsearch, "3. Get data suggestion listing item")
 
 
 SHOW_LEGEND()

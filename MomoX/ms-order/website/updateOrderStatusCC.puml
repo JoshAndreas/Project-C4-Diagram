@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Update Data Status CC Order API\n[updateOrderStatusCC]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware order API\n[Component]"){
+
+        Component(validate_body, "validateRequestBody", "Middleware | NodeJS", "Middleware for validate request body\n{ms-order}")
+
+    }
+    
+    Boundary(api, "updateOrderStatusCC API\n[Component]"){
+
+        Component(updateOrderStatusCC, "updateOrderStatusCC", "Function | NodeJS", "API for update status data order CC\n{ms-order}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for order momo x")
+
+Rel_D(web_momo_x, validate_body, "1. Check token request")
+Rel_D(validate_body, updateOrderStatusCC, "2. Request update status data order CC")
+Rel_D(updateOrderStatusCC, momo_x_storage, "3. Update status order CC")
+Rel_D(updateOrderStatusCC, momo_x_storage, "4. Insert order log")
+
+
+SHOW_LEGEND()
+@enduml

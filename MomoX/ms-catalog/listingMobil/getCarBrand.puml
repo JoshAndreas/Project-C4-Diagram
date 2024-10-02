@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Get Car Brand API\n[getCarBrand]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware user API\n[Component]"){
+
+       Component(validate_query, "validateRequestQuery", "Middleware | NodeJS", "Middleware for validate query\n{ms-catalog}")
+
+    }
+    
+    Boundary(api, "getCarBrand API\n[Component]"){
+
+        Component(getCarBrand, "getCarBrand", "Function | NodeJS", "API for get data brand car\n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
+
+
+Rel_D(web_momo_x, validate_query, "1. Validate request query")
+Rel_D(validate_query, getCarBrand, "2. Request get data car brand")
+Rel_D(getCarBrand, momo_x_storage, "3. Get data car brand")
+
+SHOW_LEGEND()
+@enduml

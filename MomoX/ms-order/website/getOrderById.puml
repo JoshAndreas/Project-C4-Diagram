@@ -1,0 +1,32 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Get Order by Id API\n[getOrderById]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware order API\n[Component]"){
+
+        Component(verify_token, "verifyToken", "Middleware | NodeJS", "Middleware check bearer token\n{ms-order}")
+        Component(validate_query, "validateRequestQuery", "Middleware | NodeJS", "Middleware for validate request query\n{ms-order}")
+
+    }
+    
+    Boundary(api, "getOrderById API\n[Component]"){
+
+        Component(getOrderById, "getOrderById", "Function | NodeJS", "API for get single data order by id\n{ms-order}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for order momo x")
+
+Rel_D(web_momo_x, verify_token, "1. Check token request")
+Rel_D(verify_token, validate_query, "2. Validate request query")
+Rel_D(validate_query, getOrderById, "3. Request get data order")
+Rel_D(getOrderById, momo_x_storage, "4. Get data order")
+
+
+SHOW_LEGEND()
+@enduml

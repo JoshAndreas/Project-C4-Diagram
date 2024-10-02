@@ -6,6 +6,12 @@ LAYOUT_WITH_LEGEND()
 title Increment Statistic Count API\n[listingItem]
 
     Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware catalog API\n[Component]"){
+
+        Component(decrypt_body, "validateRequestBody", "Middleware | NodeJS", "Middleware for decrypt request body\n{ms-catalog}")
+
+    }
     
     Boundary(api, "incrementStatisticCount API\n[Component]"){
 
@@ -15,8 +21,9 @@ title Increment Statistic Count API\n[listingItem]
     ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
 
 
-Rel_D(web_momo_x, incrementStatisticCount, "1. Request increment data statistics listing item")
-Rel_D(incrementStatisticCount, momo_x_storage, "2. Post data statistics listing item")
+Rel_D(web_momo_x, decrypt_body, "1. Decrypt request body")
+Rel_D(decrypt_body, incrementStatisticCount, "2. Request increment data statistics listing item")
+Rel_D(incrementStatisticCount, momo_x_storage, "3. Post data statistics listing item")
 
 
 SHOW_LEGEND()

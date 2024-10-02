@@ -1,0 +1,33 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Save User Action API\n[saveUserAction]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware catalog API\n[Component]"){
+
+        Component(decrypt_body, "validateRequestBody", "Middleware | NodeJS", "Middleware for decrypt request body\n{ms-catalog}")
+
+    }
+    
+    Boundary(api, "saveUserAction API\n[Component]"){
+
+        Component(saveUserAction, "saveUserAction", "Function | NodeJS", "API for post data user action\n{ms-catalog}")
+
+    }
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
+
+
+Rel_D(web_momo_x, decrypt_body, "1. Decrypt & validate request body")
+Rel_D(decrypt_body, saveUserAction, "2. Request post data action user")
+Rel_D(saveUserAction, momo_x_storage, "3A. (if action == 'wishlist') Get data user action")
+Rel_D(saveUserAction, momo_x_storage, "4AA. (if data user action is exist) Delete data user action 'wishlist'")
+Rel_D(saveUserAction, momo_x_storage, "4AB. (if data user action is not exist) insert data user action 'wishlist'")
+
+Rel_D(saveUserAction, momo_x_storage, "3B. (if action !== 'wishlist') insert data user action")
+
+SHOW_LEGEND()
+@enduml

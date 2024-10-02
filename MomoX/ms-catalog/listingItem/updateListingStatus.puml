@@ -3,7 +3,7 @@
 
 
 LAYOUT_WITH_LEGEND()
-title Delete Listing Item API\n[listingItem]
+title Update Listing Item Status API\n[updateListingStatus]
 
     Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
 
@@ -11,26 +11,25 @@ title Delete Listing Item API\n[listingItem]
 
         Component(verify_token, "verifyToken", "Middleware | NodeJS", "Middleware check bearer token\n{ms-catalog}")
         Component(validate_query, "validateRequestQuery", "Middleware | NodeJS", "Middleware for validate query\n{ms-catalog}")
-        Component(catalog_middleware, "verifyListingDelById", "Middleware | NodeJS", "Middleware for check delete catalog param\n{ms-catalog}")
+        Component(catalog_middleware, "verifyListingUpdateStatus", "Middleware | NodeJS", "Middleware for check update catalog param\n{ms-catalog")
 
     }
     
-    Boundary(api, "deleteListingItem API\n[Component]"){
+    Boundary(api, "updateListingStatus API\n[Component]"){
 
-        Component(deleteListingItem, "deleteListingItem", "Function | NodeJS", "API delete data catalog \n{ms-catalog}")
+        Component(updateListingStatus, "updateListingStatus", "Function | NodeJS", "API update data catalog \n{ms-catalog}")
 
     }
     ContainerDb(momo_x_elasticsearch, "Momo X Elastic Search", "Elastic Search", "Storage elastic search for catalog momo x")
     ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
 
 
-Rel_D(web_momo_x, verify_token, "1. Validate token")
+Rel_D(web_momo_x, verify_token, "1. Verify token")
 Rel_R(verify_token, validate_query, "2. Validate request query")
-Rel_R(validate_query, catalog_middleware, "3. Check request body")
-Rel_D(catalog_middleware, deleteListingItem, "4. Request delete listing")
-Rel_L(deleteListingItem, momo_x_storage, "5. Check data catalog by param id")
-Rel_L(deleteListingItem, momo_x_storage, "6. delete data catalog")
-Rel_D(deleteListingItem, momo_x_elasticsearch, "7. delete data catalog")
+Rel_D(validate_query, catalog_middleware, "3. Check request body")
+Rel_R(catalog_middleware, updateListingStatus, "4. Request update listing status")
+Rel_D(updateListingStatus, momo_x_storage, "5. Update data listing status")
+Rel_R(updateListingStatus, momo_x_elasticsearch, "6. Update data listing status")
 
 SHOW_LEGEND()
 @enduml

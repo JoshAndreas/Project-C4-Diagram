@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Upload Image API\n[uploadImage]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+   
+    Boundary(api, "uploadImage API\n[Component]"){
+
+        Component(uploadImage, "uploadImage", "Function | NodeJS", "API for upload image\n{ms-catalog}")
+
+    }
+
+    Boundary(uploader, "uploader\n[Component]"){
+
+        Component(compressAndUpload, "compressAndUpload", "Function | NodeJS", "function for compress and upload image to cloudinary\n{ms-catalog}")
+
+    }
+    
+    ContainerDb(cloudinary, "Momo X Cloudinary", "Cloudinary", "Storage image for catalog momo x")
+
+Rel_D(web_momo_x, uploadImage, "1. Check data upload image")
+Rel_D(uploadImage, compressAndUpload, "2. Request upload image")
+Rel_D(compressAndUpload, cloudinary, "3. Compress & upload image")
+
+SHOW_LEGEND()
+@enduml

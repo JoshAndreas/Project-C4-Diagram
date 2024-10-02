@@ -6,10 +6,18 @@ LAYOUT_WITH_LEGEND()
 title Add Listing Item API\n[listingItem]
 
     Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware catalog API\n[Component]"){
+
+        Component(verify_token, "verifyToken", "Middleware | NodeJS", "Middleware check bearer token\n{ms-catalog}")
+        Component(validate_query, "validateRequestQuery", "Middleware | NodeJS", "Middleware for validate query\n{ms-catalog}")
+        Component(decrypt_body, "validateRequestBody", "Middleware | NodeJS", "Middleware for decrypt request body\n{ms-catalog}")
+        Component(catalog_middleware, "verifyAddListing", "Middleware | NodeJS", "Middleware for check add catalog param\n{ms-catalog}")
+
+    }
     
     Boundary(api, "addListingItem API\n[Component]"){
 
-        Component(catalog_middleware, "verifyListingCreateUpdate", "Middleware | NodeJS", "Middleware for check add catalog param\n{ms-catalog}")
         Component(addListingItem, "addListingItem", "Function | NodeJS", "API insert data catalog \n{ms-catalog}")
 
     }
@@ -17,12 +25,15 @@ title Add Listing Item API\n[listingItem]
     ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
 
 
-Rel_D(web_momo_x, catalog_middleware, "1. Send request create add listing and check parameter")
-Rel_R(catalog_middleware, addListingItem, "2. Request add listing")
-Rel_D(addListingItem, momo_x_storage, "3. Get data location by param")
-Rel_D(addListingItem, momo_x_storage, "4. Get data brand, type, and model by param")
-Rel_D(addListingItem, momo_x_storage, "5. Insert data catalog")
-Rel_R(addListingItem, momo_x_elasticsearch, "6. Insert data catalog")
+Rel_D(web_momo_x, verify_token, "1. Verify token")
+Rel_D(verify_token, validate_query, "2. Validate request query")
+Rel_R(validate_query, decrypt_body, "3. Decrypt request body")
+Rel_U(decrypt_body, catalog_middleware, "4. Check request body")
+Rel_R(catalog_middleware, addListingItem, "5. Request add listing")
+Rel_D(addListingItem, momo_x_storage, "6. Get data location by param")
+Rel_D(addListingItem, momo_x_storage, "7. Get data brand, type, and model by param")
+Rel_D(addListingItem, momo_x_storage, "8. Insert data catalog")
+Rel_R(addListingItem, momo_x_elasticsearch, "9. Insert data catalog")
 
 SHOW_LEGEND()
 @enduml

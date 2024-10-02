@@ -6,6 +6,13 @@ LAYOUT_WITH_LEGEND()
 title Get Similar Listing Item API\n[listingItem]
 
     Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware catalog API\n[Component]"){
+
+        Component(validate_query, "validateRequestQuery", "Middleware | NodeJS", "Middleware for validate query\n{ms-catalog}")
+        Component(catalog_middleware, "verifySimilarListingItem", "Middleware | NodeJS", "Middleware for check request param\n{ms-catalog}")
+
+    }
     
     Boundary(api, "getSimilarListingItem API\n[Component]"){
 
@@ -15,8 +22,10 @@ title Get Similar Listing Item API\n[listingItem]
     ContainerDb(momo_x_elasticsearch, "Momo X Elastic Search", "Elastic Search", "Storage elastic search for catalog momo x")
 
 
-Rel_D(web_momo_x, getSimilarListingItem, "1. Request search similar listing item by param category_id, brand_desc, model_desc, and type_desc")
-Rel_D(getSimilarListingItem, momo_x_elasticsearch, "2. Get data similar listing item")
+Rel_D(web_momo_x, validate_query, "1. Validate request query")
+Rel_D(validate_query, catalog_middleware, "2. Check request body")
+Rel_D(catalog_middleware, getSimilarListingItem, "3. Request search similar listing item by param category_id, brand_desc, model_desc, and type_desc")
+Rel_D(getSimilarListingItem, momo_x_elasticsearch, "4. Get data similar listing item")
 
 
 SHOW_LEGEND()

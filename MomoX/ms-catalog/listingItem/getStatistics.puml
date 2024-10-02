@@ -6,6 +6,12 @@ LAYOUT_WITH_LEGEND()
 title Get Statistic API\n[listingItem]
 
     Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+
+    Boundary(middleware, "middleware catalog API\n[Component]"){
+
+        Component(validate_query, "validateRequestQuery", "Middleware | NodeJS", "Middleware for validate query\n{ms-catalog}")
+        
+    }
     
     Boundary(api, "getStatistics API\n[Component]"){
 
@@ -15,8 +21,9 @@ title Get Statistic API\n[listingItem]
     ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
 
 
-Rel_D(web_momo_x, getStatistics, "1. Request get data statistics listing item")
-Rel_D(getStatistics, momo_x_storage, "2. Get data statistics listing item")
+Rel_D(web_momo_x, validate_query, "1. Validate request query")
+Rel_D(validate_query, getStatistics, "2. Request get data statistics listing item")
+Rel_D(getStatistics, momo_x_storage, "3. Get data statistics listing item")
 
 
 SHOW_LEGEND()

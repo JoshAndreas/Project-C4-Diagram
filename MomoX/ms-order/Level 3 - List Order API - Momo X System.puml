@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Boundary(momo_x_system, 'Level 3 - Order API - Momo X system'){
+
+    System(web_momo_x, 'Web Momo X', 'Maintenance profil & view Order.\n{ms-momo-x}', $type='website | NextJS')
+    System(ms_order_momo_x, 'Order API', 'Main Proxy Order API Momo X.\n{ms-order}', $type='Microservice | NodeJS')
+
+    Boundary(api_system_momo_x, 'ms-order' ,'Component'){
+
+        System(getAllOrders, 'getAllOrders', 'Function for all get order', $type='Function | NodeJS')
+        System(getOrderById, 'getOrderById', 'Function for get order by id', $type='Function | NodeJS')
+        System(createOrders, 'createOrders', 'Function for create order', $type='Function | NodeJS')
+        System(updateOrderStatusMomo, 'updateOrderStatusMomo', 'Function for update status momo order', $type='Function | NodeJS')
+        System(updateOrderStatusCC, 'updateOrderStatusCC', 'Function for update status cc order', $type='Function | NodeJS')
+
+    }
+
+    ContainerDb(momo_x_storage, 'Momo X Storage', 'mysql database, Redis, Elastic Search, Cloudinary & ECM', 'All store for save data and content')
+
+}
+
+Rel(web_momo_x, ms_order_momo_x, 'Request using function related to data order')
+Rel(ms_order_momo_x, getAllOrders, 'Request search order')
+Rel(ms_order_momo_x, getOrderById, 'Request search order by id')
+Rel(ms_order_momo_x, createOrders, 'Request insert data order')
+Rel(ms_order_momo_x, updateOrderStatusMomo, 'Request change status data order')
+Rel(ms_order_momo_x, updateOrderStatusCC, 'Request change status data order')
+Rel(getAllOrders, momo_x_storage,'get order')
+Rel(getOrderById, momo_x_storage,'get order by id')
+Rel(createOrders, momo_x_storage,'insert data order')
+Rel(updateOrderStatusMomo, momo_x_storage,'change data order')
+Rel(updateOrderStatusCC, momo_x_storage,'change data order')
+
+
+SHOW_LEGEND()
+@enduml

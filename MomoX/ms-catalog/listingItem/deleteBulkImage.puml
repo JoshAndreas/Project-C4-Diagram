@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Delete Image API\n[deleteImage]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
+   
+    Boundary(api, "deleteImage API\n[Component]"){
+
+        Component(deleteImage, "deleteImage", "Function | NodeJS", "API for delete image\n{ms-catalog}")
+
+    }
+
+    Boundary(uploader, "uploader\n[Component]"){
+
+        Component(deleteMultiplePhotoByURL, "deleteMultiplePhotoByURL", "Function | NodeJS", "function for delete multiple image in cloudinary\n{ms-catalog}")
+
+    }
+    
+    ContainerDb(cloudinary, "Momo X Cloudinary", "Cloudinary", "Storage image for catalog momo x")
+
+Rel_D(web_momo_x, deleteImage, "1. Check data delete image")
+Rel_D(deleteImage, deleteMultiplePhotoByURL, "2. Request multiple delete image")
+Rel_D(deleteMultiplePhotoByURL, cloudinary, "3. Delete multiple image")
+
+SHOW_LEGEND()
+@enduml

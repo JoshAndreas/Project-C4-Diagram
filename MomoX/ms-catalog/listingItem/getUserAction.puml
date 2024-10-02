@@ -3,7 +3,7 @@
 
 
 LAYOUT_WITH_LEGEND()
-title Save User Search History API\n[saveUserSearchHistory]
+title Get User Action API\n[getUserAction]
 
     Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services for Customer")
 
@@ -13,18 +13,17 @@ title Save User Search History API\n[saveUserSearchHistory]
 
     }
     
-    Boundary(api, "saveUserSearchHistory API\n[Component]"){
+    Boundary(api, "getUserAction API\n[Component]"){
 
-        Component(saveUserSearchHistory, "saveUserSearchHistory", "Function | NodeJS", "API for post data search history user\n{ms-catalog}")
+        Component(getUserAction, "getUserAction", "Function | NodeJS", "API for get data user action\n{ms-catalog}")
 
     }
     ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for catalog momo x")
 
 
 Rel_D(web_momo_x, decrypt_body, "1. Decrypt & validate request body")
-Rel_D(decrypt_body, saveUserSearchHistory, "2. Request post data search history user")
-Rel_D(saveUserSearchHistory, momo_x_storage, "3. Post data search history user")
-
+Rel_D(decrypt_body, getUserAction, "2. Request get all data user action")
+Rel_D(getUserAction, momo_x_storage, "3. Get all data user action")
 
 SHOW_LEGEND()
 @enduml
