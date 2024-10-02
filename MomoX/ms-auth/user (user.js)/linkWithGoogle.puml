@@ -1,0 +1,35 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+
+LAYOUT_WITH_LEGEND()
+title Link email user to Google Email\n[linkWithGoogle]
+
+    Container(web_momo_x, "Web Momo X", "Website | NextJS", "Momo main services")
+    
+    Boundary(api, "linkWithGoogle API\n[Component]"){
+
+        Boundary(middleware, "middleware user API\n[Component]"){
+
+            Component(auth_middleware_1, "verifyUserHeaderToken", "Middleware | NodeJS", "Middleware for check header token\n{ms-auth}")
+            Component(auth_middleware_2, "verifylinkWithGoogle", "Middleware | NodeJS", "Middleware for check request body\n{ms-auth}")
+
+        }
+
+        Component(linkWithGoogle, "linkWithGoogle", "Function | NodeJS", "API for linkWithGoogle user\n{ms-auth}")
+
+    }
+
+    ContainerDb(momo_x_storage, "Momo X Database", "MySql Database", "Storage Database for auth momo x")
+
+
+Rel_D(web_momo_x, auth_middleware_1, "1. Send request check header token")
+Rel_D(web_momo_x, auth_middleware_2, "2. Send request check request body auth_id")
+Rel_D(auth_middleware_1, linkWithGoogle,  "3. Send request linkWithGoogle")
+Rel_D(auth_middleware_2, linkWithGoogle, "3. Send request linkWithGoogle")
+Rel_D(linkWithGoogle, momo_x_storage, "4. Insert data email google user")
+Rel_D(linkWithGoogle, momo_x_storage, "4. Update data user")
+Rel_D(linkWithGoogle, momo_x_storage, "5. Insert log data user is linked to google")
+
+SHOW_LEGEND()
+@enduml
